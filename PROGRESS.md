@@ -13,7 +13,7 @@
 | 4 | 저장소 초기 구조 생성 | ✅ | `index.html`, `assets/`, `data/`, `scripts/`, `.github/workflows/` |
 | 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc}` 배열 |
 | 6 | 일일 워크플로 작성 | ✅ | `daily-cve-count.yml`, KST 09:00 cron, 날짜 중복 방지(스크립트가 존재 시 skip) |
-| 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 로컬 실행으로 확보: 2026-08-23 = 184건. 재실행 시 idempotent 확인 완료. 원격에서도 workflow_dispatch 수동 실행 성공(13초, 오늘 날짜 있어 스킵 경로 확인) — 단, **Actions가 실제로 새 파일을 커밋·push하는 경로는 아직 미검증**(스킵만 탐). Day2 자동 실행 때 최초 확인 |
+| 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 2026-08-23 = 187건. 로컬 실행(184건)으로 1차 확보 후, 실제 쓰기 경로 검증을 위해 기록을 비우고 재실행 → Actions가 NVD 재조회·커밋(`08699ae`)·push까지 전부 성공 확인. 스킵(중복방지)·쓰기(신규커밋) 두 경로 모두 원격에서 검증 완료 |
 | 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/today_information/` 200 OK 확인 |
 | 9 | 프론트엔드 렌더링 구현 | ✅ | 값·단위·출처·조회 시각·날짜별 기록 표, 헤드리스 브라우저로 렌더 확인 |
 | 10 | 목적 문장 + 출처/항목/단위/시간대 정의표 작성 | ✅ | `docs/worksheet/definitions.md`, Day1 원자료-화면값 대조 포함 |
@@ -155,6 +155,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
   1. "응답 형식 변경" 시뮬레이션이 `text.slice(0, -1)`로 끝의 개행문자만 잘라내 여전히 유효한 JSON이 되는 바람에 실패가 재현되지 않음 → `text.trimEnd().slice(0, -1)`로 실제 닫는 괄호를 잘라내도록 수정.
   2. 정상 렌더링 시 상태 배너를 `hidden`만 처리하고 `textContent`는 지우지 않아 이전 오류 문구가 DOM에 남아있었음 → 정상 렌더링 시 배너 텍스트·클래스도 함께 초기화하도록 수정.
   두 버그 모두 "말로 설명"이 아니라 실제 클릭 테스트로만 드러났던 문제 — 카드3은 화면 캡처까지 재확인 완료.
+- **2026-08-23**: Actions의 실제 커밋·push 경로가 한 번도 검증되지 않은 채 다음 날을 기다리는 게 불안해서, `data/history.json`을 잠시 비우고 workflow_dispatch를 재실행해 그 자리에서 검증. NVD를 실제로 재조회(184건→187건, 같은 KST 날짜 내 증가)해 커밋(`08699ae`)·push까지 성공 확인. 데이터는 그 순간의 진짜 NVD 응답이라 위조가 아니며, 내일 자동 cron이 처음 실패할 리스크를 오늘 미리 제거함.
 
 ---
 
