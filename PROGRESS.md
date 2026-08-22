@@ -13,7 +13,7 @@
 | 4 | 저장소 초기 구조 생성 | ✅ | `index.html`, `assets/`, `data/`, `scripts/`, `.github/workflows/` |
 | 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc}` 배열 |
 | 6 | 일일 워크플로 작성 | ✅ | `daily-cve-count.yml`, KST 09:00 cron, 날짜 중복 방지(스크립트가 존재 시 skip) |
-| 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 로컬 실행으로 확보: 2026-08-23 = 184건. 재실행 시 idempotent 확인 완료. 원격 워크플로는 push 후 1회 더 확인 필요 |
+| 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 로컬 실행으로 확보: 2026-08-23 = 184건. 재실행 시 idempotent 확인 완료. 원격에서도 workflow_dispatch 수동 실행 성공(13초, 오늘 날짜 있어 스킵 경로 확인) — 단, **Actions가 실제로 새 파일을 커밋·push하는 경로는 아직 미검증**(스킵만 탐). Day2 자동 실행 때 최초 확인 |
 | 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/today_information/` 200 OK 확인 |
 | 9 | 프론트엔드 렌더링 구현 | ✅ | 값·단위·출처·조회 시각·날짜별 기록 표, 헤드리스 브라우저로 렌더 확인 |
 | 10 | 목적 문장 + 출처/항목/단위/시간대 정의표 작성 | ✅ | `docs/worksheet/definitions.md`, Day1 원자료-화면값 대조 포함 |
