@@ -1,0 +1,165 @@
+:root {
+  --bg: #f5f6f8;
+  --card-bg: #ffffff;
+  --text: #1a1d24;
+  --muted: #5b6270;
+  --accent: #2050c8;
+  --border: #e2e5ea;
+  --stale-bg: #fff4e0;
+  --stale-text: #8a5a00;
+  --empty-bg: #fdecec;
+  --empty-text: #a11212;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161b;
+    --card-bg: #1e2128;
+    --text: #eef0f4;
+    --muted: #9aa2b1;
+    --accent: #6d9bff;
+    --border: #2c303a;
+    --stale-bg: #3a2c05;
+    --stale-text: #f0c060;
+    --empty-bg: #3a1414;
+    --empty-text: #ff8080;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
+}
+
+.dashboard {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.purpose {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+.status-banner {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.status-banner.stale {
+  background: var(--stale-bg);
+  color: var(--stale-text);
+}
+
+.status-banner.empty {
+  background: var(--empty-bg);
+  color: var(--empty-text);
+}
+
+.value-card, .compare-card, .history-card, .debug-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.value-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.value-number {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.value-unit {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.meta {
+  margin: 1rem 0 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+}
+
+.meta > div { display: contents; }
+
+.meta dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.meta dd {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.meta a {
+  color: var(--accent);
+}
+
+.compare-card h2, .history-card h2, .debug-panel h2 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.debug-panel {
+  border-style: dashed;
+}
+
+.debug-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button.retry {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+footer {
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}

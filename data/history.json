@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-08-23",
+    "count": 184,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-22T22%3A55%3A48.755Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-22T22:55:48.755Z"
+  }
+]

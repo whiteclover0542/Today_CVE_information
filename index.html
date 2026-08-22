@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>오늘의 CVE 정보판</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<main class="dashboard">
+  <header>
+    <h1>오늘의 신규 취약점(CVE) 정보판</h1>
+    <p class="purpose">이 정보판은 오늘 새로 등록된 보안 취약점(CVE) 수를 확인하기 위한 것입니다.</p>
+  </header>
+
+  <section id="status-banner" class="status-banner" hidden></section>
+
+  <section class="value-card">
+    <div class="value-main">
+      <span class="value-number" id="value-number">—</span>
+      <span class="value-unit" id="value-unit"></span>
+    </div>
+    <dl class="meta">
+      <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
+      <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
+      <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
+    </dl>
+  </section>
+
+  <section class="compare-card" id="compare-card" hidden>
+    <h2>어제 대비 변화</h2>
+    <p id="compare-text">-</p>
+  </section>
+
+  <section class="history-card">
+    <h2>날짜별 기록 (기준 시간대: Asia/Seoul, KST)</h2>
+    <table id="history-table">
+      <thead><tr><th>날짜 (KST)</th><th>건수</th><th>조회 시각 (UTC)</th></tr></thead>
+      <tbody id="history-body"></tbody>
+    </table>
+  </section>
+
+  <section id="debug-panel" class="debug-panel" hidden>
+    <h2>장애 시연 패널 (?debug=1)</h2>
+    <p>버튼을 눌러 실패 5종을 하나씩 재현합니다. 실패 중에도 마지막 정상값이 남아있는지, "다시 시도"로 복구되는지 확인하세요.</p>
+    <div class="debug-buttons">
+      <button data-simulate="timeout">timeout 재현</button>
+      <button data-simulate="auth">인증 실패 재현(모의)</button>
+      <button data-simulate="ratelimit">호출 제한 재현(모의)</button>
+      <button data-simulate="offline">오프라인 재현(모의)</button>
+      <button data-simulate="malformed">응답 형식 변경 재현</button>
+      <button id="retry-btn" class="retry">다시 시도</button>
+    </div>
+  </section>
+
+  <footer>
+    <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
+  </footer>
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>
