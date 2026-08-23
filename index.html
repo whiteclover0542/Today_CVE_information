@@ -11,18 +11,18 @@
 <main class="dashboard">
   <header>
     <h1>🛡️ 오늘의 신규 취약점(CVE) 정보판</h1>
-    <p class="purpose">이 정보판은 오늘 새로 등록된 보안 취약점(CVE) 수를 확인하기 위한 것입니다.</p>
+    <p class="purpose">
+      오늘(KST) 새로 등록된 CVE 건수를 자동으로 확인합니다.
+      <details class="about-details">
+        <summary>CVE가 뭔가요?</summary>
+        소프트웨어 보안 취약점에 붙는 공식 식별번호. 미국 NVD가 매일 새로 등록되는 CVE를 공개합니다.
+      </details>
+    </p>
   </header>
-
-  <section class="about-card">
-    <h2>❔ 이게 뭔가요?</h2>
-    <p><strong>CVE</strong>(Common Vulnerabilities and Exposures)는 소프트웨어에서 발견된 보안 취약점에 붙는 공식 식별번호입니다. 미국 국립표준기술연구소(NIST) 산하 <strong>NVD</strong>가 새로 발견된 CVE를 매일 공개합니다.</p>
-    <p>이 정보판은 그중 <strong>오늘(한국시간 기준) 새로 등록된 CVE 건수</strong>를 하루 한 번 자동으로 확인해 보여줍니다. 값은 그날 00:00부터 조회 시각까지의 누적치라 하루 안에서도 늘어날 수 있습니다.</p>
-  </section>
 
   <section id="status-banner" class="status-banner" hidden></section>
 
-  <div class="hero-grid">
+  <div class="grid-2">
     <section class="value-card">
       <div class="value-main">
         <span class="value-number" id="value-number">—</span>
@@ -45,32 +45,34 @@
         <div id="severity-donut" class="severity-donut"></div>
         <ul class="severity-legend" id="severity-legend"></ul>
       </div>
-      <p class="severity-note">CVSSv3 기준. "평가 대기"는 아직 심각도 점수가 매겨지지 않은 신규 CVE입니다.</p>
+      <p class="severity-note">CVSSv3 기준 · "평가 대기"는 점수 미부여</p>
     </section>
   </div>
 
-  <section class="trend-card">
-    <h2>📈 최근 추이</h2>
-    <div class="trend-note" id="trend-note">
-      <div class="skeleton-bars" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  <div class="grid-2">
+    <section class="trend-card">
+      <h2>📈 최근 추이</h2>
+      <div class="trend-note" id="trend-note">
+        <div class="skeleton-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p>2건 이상부터 표시됩니다.</p>
       </div>
-      <p>기록이 2건 이상 쌓이면 여기에 실제 추이 그래프가 표시됩니다.</p>
-    </div>
-    <div id="trend-chart" class="trend-chart" hidden></div>
-  </section>
+      <div id="trend-chart" class="trend-chart" hidden></div>
+    </section>
 
-  <section class="history-card">
-    <h2>🗓️ 날짜별 기록 (기준 시간대: Asia/Seoul, KST)</h2>
-    <table id="history-table">
-      <thead><tr><th>날짜 (KST)</th><th>건수</th><th>조회 시각 (UTC)</th></tr></thead>
-      <tbody id="history-body"></tbody>
-    </table>
-  </section>
+    <section class="history-card">
+      <h2>🗓️ 날짜별 기록 <span class="tz-note">(KST)</span></h2>
+      <table id="history-table">
+        <thead><tr><th>날짜</th><th>건수</th><th>조회 시각(UTC)</th></tr></thead>
+        <tbody id="history-body"></tbody>
+      </table>
+    </section>
+  </div>
 
   <section id="debug-panel" class="debug-panel" hidden>
-    <h2>🧪 장애 시연 패널 (?debug=1)</h2>
-    <p>버튼을 눌러 실패 5종을 하나씩 재현합니다. 실패 중에도 마지막 정상값이 남아있는지, "다시 시도"로 복구되는지 확인하세요.</p>
+    <h2>🧪 장애 시연 (?debug=1)</h2>
+    <p>버튼으로 실패 5종을 재현합니다. 값 유지·복구를 확인하세요.</p>
     <div class="debug-buttons">
       <button data-simulate="timeout">timeout 재현</button>
       <button data-simulate="auth">인증 실패 재현(모의)</button>

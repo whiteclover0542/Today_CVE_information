@@ -27,25 +27,24 @@ body {
 }
 
 .dashboard {
-  max-width: 900px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 4rem;
 }
 
-.hero-grid {
+.grid-2 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.4rem;
   margin-bottom: 1.4rem;
 }
 
-.hero-grid .value-card,
-.hero-grid .severity-card {
+.grid-2 > section {
   margin-bottom: 0;
 }
 
 @media (min-width: 720px) {
-  .hero-grid {
+  .grid-2 {
     grid-template-columns: 1.15fr 1fr;
     align-items: stretch;
   }
@@ -62,6 +61,25 @@ header h1 {
   margin-top: 0;
   font-size: 0.95rem;
 }
+
+.about-details {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.about-details summary {
+  display: inline;
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  list-style: none;
+}
+
+.about-details summary::-webkit-details-marker { display: none; }
+
+.about-details[open] summary { display: block; margin-bottom: 0.35rem; }
 
 .status-banner {
   padding: 0.85rem 1rem;
@@ -81,10 +99,8 @@ header h1 {
   color: var(--empty-text);
 }
 
-.about-card,
 .value-card,
 .severity-card,
-.compare-card,
 .trend-card,
 .history-card,
 .debug-panel {
@@ -96,28 +112,6 @@ header h1 {
   margin-bottom: 1.4rem;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
 }
-
-.about-card {
-  border-left-color: var(--border);
-}
-
-.about-card h2 {
-  margin-top: 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.about-card p {
-  font-size: 0.92rem;
-  line-height: 1.65;
-  margin: 0.6rem 0;
-}
-
-.about-card p:last-child { margin-bottom: 0; }
-
-.about-card strong { color: var(--text); }
 
 .value-main {
   display: flex;
@@ -196,6 +190,13 @@ header h1 {
   margin-bottom: 0.9rem;
   font-size: 1.02rem;
 }
+
+.tz-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
 
 .severity-card {
   display: flex;
