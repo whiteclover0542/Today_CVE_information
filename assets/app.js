@@ -77,6 +77,8 @@ const els = {
   severityCard: document.getElementById('severity-card'),
   severityDonut: document.getElementById('severity-donut'),
   severityLegend: document.getElementById('severity-legend'),
+  highlightsCard: document.getElementById('highlights-card'),
+  highlightsList: document.getElementById('highlights-list'),
   trendNote: document.getElementById('trend-note'),
   trendChart: document.getElementById('trend-chart'),
   historyBody: document.getElementById('history-body'),
@@ -167,6 +169,38 @@ function renderSeverity(entry) {
     .join('');
 }
 
+const SEVERITY_COLOR = {
+  CRITICAL: '#ff4d4f',
+  HIGH: '#ff9f43',
+  MEDIUM: '#ffd166',
+  LOW: '#4dabf7',
+};
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+function renderHighlights(entry) {
+  const list = entry.highlights;
+  if (!list || list.length === 0) {
+    els.highlightsCard.hidden = true;
+    return;
+  }
+  els.highlightsCard.hidden = false;
+  els.highlightsList.innerHTML = list
+    .map((h) => {
+      const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
+      return `<li>
+        <span class="hl-dot" style="background:${color}"></span>
+        <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
+        <span class="hl-summary">${escapeHtml(h.summary)}</span>
+      </li>`;
+    })
+    .join('');
+}
+
 function renderTrend(data) {
   if (data.length < 2) {
     els.trendChart.hidden = true;
@@ -227,6 +261,7 @@ function renderNormal(data) {
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
+    els.highlightsCard.hidden = true;
     els.trendChart.hidden = true;
     els.trendNote.hidden = false;
     els.historyBody.innerHTML = '';
@@ -240,6 +275,7 @@ function renderNormal(data) {
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
 
   renderSeverity(latest);
+  renderHighlights(latest);
   renderCompare(data);
   renderTrend(data);
   renderHistoryTable(data);
@@ -267,6 +303,8 @@ function renderError(err) {
     els.valueNumber.textContent = '—';
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
+    els.severityCard.hidden = true;
+    els.highlightsCard.hidden = true;
   }
 }
 

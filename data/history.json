@@ -4,14 +4,34 @@
     "count": 208,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-23T09%3A24%3A08.447Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-08-23T09:24:08.447Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-23T10%3A08%3A56.479Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-23T10:08:56.479Z",
     "severity": {
       "critical": 2,
       "high": 11,
       "medium": 16,
       "low": 1,
       "unrated": 178
-    }
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-4703",
+        "severity": "CRITICAL",
+        "summary": "The WS Form LITE – Drag & Drop Contact Form Builder plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and in…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4703"
+      },
+      {
+        "id": "CVE-2026-78050",
+        "severity": "CRITICAL",
+        "summary": "A vulnerability was found in Comfast CF-N1-S 2.6.0.1. The affected element is the function sub_41AD7C of the file /cgi-bin/mbox-config?metho…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78050"
+      },
+      {
+        "id": "CVE-2026-62384",
+        "severity": "HIGH",
+        "summary": "NLTK versions before 3.10.2 contain a symlink-based sandbox bypass in FramenetCorpusReader that allows attackers to read arbitrary XML files…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62384"
+      }
+    ]
   }
 ]
