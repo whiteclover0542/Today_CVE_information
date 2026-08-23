@@ -11,7 +11,7 @@
 | 2 | 아키텍처 설계 | ✅ | 정적 사이트 + 일 1회 GitHub Actions 배치, 서버리스 프록시 없음 |
 | 3 | NVD API 무키 호출 스모크 테스트 | ✅ | 2026-08-22 실제 조회: `totalResults: 239`, HTTP 200 |
 | 4 | 저장소 초기 구조 생성 | ✅ | `index.html`, `assets/`, `data/`, `scripts/`, `.github/workflows/` |
-| 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc, severity:{...}, highlights:[{id,severity,summary,url}]}` 배열 |
+| 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc, severity:{...}, highlights:[{id,severity,summaryEn,summaryKo,url}]}` 배열 |
 | 6 | 일일 워크플로 작성 | ✅ | `daily-cve-count.yml`, KST 09:00 cron, 날짜 중복 방지(스크립트가 존재 시 skip) |
 | 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 2026-08-23 = 187건. 로컬 실행(184건)으로 1차 확보 후, 실제 쓰기 경로 검증을 위해 기록을 비우고 재실행 → Actions가 NVD 재조회·커밋(`08699ae`)·push까지 전부 성공 확인. 스킵(중복방지)·쓰기(신규커밋) 두 경로 모두 원격에서 검증 완료 |
 | 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/today_information/` 200 OK 확인 |
@@ -186,6 +186,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
   두 버그 모두 "말로 설명"이 아니라 실제 클릭 테스트로만 드러났던 문제 — 카드3은 화면 캡처까지 재확인 완료.
 - **2026-08-23**: Actions의 실제 커밋·push 경로가 한 번도 검증되지 않은 채 다음 날을 기다리는 게 불안해서, `data/history.json`을 잠시 비우고 workflow_dispatch를 재실행해 그 자리에서 검증. NVD를 실제로 재조회(184건→187건, 같은 KST 날짜 내 증가)해 커밋(`08699ae`)·push까지 성공 확인. 데이터는 그 순간의 진짜 NVD 응답이라 위조가 아니며, 내일 자동 cron이 처음 실패할 리스크를 오늘 미리 제거함.
 - **2026-08-23**: 화면이 "보기 어렵다"는 피드백을 받아 (1) 카드 배경/테두리 대비, 여백, 아이콘을 더해 가독성을 높이고 (2) 기록이 1건뿐이어도 바로 볼 수 있는 시각화로 "오늘 등록분 심각도 분포"(CVSSv3 기준 스택 막대 + 범례)를 추가함. NVD의 `cvssV3Severity` 필터 파라미터로 CRITICAL/HIGH/MEDIUM/LOW 각각의 `totalResults`를 추가 조회(기존 요청과 합쳐 총 5회, 30초당 5회 제한과 정확히 같아 요청 사이 1.5초 간격을 둠)하고, 전체 건수에서 뺀 나머지를 "평가 대기"로 표시. 기존 187건 기록을 지우고 재조회해 208건(critical 2/high 11/medium 16/low 1/unrated 178)으로 다시 확보 — 역시 같은 날 재조회한 진짜 데이터.
+- **2026-08-23 (5차)**: 대표 CVE 요약이 영어라 못 읽겠다는 피드백을 받아, 무키·무료 번역 서비스(MyMemory Translation API, `en|ko`, 익명 사용 하루 5000단어 한도)를 실제 호출로 검증 후 도입. NVD 호출(5회, 30초당 5회 제한)과는 별개 서비스라 영향 없고, 대표 CVE 3건만 번역하는 양이라 한도에도 여유 있음. 번역 실패 시 영문 요약으로 조용히 대체(치명적 오류 아님). `summary` 필드를 `summaryEn`/`summaryKo`로 분리하고 화면은 한국어를 우선 표시.
 - **2026-08-23 (4차)**: "사이트에 더 추가할 거 없냐"는 질문에 "오늘의 대표 CVE 미리보기"를 추천해 채택. 이미 심각도별로 호출하던 4개 요청의 `resultsPerPage`를 1→3으로만 늘려(API 호출 횟수는 그대로 5회 유지, 요청당 페이로드만 약간 커짐) 건수뿐 아니라 실제 CVE 객체(id·설명·NVD 상세 링크)도 함께 받아옴. CRITICAL부터 순서대로 최대 3건을 뽑아 심각도 색점+ID(NVD 링크)+한 줄 요약으로 표시. 외부(NVD) 텍스트를 innerHTML로 꽂는 지점이라 escapeHtml을 통과시켜 XSS 여지를 없앰.
 - **2026-08-23 (3차)**: "글이 너무 많고 세로 1열이라 불편하다"는 피드백을 받아 (1) "이게 뭔가요?" 두 문단을 `<details>` 한 줄 토글로 접고, 헤더 설명문도 한 문장으로 줄이고 (2) 카드 4개(값·심각도·추이·기록)를 세로로 쭉 쌓는 대신 데스크톱에서 2×2 그리드(`.grid-2`)로 배치해 스크롤 없이 한 화면에 다 보이게 함, 모바일에서는 자동으로 1열로 풀림. 대시보드 최대폭도 900→1040px로 넓힘.
 - **2026-08-23 (2차)**: 그래도 "보기 어렵다"는 재요청을 받아 큰 폭으로 다시 손봄 — 심각도를 얇은 막대 대신 SVG 도넛 차트(중앙에 총 건수)로 바꾸고, 값 카드와 심각도 카드를 데스크톱에서는 2열(hero-grid), 모바일에서는 1열로 쌓이게 하고, 어제 대비 변화를 값 카드 안의 색상 배지(▲빨강 증가/▼초록 감소)로 옮기고, 추이 그래프가 없을 때는 빈 텍스트 대신 애니메이션 스켈레톤 막대를 보여주도록 함. 헤드리스 브라우저로 확인하다가 실제 버그 발견: `hidden` 속성이 있어도 같은 클래스에 `display` 값을 직접 지정하면(`.compare-inline{display:inline-flex}`, `.severity-card{display:flex}`) author 스타일이 UA의 `[hidden]{display:none}`을 명시도 동률에서 origin 우선순위로 이겨버려서 숨겨야 할 요소가 빈 채로 보임 → 전역 규칙 `[hidden]{display:none!important}`을 최상단에 추가해 해결.

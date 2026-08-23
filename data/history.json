@@ -1,35 +1,38 @@
 [
   {
     "date": "2026-08-23",
-    "count": 208,
+    "count": 212,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-23T10%3A08%3A56.479Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-08-23T10:08:56.479Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-23T10%3A18%3A22.614Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-23T10:18:22.614Z",
     "severity": {
       "critical": 2,
       "high": 11,
-      "medium": 16,
+      "medium": 18,
       "low": 1,
-      "unrated": 178
+      "unrated": 180
     },
     "highlights": [
       {
         "id": "CVE-2026-4703",
         "severity": "CRITICAL",
-        "summary": "The WS Form LITE – Drag & Drop Contact Form Builder plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and in…",
+        "summaryEn": "The WS Form LITE – Drag & Drop Contact Form Builder plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and in…",
+        "summaryKo": "WordPress용 WS Form LITE – Drag & Drop Contact Form Builder 플러그인은 최대 및 최대 모든 버전의 PHP 개체 주입에 취약합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4703"
       },
       {
         "id": "CVE-2026-78050",
         "severity": "CRITICAL",
-        "summary": "A vulnerability was found in Comfast CF-N1-S 2.6.0.1. The affected element is the function sub_41AD7C of the file /cgi-bin/mbox-config?metho…",
+        "summaryEn": "A vulnerability was found in Comfast CF-N1-S 2.6.0.1. The affected element is the function sub_41AD7C of the file /cgi-bin/mbox-config?metho…",
+        "summaryKo": "Comfast CF-N1-S 2.6.0.1에서 취약점이 발견되었습니다. 영향을 받는 요소는/cgi-bin/mbox-config? metho 파일의 sub_41AD7C 함수입니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78050"
       },
       {
         "id": "CVE-2026-62384",
         "severity": "HIGH",
-        "summary": "NLTK versions before 3.10.2 contain a symlink-based sandbox bypass in FramenetCorpusReader that allows attackers to read arbitrary XML files…",
+        "summaryEn": "NLTK versions before 3.10.2 contain a symlink-based sandbox bypass in FramenetCorpusReader that allows attackers to read arbitrary XML files…",
+        "summaryKo": "3.10.2 이전 NLTK 버전에는 FramenetCorpusReader에 심볼릭 링크 기반 샌드박스 바이패스가 포함되어 있어 공격자가 임의 XML 파일을 읽을 수 있습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62384"
       }
     ]

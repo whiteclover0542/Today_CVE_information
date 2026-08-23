@@ -192,10 +192,11 @@ function renderHighlights(entry) {
   els.highlightsList.innerHTML = list
     .map((h) => {
       const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
+      const summary = h.summaryKo || h.summaryEn || h.summary || '';
       return `<li>
         <span class="hl-dot" style="background:${color}"></span>
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
-        <span class="hl-summary">${escapeHtml(h.summary)}</span>
+        <span class="hl-summary">${escapeHtml(summary)}</span>
       </li>`;
     })
     .join('');
