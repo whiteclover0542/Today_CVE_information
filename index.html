@@ -22,33 +22,41 @@
 
   <section id="status-banner" class="status-banner" hidden></section>
 
-  <section class="value-card">
-    <div class="value-main">
-      <span class="value-number" id="value-number">—</span>
-      <span class="value-unit" id="value-unit"></span>
-    </div>
-    <dl class="meta">
-      <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
-      <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
-      <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
-    </dl>
-  </section>
+  <div class="hero-grid">
+    <section class="value-card">
+      <div class="value-main">
+        <span class="value-number" id="value-number">—</span>
+        <span class="value-unit" id="value-unit"></span>
+      </div>
+      <div class="compare-inline" id="compare-card" hidden>
+        <span class="compare-arrow" id="compare-arrow"></span>
+        <span id="compare-text">-</span>
+      </div>
+      <dl class="meta">
+        <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
+        <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
+        <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
+      </dl>
+    </section>
 
-  <section class="severity-card" id="severity-card" hidden>
-    <h2>📊 오늘 등록분 심각도 분포</h2>
-    <div class="severity-bar" id="severity-bar"></div>
-    <ul class="severity-legend" id="severity-legend"></ul>
-    <p class="severity-note">CVSSv3 기준. "평가 대기"는 아직 심각도 점수가 매겨지지 않은 신규 CVE입니다.</p>
-  </section>
-
-  <section class="compare-card" id="compare-card" hidden>
-    <h2>🔺 어제 대비 변화</h2>
-    <p id="compare-text">-</p>
-  </section>
+    <section class="severity-card" id="severity-card" hidden>
+      <h2>📊 오늘 등록분 심각도</h2>
+      <div class="severity-visual">
+        <div id="severity-donut" class="severity-donut"></div>
+        <ul class="severity-legend" id="severity-legend"></ul>
+      </div>
+      <p class="severity-note">CVSSv3 기준. "평가 대기"는 아직 심각도 점수가 매겨지지 않은 신규 CVE입니다.</p>
+    </section>
+  </div>
 
   <section class="trend-card">
     <h2>📈 최근 추이</h2>
-    <p class="trend-note" id="trend-note">기록이 2건 이상 쌓이면 여기에 추이 그래프가 표시됩니다.</p>
+    <div class="trend-note" id="trend-note">
+      <div class="skeleton-bars" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <p>기록이 2건 이상 쌓이면 여기에 실제 추이 그래프가 표시됩니다.</p>
+    </div>
     <div id="trend-chart" class="trend-chart" hidden></div>
   </section>
 

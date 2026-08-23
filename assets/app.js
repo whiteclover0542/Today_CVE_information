@@ -72,9 +72,10 @@ const els = {
   queriedAt: document.getElementById('queried-at'),
   recordDate: document.getElementById('record-date'),
   compareCard: document.getElementById('compare-card'),
+  compareArrow: document.getElementById('compare-arrow'),
   compareText: document.getElementById('compare-text'),
   severityCard: document.getElementById('severity-card'),
-  severityBar: document.getElementById('severity-bar'),
+  severityDonut: document.getElementById('severity-donut'),
   severityLegend: document.getElementById('severity-legend'),
   trendNote: document.getElementById('trend-note'),
   trendChart: document.getElementById('trend-chart'),
@@ -102,10 +103,14 @@ function renderCompare(data) {
   const diff = latest.count - prev.count;
   const direction = diff > 0 ? '증가' : diff < 0 ? '감소' : '변화 없음';
   const sign = diff > 0 ? '+' : '';
+  const arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '■';
+  const cls = diff > 0 ? 'up' : diff < 0 ? 'down' : 'flat';
+
   els.compareCard.hidden = false;
+  els.compareCard.className = `compare-inline ${cls}`;
+  els.compareArrow.textContent = arrow;
   els.compareText.textContent =
-    `${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit} ` +
-    `(${sign}${diff}${latest.unit}, ${direction})`;
+    `${sign}${diff}${latest.unit} (${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit}, ${direction})`;
 }
 
 const SEVERITY_LEVELS = [
@@ -124,14 +129,35 @@ function renderSeverity(entry) {
   els.severityCard.hidden = false;
   const total = entry.count || 1;
 
-  els.severityBar.innerHTML = SEVERITY_LEVELS
+  const size = 168;
+  const r = 62;
+  const strokeWidth = 24;
+  const cx = size / 2;
+  const cy = size / 2;
+  const circumference = 2 * Math.PI * r;
+
+  let offset = 0;
+  const rings = SEVERITY_LEVELS
     .map(([key, label, color]) => {
       const v = entry.severity[key] || 0;
-      const pct = (v / total) * 100;
-      if (pct <= 0) return '';
-      return `<span class="seg" style="width:${pct}%;background:${color}" title="${label}: ${v}건"></span>`;
+      const frac = v / total;
+      const len = frac * circumference;
+      const dashoffset = -offset;
+      offset += len;
+      if (v <= 0) return '';
+      return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${strokeWidth}"
+        stroke-dasharray="${len} ${circumference - len}" stroke-dashoffset="${dashoffset}"
+        transform="rotate(-90 ${cx} ${cy})"><title>${label}: ${v}건</title></circle>`;
     })
     .join('');
+
+  els.severityDonut.innerHTML = `
+    <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="오늘 등록분 심각도 분포">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#232327" stroke-width="${strokeWidth}"></circle>
+      ${rings}
+      <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#ffffff">${total}</text>
+      <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="12" fill="#a8a8b0">${entry.unit}</text>
+    </svg>`;
 
   els.severityLegend.innerHTML = SEVERITY_LEVELS
     .map(([key, label, color]) => {
