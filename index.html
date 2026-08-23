@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=13" />
+<link rel="stylesheet" href="assets/style.css?v=14" />
 </head>
 <body>
 <main class="dashboard">
@@ -41,8 +41,7 @@
         <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
         <div><dt>다음 자동 확인</dt><dd id="next-check">-</dd></div>
       </dl>
-      <p class="refresh-note">※ "조회 시각"은 NVD에 실제로 물어본 시각이에요 — 지금 보고 있는 시각이 아니에요. 새로고침을 눌러도 이 값은 바뀌지 않고, 매일 09:00 KST에 자동 배치가 돌 때만 갱신돼요.</p>
-      <button id="refresh-btn" class="refresh-btn" type="button">🔄 새로고침</button>
+      <p class="refresh-note">※ "조회 시각"은 지금 보고 있는 시각이 아니라, 매일 09:00 KST 자동 배치가 NVD에 실제로 물어본 시각이에요.</p>
     </section>
 
     <section class="severity-card" id="severity-card" hidden>
@@ -98,6 +97,6 @@
     <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=13"></script>
+<script src="assets/app.js?v=14"></script>
 </body>
 </html>

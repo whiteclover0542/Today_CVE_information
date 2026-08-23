@@ -79,7 +79,6 @@ const els = {
   queriedAt: document.getElementById('queried-at'),
   recordDate: document.getElementById('record-date'),
   nextCheck: document.getElementById('next-check'),
-  refreshBtn: document.getElementById('refresh-btn'),
   compareCard: document.getElementById('compare-card'),
   compareArrow: document.getElementById('compare-arrow'),
   compareText: document.getElementById('compare-text'),
@@ -337,15 +336,6 @@ async function load(simulateKind) {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderNextAutoCheck();
-
-  els.refreshBtn.addEventListener('click', async () => {
-    els.refreshBtn.disabled = true;
-    els.refreshBtn.textContent = '⏳ 확인 중…';
-    await load();
-    renderNextAutoCheck();
-    els.refreshBtn.disabled = false;
-    els.refreshBtn.textContent = '🔄 새로고침';
-  });
 
   const params = new URLSearchParams(location.search);
   if (params.get('debug') === '1') {
