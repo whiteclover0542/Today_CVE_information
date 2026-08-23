@@ -18,6 +18,13 @@ function formatKst(iso) {
   return `${kstFormatter.format(new Date(iso))} (KST)`;
 }
 
+// 배치는 매일 00:00 UTC(=09:00 KST) 실행 — KST는 DST가 없어 UTC 00:00 == KST 09:00
+function renderNextAutoCheck() {
+  const now = new Date();
+  const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+  els.nextCheck.textContent = formatKst(next.toISOString());
+}
+
 async function fetchHistory(simulateKind) {
   if (simulateKind === 'offline') {
     throw new SimulatedError('offline', '오프라인 상태입니다 (network error, 모의)');
@@ -71,6 +78,8 @@ const els = {
   sourceLink: document.getElementById('source-link'),
   queriedAt: document.getElementById('queried-at'),
   recordDate: document.getElementById('record-date'),
+  nextCheck: document.getElementById('next-check'),
+  refreshBtn: document.getElementById('refresh-btn'),
   compareCard: document.getElementById('compare-card'),
   compareArrow: document.getElementById('compare-arrow'),
   compareText: document.getElementById('compare-text'),
@@ -327,6 +336,17 @@ async function load(simulateKind) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  renderNextAutoCheck();
+
+  els.refreshBtn.addEventListener('click', async () => {
+    els.refreshBtn.disabled = true;
+    els.refreshBtn.textContent = '⏳ 확인 중…';
+    await load();
+    renderNextAutoCheck();
+    els.refreshBtn.disabled = false;
+    els.refreshBtn.textContent = '🔄 새로고침';
+  });
+
   const params = new URLSearchParams(location.search);
   if (params.get('debug') === '1') {
     const panel = document.getElementById('debug-panel');

@@ -164,6 +164,24 @@ header h1 {
 
 .meta a:hover { opacity: 0.75; }
 
+.refresh-btn {
+  margin-top: 1.1rem;
+  font-size: 0.82rem;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  color: var(--muted);
+}
+
+.refresh-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .compare-inline {
   display: inline-flex;
   align-items: center;
