@@ -182,6 +182,13 @@ header h1 {
   cursor: default;
 }
 
+.refresh-note {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 .compare-inline {
   display: inline-flex;
   align-items: center;

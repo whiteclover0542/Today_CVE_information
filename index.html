@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=10" />
+<link rel="stylesheet" href="assets/style.css?v=11" />
 </head>
 <body>
 <main class="dashboard">
@@ -42,6 +42,7 @@
         <div><dt>다음 자동 확인</dt><dd id="next-check">-</dd></div>
       </dl>
       <button id="refresh-btn" class="refresh-btn" type="button">🔄 새로고침</button>
+      <p class="refresh-note">새로고침은 저장된 값을 다시 불러올 뿐, NVD에 새로 묻지 않아요. 값 자체는 매일 09:00 KST에만 갱신돼요.</p>
     </section>
 
     <section class="severity-card" id="severity-card" hidden>
@@ -97,6 +98,6 @@
     <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=10"></script>
+<script src="assets/app.js?v=11"></script>
 </body>
 </html>
