@@ -176,6 +176,13 @@ const SEVERITY_COLOR = {
   LOW: '#4dabf7',
 };
 
+const SEVERITY_LABEL_KO = {
+  CRITICAL: '심각',
+  HIGH: '높음',
+  MEDIUM: '중간',
+  LOW: '낮음',
+};
+
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
@@ -192,9 +199,10 @@ function renderHighlights(entry) {
   els.highlightsList.innerHTML = list
     .map((h) => {
       const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
+      const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
       const summary = h.summaryKo || h.summaryEn || h.summary || '';
       return `<li>
-        <span class="hl-dot" style="background:${color}"></span>
+        <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
         <span class="hl-summary">${escapeHtml(summary)}</span>
       </li>`;

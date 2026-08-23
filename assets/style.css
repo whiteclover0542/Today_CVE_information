@@ -265,12 +265,16 @@ header h1 {
   flex-wrap: wrap;
 }
 
-.hl-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.hl-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid;
+  background: var(--card-bg-2);
   flex-shrink: 0;
   align-self: center;
+  white-space: nowrap;
 }
 
 .hl-id {

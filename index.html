@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=8" />
+<link rel="stylesheet" href="assets/style.css?v=9" />
 </head>
 <body>
 <main class="dashboard">
@@ -15,7 +15,10 @@
       오늘(KST) 새로 등록된 CVE 건수를 자동으로 확인합니다.
       <details class="about-details">
         <summary>CVE가 뭔가요?</summary>
-        소프트웨어 보안 취약점에 붙는 공식 식별번호. 미국 NVD가 매일 새로 등록되는 CVE를 공개합니다.
+        소프트웨어에 생긴 "보안 허점"에 매기는 접수번호예요. 나쁜 사람이 악용할 수 있는 구멍이 발견되면
+        전 세계가 같은 걸 가리키도록 <code>CVE-연도-번호</code>를 붙여 등록해요(경찰 사건번호와 비슷해요).
+        미국 정부기관 NVD가 매일 새로 등록되는 CVE를 공개하고, 이 정보판은 그중 오늘(KST) 등록된 개수를 보여줘요.
+        색깔(빨강→파랑)은 그 허점이 얼마나 위험한지 등급이에요.
       </details>
     </p>
   </header>
@@ -92,6 +95,6 @@
     <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/app.js?v=9"></script>
 </body>
 </html>
