@@ -150,6 +150,12 @@ header h1 {
   align-self: center;
 }
 
+.meta dt[title] {
+  cursor: help;
+  border-bottom: 1px dotted var(--muted);
+  width: fit-content;
+}
+
 .meta dd {
   margin: 0;
   font-size: 0.95rem;
