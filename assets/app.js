@@ -73,6 +73,8 @@ const els = {
   recordDate: document.getElementById('record-date'),
   compareCard: document.getElementById('compare-card'),
   compareText: document.getElementById('compare-text'),
+  trendNote: document.getElementById('trend-note'),
+  trendChart: document.getElementById('trend-chart'),
   historyBody: document.getElementById('history-body'),
 };
 
@@ -103,6 +105,54 @@ function renderCompare(data) {
     `(${sign}${diff}${latest.unit}, ${direction})`;
 }
 
+function renderTrend(data) {
+  if (data.length < 2) {
+    els.trendChart.hidden = true;
+    els.trendNote.hidden = false;
+    return;
+  }
+  els.trendNote.hidden = true;
+  els.trendChart.hidden = false;
+
+  const recent = data.slice(-14);
+  const counts = recent.map((d) => d.count);
+  const max = Math.max(...counts);
+  const min = Math.min(...counts);
+  const range = max - min || 1;
+
+  const W = 640;
+  const H = 180;
+  const padX = 16;
+  const padTop = 24;
+  const padBottom = 30;
+  const plotH = H - padTop - padBottom;
+  const n = recent.length;
+  const gap = 8;
+  const barW = Math.max(10, (W - padX * 2 - gap * (n - 1)) / n);
+
+  const bars = recent
+    .map((entry, i) => {
+      const x = padX + i * (barW + gap);
+      const ratio = (entry.count - min) / range;
+      const h = Math.max(6, ratio * plotH);
+      const y = padTop + (plotH - h);
+      const isLast = i === n - 1;
+      const fill = isLast ? '#ffffff' : 'rgba(255,255,255,0.35)';
+      const shortDate = entry.date.slice(5); // MM-DD
+      return `
+        <g>
+          <title>${entry.date}: ${entry.count}${entry.unit}</title>
+          <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${fill}"></rect>
+          <text x="${x + barW / 2}" y="${y - 8}" text-anchor="middle" font-size="11" fill="#ffffff">${entry.count}</text>
+          <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#9a9aa2">${shortDate}</text>
+        </g>`;
+    })
+    .join('');
+
+  els.trendChart.innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="최근 날짜별 신규 CVE 건수 추이">${bars}</svg>`;
+}
+
 function renderNormal(data) {
   lastGood = { data, queriedAtIso: new Date().toISOString() };
   els.statusBanner.hidden = true;
@@ -114,6 +164,8 @@ function renderNormal(data) {
     els.valueNumber.textContent = '기록 없음';
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
+    els.trendChart.hidden = true;
+    els.trendNote.hidden = false;
     els.historyBody.innerHTML = '';
     return;
   }
@@ -125,6 +177,7 @@ function renderNormal(data) {
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
 
   renderCompare(data);
+  renderTrend(data);
   renderHistoryTable(data);
 }
 

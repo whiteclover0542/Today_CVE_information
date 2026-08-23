@@ -1,29 +1,14 @@
 :root {
-  --bg: #f5f6f8;
-  --card-bg: #ffffff;
-  --text: #1a1d24;
-  --muted: #5b6270;
-  --accent: #2050c8;
-  --border: #e2e5ea;
-  --stale-bg: #fff4e0;
-  --stale-text: #8a5a00;
-  --empty-bg: #fdecec;
-  --empty-text: #a11212;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14161b;
-    --card-bg: #1e2128;
-    --text: #eef0f4;
-    --muted: #9aa2b1;
-    --accent: #6d9bff;
-    --border: #2c303a;
-    --stale-bg: #3a2c05;
-    --stale-text: #f0c060;
-    --empty-bg: #3a1414;
-    --empty-text: #ff8080;
-  }
+  --bg: #000000;
+  --card-bg: #111113;
+  --text: #ffffff;
+  --muted: #9a9aa2;
+  --accent: #ffffff;
+  --border: #2a2a2e;
+  --stale-bg: #2c2408;
+  --stale-text: #ffd166;
+  --empty-bg: #2b1414;
+  --empty-text: #ff6b6b;
 }
 
 * { box-sizing: border-box; }
@@ -42,8 +27,9 @@ body {
 }
 
 header h1 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
 }
 
 .purpose {
@@ -68,13 +54,41 @@ header h1 {
   color: var(--empty-text);
 }
 
-.value-card, .compare-card, .history-card, .debug-panel {
+.about-card,
+.value-card,
+.compare-card,
+.trend-card,
+.history-card,
+.debug-panel {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
   padding: 1.25rem;
   margin-bottom: 1.25rem;
 }
+
+.about-card {
+  border-left-color: var(--border);
+}
+
+.about-card h2 {
+  margin-top: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.about-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.about-card p:last-child { margin-bottom: 0; }
+
+.about-card strong { color: var(--text); }
 
 .value-main {
   display: flex;
@@ -83,8 +97,10 @@ header h1 {
 }
 
 .value-number {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 3.25rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
 }
 
 .value-unit {
@@ -113,12 +129,29 @@ header h1 {
 
 .meta a {
   color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.compare-card h2, .history-card h2, .debug-panel h2 {
+.meta a:hover { opacity: 0.75; }
+
+.compare-card h2, .trend-card h2, .history-card h2, .debug-panel h2 {
   margin-top: 0;
   font-size: 1rem;
 }
+
+.compare-card #compare-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.trend-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.trend-chart svg { display: block; }
 
 table {
   width: 100%;
@@ -126,13 +159,22 @@ table {
   font-size: 0.85rem;
 }
 
-th, td {
+th {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  color: var(--muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
   text-align: left;
   padding: 0.4rem 0.5rem;
   border-bottom: 1px solid var(--border);
 }
 
 .debug-panel {
+  border-left-color: var(--border);
   border-style: dashed;
 }
 
@@ -147,19 +189,29 @@ button {
   padding: 0.5rem 0.85rem;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--card-bg);
+  background: transparent;
   color: var(--text);
   cursor: pointer;
 }
 
-button.retry {
-  background: var(--accent);
-  color: #fff;
+button:hover {
   border-color: var(--accent);
 }
+
+button.retry {
+  background: var(--accent);
+  color: #000000;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+button.retry:hover { opacity: 0.85; }
 
 footer {
   margin-top: 2rem;
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+footer a { color: var(--muted); }
+footer a:hover { color: var(--text); }

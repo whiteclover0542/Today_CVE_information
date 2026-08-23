@@ -14,6 +14,12 @@
     <p class="purpose">이 정보판은 오늘 새로 등록된 보안 취약점(CVE) 수를 확인하기 위한 것입니다.</p>
   </header>
 
+  <section class="about-card">
+    <h2>이게 뭔가요?</h2>
+    <p><strong>CVE</strong>(Common Vulnerabilities and Exposures)는 소프트웨어에서 발견된 보안 취약점에 붙는 공식 식별번호입니다. 미국 국립표준기술연구소(NIST) 산하 <strong>NVD</strong>가 새로 발견된 CVE를 매일 공개합니다.</p>
+    <p>이 정보판은 그중 <strong>오늘(한국시간 기준) 새로 등록된 CVE 건수</strong>를 하루 한 번 자동으로 확인해 보여줍니다. 값은 그날 00:00부터 조회 시각까지의 누적치라 하루 안에서도 늘어날 수 있습니다.</p>
+  </section>
+
   <section id="status-banner" class="status-banner" hidden></section>
 
   <section class="value-card">
@@ -31,6 +37,12 @@
   <section class="compare-card" id="compare-card" hidden>
     <h2>어제 대비 변화</h2>
     <p id="compare-text">-</p>
+  </section>
+
+  <section class="trend-card">
+    <h2>최근 추이</h2>
+    <p class="trend-note" id="trend-note">기록이 2건 이상 쌓이면 여기에 추이 그래프가 표시됩니다.</p>
+    <div id="trend-chart" class="trend-chart" hidden></div>
   </section>
 
   <section class="history-card">
