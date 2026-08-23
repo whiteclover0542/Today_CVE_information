@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
+const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 
 function kstDateString(date) {
   return new Intl.DateTimeFormat('en-CA', {
@@ -10,6 +11,19 @@ function kstDateString(date) {
     month: '2-digit',
     day: '2-digit',
   }).format(date);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchTotalResults(url) {
+  const res = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!res.ok) {
+    throw new Error(`NVD API 호출 실패: HTTP ${res.status} (${url})`);
+  }
+  const body = await res.json();
+  return body.totalResults;
 }
 
 async function main() {
@@ -28,31 +42,39 @@ async function main() {
   const pubStartDate = new Date(`${kstDate}T00:00:00+09:00`).toISOString();
   const pubEndDate = now.toISOString();
 
-  const apiUrl = new URL('https://services.nvd.nist.gov/rest/json/cves/2.0');
-  apiUrl.searchParams.set('pubStartDate', pubStartDate);
-  apiUrl.searchParams.set('pubEndDate', pubEndDate);
-  apiUrl.searchParams.set('resultsPerPage', '1');
+  const baseUrl = new URL('https://services.nvd.nist.gov/rest/json/cves/2.0');
+  baseUrl.searchParams.set('pubStartDate', pubStartDate);
+  baseUrl.searchParams.set('pubEndDate', pubEndDate);
+  baseUrl.searchParams.set('resultsPerPage', '1');
 
-  const res = await fetch(apiUrl, { headers: { Accept: 'application/json' } });
-  if (!res.ok) {
-    throw new Error(`NVD API 호출 실패: HTTP ${res.status}`);
+  const total = await fetchTotalResults(baseUrl);
+
+  // 키 없이 호출하면 30초당 5회 제한(NVD 공식 문서) — 4개 심각도 질의를 여유 있게 간격을 두고 순차 호출
+  const severity = {};
+  for (const level of SEVERITIES) {
+    await sleep(1500);
+    const sevUrl = new URL(baseUrl);
+    sevUrl.searchParams.set('cvssV3Severity', level);
+    severity[level.toLowerCase()] = await fetchTotalResults(sevUrl);
   }
-  const body = await res.json();
+  const rated = severity.critical + severity.high + severity.medium + severity.low;
+  severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
 
   const entry = {
     date: kstDate,
-    count: body.totalResults,
+    count: total,
     unit: '건',
     timezone: TIMEZONE,
-    sourceApiUrl: apiUrl.toString(),
+    sourceApiUrl: baseUrl.toString(),
     queriedAtUtc: now.toISOString(),
+    severity,
   };
 
   history.push(entry);
   history.sort((a, b) => a.date.localeCompare(b.date));
 
   writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2) + '\n');
-  console.log(`[saved] ${kstDate} -> ${entry.count}건`);
+  console.log(`[saved] ${kstDate} -> ${entry.count}건`, severity);
 }
 
 main().catch((err) => {

@@ -11,11 +11,11 @@
 | 2 | 아키텍처 설계 | ✅ | 정적 사이트 + 일 1회 GitHub Actions 배치, 서버리스 프록시 없음 |
 | 3 | NVD API 무키 호출 스모크 테스트 | ✅ | 2026-08-22 실제 조회: `totalResults: 239`, HTTP 200 |
 | 4 | 저장소 초기 구조 생성 | ✅ | `index.html`, `assets/`, `data/`, `scripts/`, `.github/workflows/` |
-| 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc}` 배열 |
+| 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc, severity:{critical,high,medium,low,unrated}}` 배열 |
 | 6 | 일일 워크플로 작성 | ✅ | `daily-cve-count.yml`, KST 09:00 cron, 날짜 중복 방지(스크립트가 존재 시 skip) |
 | 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 2026-08-23 = 187건. 로컬 실행(184건)으로 1차 확보 후, 실제 쓰기 경로 검증을 위해 기록을 비우고 재실행 → Actions가 NVD 재조회·커밋(`08699ae`)·push까지 전부 성공 확인. 스킵(중복방지)·쓰기(신규커밋) 두 경로 모두 원격에서 검증 완료 |
 | 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/today_information/` 200 OK 확인 |
-| 9 | 프론트엔드 렌더링 구현 | ✅ | 값·단위·출처·조회 시각·날짜별 기록 표, 헤드리스 브라우저로 렌더 확인 |
+| 9 | 프론트엔드 렌더링 구현 | ✅ | 값·단위·출처·조회 시각·날짜별 기록 표·심각도 분포 그래프, 검정+흰색 테마로 재정비, 헤드리스 브라우저로 렌더 확인 |
 | 10 | 목적 문장 + 출처/항목/단위/시간대 정의표 작성 | ✅ | `docs/worksheet/definitions.md`, Day1 원자료-화면값 대조 포함 |
 | 11 | 출처 링크 동작 확인 | ✅ | href가 실제 NVD API 요청 URL로 연결됨을 확인 |
 | 12 | 비밀값 노출 전체 검색 | ✅ | 워킹트리+`git log -p --all` 검색 결과 0건. 유일한 매치는 커밋 작성자 이메일(표준 git 메타데이터, 문제 아님) |
@@ -184,6 +184,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
   2. 정상 렌더링 시 상태 배너를 `hidden`만 처리하고 `textContent`는 지우지 않아 이전 오류 문구가 DOM에 남아있었음 → 정상 렌더링 시 배너 텍스트·클래스도 함께 초기화하도록 수정.
   두 버그 모두 "말로 설명"이 아니라 실제 클릭 테스트로만 드러났던 문제 — 카드3은 화면 캡처까지 재확인 완료.
 - **2026-08-23**: Actions의 실제 커밋·push 경로가 한 번도 검증되지 않은 채 다음 날을 기다리는 게 불안해서, `data/history.json`을 잠시 비우고 workflow_dispatch를 재실행해 그 자리에서 검증. NVD를 실제로 재조회(184건→187건, 같은 KST 날짜 내 증가)해 커밋(`08699ae`)·push까지 성공 확인. 데이터는 그 순간의 진짜 NVD 응답이라 위조가 아니며, 내일 자동 cron이 처음 실패할 리스크를 오늘 미리 제거함.
+- **2026-08-23**: 화면이 "보기 어렵다"는 피드백을 받아 (1) 카드 배경/테두리 대비, 여백, 아이콘을 더해 가독성을 높이고 (2) 기록이 1건뿐이어도 바로 볼 수 있는 시각화로 "오늘 등록분 심각도 분포"(CVSSv3 기준 스택 막대 + 범례)를 추가함. NVD의 `cvssV3Severity` 필터 파라미터로 CRITICAL/HIGH/MEDIUM/LOW 각각의 `totalResults`를 추가 조회(기존 요청과 합쳐 총 5회, 30초당 5회 제한과 정확히 같아 요청 사이 1.5초 간격을 둠)하고, 전체 건수에서 뺀 나머지를 "평가 대기"로 표시. 기존 187건 기록을 지우고 재조회해 208건(critical 2/high 11/medium 16/low 1/unrated 178)으로 다시 확보 — 역시 같은 날 재조회한 진짜 데이터.
 
 ---
 
@@ -195,6 +196,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
 | 날짜 파라미터 | `pubStartDate`, `pubEndDate` — ISO-8601 확장형 `YYYY-MM-DDTHH:MM:SSZ` |
 | 날짜 범위 제한 | 최대 연속 120일 |
 | 건수 필드 | 응답의 `totalResults` |
+| 심각도 필터 | `cvssV3Severity=CRITICAL\|HIGH\|MEDIUM\|LOW` (2026-08-23 실제 호출로 동작 확인) |
 | 호출 제한 (키 없음) | 30초당 5회 |
 | 호출 제한 (키 있음) | 30초당 50회 |
 

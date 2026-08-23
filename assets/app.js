@@ -73,6 +73,9 @@ const els = {
   recordDate: document.getElementById('record-date'),
   compareCard: document.getElementById('compare-card'),
   compareText: document.getElementById('compare-text'),
+  severityCard: document.getElementById('severity-card'),
+  severityBar: document.getElementById('severity-bar'),
+  severityLegend: document.getElementById('severity-legend'),
   trendNote: document.getElementById('trend-note'),
   trendChart: document.getElementById('trend-chart'),
   historyBody: document.getElementById('history-body'),
@@ -103,6 +106,39 @@ function renderCompare(data) {
   els.compareText.textContent =
     `${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit} ` +
     `(${sign}${diff}${latest.unit}, ${direction})`;
+}
+
+const SEVERITY_LEVELS = [
+  ['critical', '심각', '#ff4d4f'],
+  ['high', '높음', '#ff9f43'],
+  ['medium', '중간', '#ffd166'],
+  ['low', '낮음', '#4dabf7'],
+  ['unrated', '평가 대기', '#5a5a62'],
+];
+
+function renderSeverity(entry) {
+  if (!entry.severity) {
+    els.severityCard.hidden = true;
+    return;
+  }
+  els.severityCard.hidden = false;
+  const total = entry.count || 1;
+
+  els.severityBar.innerHTML = SEVERITY_LEVELS
+    .map(([key, label, color]) => {
+      const v = entry.severity[key] || 0;
+      const pct = (v / total) * 100;
+      if (pct <= 0) return '';
+      return `<span class="seg" style="width:${pct}%;background:${color}" title="${label}: ${v}건"></span>`;
+    })
+    .join('');
+
+  els.severityLegend.innerHTML = SEVERITY_LEVELS
+    .map(([key, label, color]) => {
+      const v = entry.severity[key] || 0;
+      return `<li><span class="dot" style="background:${color}"></span>${label} <b>${v}</b>건</li>`;
+    })
+    .join('');
 }
 
 function renderTrend(data) {
@@ -164,6 +200,7 @@ function renderNormal(data) {
     els.valueNumber.textContent = '기록 없음';
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
+    els.severityCard.hidden = true;
     els.trendChart.hidden = true;
     els.trendNote.hidden = false;
     els.historyBody.innerHTML = '';
@@ -176,6 +213,7 @@ function renderNormal(data) {
   els.queriedAt.textContent = formatKst(latest.queriedAtUtc);
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
 
+  renderSeverity(latest);
   renderCompare(data);
   renderTrend(data);
   renderHistoryTable(data);

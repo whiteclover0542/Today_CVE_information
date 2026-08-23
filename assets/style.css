@@ -1,10 +1,11 @@
 :root {
   --bg: #000000;
-  --card-bg: #111113;
+  --card-bg: #151517;
+  --card-bg-2: #1c1c20;
   --text: #ffffff;
-  --muted: #9a9aa2;
+  --muted: #a8a8b0;
   --accent: #ffffff;
-  --border: #2a2a2e;
+  --border: #313136;
   --stale-bg: #2c2408;
   --stale-text: #ffd166;
   --empty-bg: #2b1414;
@@ -18,30 +19,33 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
+  line-height: 1.5;
 }
 
 .dashboard {
   max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1.25rem 4rem;
+  padding: 2.5rem 1.25rem 4rem;
 }
 
 header h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
   letter-spacing: -0.01em;
 }
 
 .purpose {
   color: var(--muted);
   margin-top: 0;
+  font-size: 0.95rem;
 }
 
 .status-banner {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .status-banner.stale {
@@ -56,6 +60,7 @@ header h1 {
 
 .about-card,
 .value-card,
+.severity-card,
 .compare-card,
 .trend-card,
 .history-card,
@@ -63,9 +68,10 @@ header h1 {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
-  border-radius: 10px;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
 }
 
 .about-card {
@@ -74,16 +80,16 @@ header h1 {
 
 .about-card h2 {
   margin-top: 0;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .about-card p {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin: 0.5rem 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  margin: 0.6rem 0;
 }
 
 .about-card p:last-child { margin-bottom: 0; }
@@ -93,38 +99,43 @@ header h1 {
 .value-main {
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .value-number {
-  font-size: 3.25rem;
+  font-size: 3.5rem;
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 44px rgba(255, 255, 255, 0.28);
 }
 
 .value-unit {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--muted);
 }
 
 .meta {
-  margin: 1rem 0 0;
+  margin: 1.25rem 0 0;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.35rem 1rem;
+  gap: 0.5rem 1.25rem;
 }
 
 .meta > div { display: contents; }
 
 .meta dt {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  align-self: center;
 }
 
 .meta dd {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  align-self: center;
 }
 
 .meta a {
@@ -135,20 +146,74 @@ header h1 {
 
 .meta a:hover { opacity: 0.75; }
 
-.compare-card h2, .trend-card h2, .history-card h2, .debug-panel h2 {
+.severity-card h2,
+.compare-card h2,
+.trend-card h2,
+.history-card h2,
+.debug-panel h2 {
   margin-top: 0;
-  font-size: 1rem;
+  margin-bottom: 0.9rem;
+  font-size: 1.02rem;
 }
 
 .compare-card #compare-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
+}
+
+.severity-bar {
+  display: flex;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card-bg-2);
+  margin-bottom: 0.9rem;
+}
+
+.severity-bar .seg {
+  height: 100%;
+}
+
+.severity-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  font-size: 0.88rem;
+}
+
+.severity-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.severity-legend .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.severity-legend b { font-variant-numeric: tabular-nums; }
+
+.severity-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin: 0.9rem 0 0;
 }
 
 .trend-note {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   margin: 0;
+  padding: 1.5rem 0;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
 }
 
 .trend-chart svg { display: block; }
@@ -156,42 +221,53 @@ header h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.87rem;
 }
 
 th {
   text-align: left;
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem 0.6rem;
   color: var(--muted);
   font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   border-bottom: 1px solid var(--border);
 }
 
 td {
   text-align: left;
-  padding: 0.4rem 0.5rem;
+  padding: 0.55rem 0.6rem;
   border-bottom: 1px solid var(--border);
 }
+
+tbody tr:hover { background: var(--card-bg-2); }
 
 .debug-panel {
   border-left-color: var(--border);
   border-style: dashed;
 }
 
+.debug-panel p {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .debug-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 button {
   font: inherit;
-  padding: 0.5rem 0.85rem;
+  padding: 0.55rem 0.9rem;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--card-bg-2);
   color: var(--text);
   cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
 }
 
 button:hover {
@@ -208,7 +284,7 @@ button.retry {
 button.retry:hover { opacity: 0.85; }
 
 footer {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   color: var(--muted);
   font-size: 0.85rem;
 }

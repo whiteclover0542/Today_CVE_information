@@ -1,10 +1,17 @@
 [
   {
     "date": "2026-08-23",
-    "count": 187,
+    "count": 208,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-22T23%3A19%3A01.045Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-08-22T23:19:01.045Z"
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-22T15%3A00%3A00.000Z&pubEndDate=2026-08-23T09%3A24%3A08.447Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-23T09:24:08.447Z",
+    "severity": {
+      "critical": 2,
+      "high": 11,
+      "medium": 16,
+      "low": 1,
+      "unrated": 178
+    }
   }
 ]
