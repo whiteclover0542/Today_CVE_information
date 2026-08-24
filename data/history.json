@@ -36,5 +36,43 @@
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62384"
       }
     ]
+  },
+  {
+    "date": "2026-08-24",
+    "count": 13,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-23T15%3A00%3A00.000Z&pubEndDate=2026-08-24T00%3A30%3A19.886Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-24T00:30:19.886Z",
+    "severity": {
+      "critical": 0,
+      "high": 5,
+      "medium": 5,
+      "low": 0,
+      "unrated": 3
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-78141",
+        "severity": "HIGH",
+        "summaryEn": "A vulnerability has been found in Tenda CH22 1.0.0.1. This affects the function formexeCommand of the file /goform/exeCommand. The manipulat…",
+        "summaryKo": "TENDA CH22 1.0.0.1에서 취약점이 발견되었습니다. 이것은/goform/exeCommand 파일의 formexeCommand 함수에 영향을 미칩니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78141"
+      },
+      {
+        "id": "CVE-2026-78143",
+        "severity": "HIGH",
+        "summaryEn": "A vulnerability was determined in code-projects Barangay Resident Profiling Management System 1.0. Affected is an unknown function of the fi…",
+        "summaryKo": "코드 프로젝트 Barangay Resident Profiling Management System 1.0에서 취약점이 확인되었습니다. 영향을 받는 것은 fi의 알려지지 않은 기능입니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78143"
+      },
+      {
+        "id": "CVE-2026-78147",
+        "severity": "HIGH",
+        "summaryEn": "A vulnerability was found in ggml-org llama.cpp bec4772f6. The impacted element is the function deserialize_tensor of the file ggml/src/ggml…",
+        "summaryKo": "Ggml-org llama.cpp bec4772f6에서 취약점이 발견되었습니다. 영향을 받는 요소는 ggml/src/ggml 파일의 deserialize_tensor 함수입니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78147"
+      }
+    ]
   }
 ]
