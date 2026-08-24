@@ -82,6 +82,9 @@ const els = {
   compareCard: document.getElementById('compare-card'),
   compareArrow: document.getElementById('compare-arrow'),
   compareText: document.getElementById('compare-text'),
+  compareWindowNote: document.getElementById('compare-window-note'),
+  compareWindowCaveat: document.getElementById('compare-window-caveat'),
+  compareWindowTimes: document.getElementById('compare-window-times'),
   severityCard: document.getElementById('severity-card'),
   severityDonut: document.getElementById('severity-donut'),
   severityLegend: document.getElementById('severity-legend'),
@@ -106,6 +109,7 @@ function renderHistoryTable(data) {
 function renderCompare(data) {
   if (data.length < 2) {
     els.compareCard.hidden = true;
+    els.compareWindowNote.hidden = true;
     return;
   }
   const latest = data[data.length - 1];
@@ -121,6 +125,16 @@ function renderCompare(data) {
   els.compareArrow.textContent = arrow;
   els.compareText.textContent =
     `${sign}${diff}${latest.unit} (${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit}, ${direction})`;
+
+  els.compareWindowNote.hidden = false;
+  els.compareWindowCaveat.textContent =
+    '※ 각 값은 자정(KST)부터 조회 시각까지의 누적치예요. 조회 시각이 다르면 위 증감폭에 실제 발생량 차이 외에 측정 구간 차이도 섞여 있어요.';
+  els.compareWindowTimes.innerHTML = '';
+  [prev, latest].forEach((entry) => {
+    const li = document.createElement('li');
+    li.textContent = `${entry.date} 조회 시각: ${formatKst(entry.queriedAtUtc)}`;
+    els.compareWindowTimes.appendChild(li);
+  });
 }
 
 const SEVERITY_LEVELS = [

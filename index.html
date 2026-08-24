@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=14" />
+<link rel="stylesheet" href="assets/style.css?v=16" />
 </head>
 <body>
 <main class="dashboard">
@@ -34,6 +34,10 @@
       <div class="compare-inline" id="compare-card" hidden>
         <span class="compare-arrow" id="compare-arrow"></span>
         <span id="compare-text">-</span>
+      </div>
+      <div class="compare-window-note" id="compare-window-note" hidden>
+        <p id="compare-window-caveat"></p>
+        <ul class="compare-window-times" id="compare-window-times"></ul>
       </div>
       <dl class="meta">
         <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
@@ -97,6 +101,6 @@
     <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=14"></script>
+<script src="assets/app.js?v=16"></script>
 </body>
 </html>

@@ -193,6 +193,27 @@ header h1 {
 
 .compare-arrow { font-size: 0.8rem; }
 
+.compare-window-note {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--card-bg-2);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.compare-window-note p { margin: 0; }
+
+.compare-window-times {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
 .severity-card h2,
 .highlights-card h2,
 .trend-card h2,
