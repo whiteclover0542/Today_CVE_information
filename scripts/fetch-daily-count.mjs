@@ -91,12 +91,17 @@ async function main() {
         if (rawHighlights.length >= MAX_HIGHLIGHTS) break;
         const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
         const { text: shortEn, truncated } = truncate(desc, SUMMARY_MAX_CHARS);
+        const metrics = cve.metrics || {};
+        // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
+        const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
         rawHighlights.push({
           id: cve.id,
           severity: level,
           shortEn,
           truncated,
           url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
+          cvssScore: cvss?.cvssData?.baseScore ?? null,
+          cvssVector: cvss?.cvssData?.vectorString ?? null,
         });
       }
     }
@@ -115,6 +120,8 @@ async function main() {
       summaryEn: h.truncated ? `${h.shortEn}…` : h.shortEn,
       summaryKo: ko ? (h.truncated ? `${ko}…` : ko) : null,
       url: h.url,
+      cvssScore: h.cvssScore,
+      cvssVector: h.cvssVector,
     });
   }
 

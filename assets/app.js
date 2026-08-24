@@ -88,8 +88,16 @@ const els = {
   severityCard: document.getElementById('severity-card'),
   severityDonut: document.getElementById('severity-donut'),
   severityLegend: document.getElementById('severity-legend'),
+  riskMeter: document.getElementById('risk-meter'),
+  riskMeterTrack: document.getElementById('risk-meter-track'),
+  riskMeterCaption: document.getElementById('risk-meter-caption'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
+  trendStats: document.getElementById('trend-stats'),
+  trendStatsNote: document.getElementById('trend-stats-note'),
+  statAvg: document.getElementById('stat-avg'),
+  statMax: document.getElementById('stat-max'),
+  statMin: document.getElementById('stat-min'),
   trendNote: document.getElementById('trend-note'),
   trendChart: document.getElementById('trend-chart'),
   historyBody: document.getElementById('history-body'),
@@ -191,6 +199,45 @@ function renderSeverity(entry) {
     .join('');
 }
 
+const RISK_STEPS = [
+  { key: 'low', label: '보통', color: '#63e6a5' },
+  { key: 'mid', label: '주의', color: '#ff9f43' },
+  { key: 'high', label: '위험', color: '#ff4d4f' },
+];
+
+// 판단 기준을 코드·화면 양쪽에 그대로 노출 — 규칙을 숨긴 채 "위험/주의/보통"만 던지지 않기 위함
+function computeRisk(severity) {
+  const critical = severity.critical || 0;
+  const high = severity.high || 0;
+  if (critical > 0) {
+    return { key: 'high', reason: `심각(CRITICAL) ${critical}건 → 위험` };
+  }
+  if (high > 0) {
+    return { key: 'mid', reason: `심각 0건, 높음(HIGH) ${high}건 → 주의` };
+  }
+  return { key: 'low', reason: '심각·높음 등급 CVE 없음 → 보통' };
+}
+
+function renderRisk(entry) {
+  if (!entry.severity) {
+    els.riskMeter.hidden = true;
+    return;
+  }
+  const risk = computeRisk(entry.severity);
+
+  els.riskMeter.hidden = false;
+  els.riskMeterTrack.innerHTML = RISK_STEPS
+    .map((step) => {
+      const active = step.key === risk.key;
+      const style = active ? `color:${step.color};border-color:${step.color};background:${step.color}26` : '';
+      return `<span class="risk-step${active ? ' active' : ''}" style="${style}">${escapeHtml(step.label)}</span>`;
+    })
+    .join('');
+
+  els.riskMeterCaption.textContent =
+    `${risk.reason} · 기준: 심각 1건 이상=위험 · 없고 높음 1건 이상=주의 · 둘 다 0건=보통`;
+}
+
 const SEVERITY_COLOR = {
   CRITICAL: '#ff4d4f',
   HIGH: '#ff9f43',
@@ -223,13 +270,39 @@ function renderHighlights(entry) {
       const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
       const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
       const summary = h.summaryKo || h.summaryEn || h.summary || '';
+      const cvss = h.cvssScore != null
+        ? `<span class="hl-cvss" title="${escapeHtml(h.cvssVector || 'CVSS 벡터 없음')}">CVSS ${h.cvssScore.toFixed(1)}</span>`
+        : '';
       return `<li>
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
+        ${cvss}
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
         <span class="hl-summary">${escapeHtml(summary)}</span>
       </li>`;
     })
     .join('');
+}
+
+function renderTrendStats(data) {
+  if (data.length < 2) {
+    els.trendStats.hidden = true;
+    els.trendStatsNote.hidden = true;
+    return;
+  }
+  const week = data.slice(-7);
+  const counts = week.map((d) => d.count);
+  const avg = counts.reduce((a, b) => a + b, 0) / week.length;
+  const maxEntry = week.reduce((a, b) => (b.count > a.count ? b : a));
+  const minEntry = week.reduce((a, b) => (b.count < a.count ? b : a));
+
+  els.trendStats.hidden = false;
+  els.statAvg.textContent = `${avg.toFixed(1)}건`;
+  els.statMax.textContent = `${maxEntry.count}건 (${maxEntry.date})`;
+  els.statMin.textContent = `${minEntry.count}건 (${minEntry.date})`;
+
+  els.trendStatsNote.hidden = false;
+  els.trendStatsNote.textContent =
+    `최근 ${week.length}일 기록 기준 (${week[0].date} ~ ${week[week.length - 1].date})`;
 }
 
 function renderTrend(data) {
@@ -292,7 +365,10 @@ function renderNormal(data) {
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
+    els.riskMeter.hidden = true;
     els.highlightsCard.hidden = true;
+    els.trendStats.hidden = true;
+    els.trendStatsNote.hidden = true;
     els.trendChart.hidden = true;
     els.trendNote.hidden = false;
     els.historyBody.innerHTML = '';
@@ -306,8 +382,10 @@ function renderNormal(data) {
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
 
   renderSeverity(latest);
+  renderRisk(latest);
   renderHighlights(latest);
   renderCompare(data);
+  renderTrendStats(data);
   renderTrend(data);
   renderHistoryTable(data);
 }
@@ -335,6 +413,7 @@ function renderError(err) {
     els.valueUnit.textContent = '';
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
+    els.riskMeter.hidden = true;
     els.highlightsCard.hidden = true;
   }
 }

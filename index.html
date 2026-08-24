@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=16" />
+<link rel="stylesheet" href="assets/style.css?v=20" />
 </head>
 <body>
 <main class="dashboard">
@@ -50,6 +50,10 @@
 
     <section class="severity-card" id="severity-card" hidden>
       <h2>📊 오늘 등록분 심각도</h2>
+      <div class="risk-meter" id="risk-meter" hidden>
+        <div class="risk-meter-track" id="risk-meter-track"></div>
+        <p class="risk-meter-caption" id="risk-meter-caption"></p>
+      </div>
       <div class="severity-visual">
         <div id="severity-donut" class="severity-donut"></div>
         <ul class="severity-legend" id="severity-legend"></ul>
@@ -66,6 +70,12 @@
   <div class="grid-2">
     <section class="trend-card">
       <h2>📈 최근 추이</h2>
+      <div class="trend-stats" id="trend-stats" hidden>
+        <div class="stat"><span class="stat-label">일평균</span><span class="stat-value" id="stat-avg">-</span></div>
+        <div class="stat"><span class="stat-label">최고</span><span class="stat-value" id="stat-max">-</span></div>
+        <div class="stat"><span class="stat-label">최저</span><span class="stat-value" id="stat-min">-</span></div>
+      </div>
+      <p class="trend-stats-note" id="trend-stats-note" hidden></p>
       <div class="trend-note" id="trend-note">
         <div class="skeleton-bars" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
@@ -101,6 +111,6 @@
     <p><a href="https://github.com/whiteclover0542/today_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=16"></script>
+<script src="assets/app.js?v=20"></script>
 </body>
 </html>

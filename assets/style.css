@@ -236,6 +236,39 @@ header h1 {
   flex-direction: column;
 }
 
+.risk-meter {
+  margin-bottom: 1.1rem;
+}
+
+.risk-meter-track {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.risk-step {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.4rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg-2);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.risk-step.active {
+  box-shadow: 0 0 0 1px currentColor inset;
+}
+
+.risk-meter-caption {
+  color: var(--muted);
+  font-size: 0.74rem;
+  margin: 0.55rem 0 0;
+  line-height: 1.5;
+}
+
 .severity-visual {
   display: flex;
   align-items: center;
@@ -308,6 +341,20 @@ header h1 {
   white-space: nowrap;
 }
 
+.hl-cvss {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg-2);
+  color: var(--muted);
+  flex-shrink: 0;
+  align-self: center;
+  white-space: nowrap;
+  cursor: help;
+}
+
 .hl-id {
   color: var(--accent);
   font-weight: 700;
@@ -320,6 +367,39 @@ header h1 {
 .hl-summary {
   color: var(--muted);
   line-height: 1.5;
+}
+
+.trend-stats {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.trend-stats .stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.trend-stats .stat-label {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.trend-stats .stat-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.trend-stats-note {
+  margin: 0 0 0.9rem;
+  color: var(--muted);
+  font-size: 0.72rem;
 }
 
 .trend-note {
