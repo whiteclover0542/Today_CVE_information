@@ -86,5 +86,49 @@
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
       }
     ]
+  },
+  {
+    "date": "2026-08-25",
+    "count": 180,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-24T15%3A00%3A00.000Z&pubEndDate=2026-08-25T00%3A29%3A34.866Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-25T00:29:34.866Z",
+    "severity": {
+      "critical": 4,
+      "high": 23,
+      "medium": 18,
+      "low": 1,
+      "unrated": 134
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-76071",
+        "severity": "CRITICAL",
+        "summaryEn": "Netis NC63 firmware through V3.0.0.3327 contains a stack-based buffer overflow vulnerability that allows unauthenticated remote attackers to…",
+        "summaryKo": "V3.0.0.3327을 통한 Netis NC63 펌웨어에는 인증되지 않은 원격 공격자가…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76071",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-77915",
+        "severity": "CRITICAL",
+        "summaryEn": "rConfig 8.0.0 before 8.2.13 contains an authentication bypass vulnerability that allows unauthenticated attackers to self-register accounts…",
+        "summaryKo": "rConfig 8.0.0 8.2.13 이전 버전에는 인증되지 않은 공격자가 계정을 스스로 등록할 수 있는 인증 무시 취약점이 있습니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77915",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-71921",
+        "severity": "CRITICAL",
+        "summaryEn": "Multiple DrayTek VigorSwitch models contain a pre-authentication command injection vulnerability in the setget.cgi interface. The vulnerabil…",
+        "summaryKo": "여러 DrayTek VigorSwitch 모델은 setget.cgi 인터페이스에 사전 인증 명령 주입 취약점이 있습니다. 취약점…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71921",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      }
+    ]
   }
 ]
