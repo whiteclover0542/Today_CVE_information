@@ -174,5 +174,49 @@
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }
     ]
+  },
+  {
+    "date": "2026-08-27",
+    "count": 272,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-26T15%3A00%3A00.000Z&pubEndDate=2026-08-27T05%3A17%3A49.357Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-27T05:17:49.357Z",
+    "severity": {
+      "critical": 1,
+      "high": 6,
+      "medium": 6,
+      "low": 0,
+      "unrated": 259
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-80428",
+        "severity": "CRITICAL",
+        "summaryEn": "ILIAS deserialises stored session data for an unauthenticated caller. The Shibboleth back-channel endpoint at components/ILIAS/AuthShibbolet…",
+        "summaryKo": "일리아스는 인증되지 않은 발신자에 대해 저장된 세션 데이터를 역직렬화합니다. 구성 요소/ILIAS/AuthShibbolet의 Shibboleth 백 채널 엔드포인트…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80428",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-81031",
+        "severity": "HIGH",
+        "summaryEn": "IDURAR ERP CRM changes the password of whichever account a request names rather than the account making the request. The update handler in b…",
+        "summaryKo": "IDURAR ERP CRM은 요청하는 계정이 아닌 요청 이름 중 어느 계정의 암호를 변경합니다. b의 업데이트 처리기…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81031",
+        "cvssScore": 7.2,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-81036",
+        "severity": "HIGH",
+        "summaryEn": "Stalwart Mail Server does not compare an OAuth redirect target against any registered destination in its default configuration. The validati…",
+        "summaryKo": "Stalwart Mail Server는 OAuth 리디렉션 대상을 기본 구성의 등록된 대상과 비교하지 않습니다. 유효성 검사…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81036",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+      }
+    ]
   }
 ]
