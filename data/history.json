@@ -218,5 +218,49 @@
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
       }
     ]
+  },
+  {
+    "date": "2026-08-28",
+    "count": 485,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-27T15%3A00%3A00.000Z&pubEndDate=2026-08-28T07%3A16%3A01.161Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-28T07:16:01.161Z",
+    "severity": {
+      "critical": 4,
+      "high": 19,
+      "medium": 25,
+      "low": 7,
+      "unrated": 430
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-81702",
+        "severity": "CRITICAL",
+        "summaryEn": "openssl_encrypt before 1.4.9 fails to re-derive and validate fingerprints when loading identities from identity.json, allowing attackers to…",
+        "summaryKo": "1.4.9 이전의 openssl_encrypt는 identity.json에서 ID를 로드할 때 지문을 다시 파생하고 유효성을 검사하지 못하므로 공격자가…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81702",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-81707",
+        "severity": "CRITICAL",
+        "summaryEn": "openssl_encrypt before 1.4.9 fails to sanitize the email field of imported identity documents, allowing attackers to inject ANSI escape sequ…",
+        "summaryKo": "1.4.9 이전의 openssl_encrypt는 가져온 ID 문서의 이메일 필드를 검사하지 못하므로 공격자는 ANSI 이스케이프 시퀀스를 주입할 수 있습니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81707",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-81735",
+        "severity": "CRITICAL",
+        "summaryEn": "startServer.ts in the mcp-http-server package of UI-TARS-desktop defaulted its listen address to '::' when no host was given, so startSseAnd…",
+        "summaryKo": "uI-TARS-desktop의 mcp-http-server 패키지에 있는 startServer.ts는 호스트가 주어지지 않았을 때 수신 주소가 '::' 로 기본 설정되었으므로 startSseAnd…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81735",
+        "cvssScore": 10,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+      }
+    ]
   }
 ]
