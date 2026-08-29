@@ -262,5 +262,49 @@
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
       }
     ]
+  },
+  {
+    "date": "2026-08-29",
+    "count": 256,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-28T15%3A00%3A00.000Z&pubEndDate=2026-08-29T04%3A27%3A32.715Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-29T04:27:32.715Z",
+    "severity": {
+      "critical": 6,
+      "high": 21,
+      "medium": 23,
+      "low": 0,
+      "unrated": 206
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-82266",
+        "severity": "CRITICAL",
+        "summaryEn": "Redpanda through 26.2.2 binds the Admin API to 0.0.0.0:9644 with admin_api_require_auth defaulting to false, treating unauthenticated reques…",
+        "summaryKo": "26.2.2를 통한 Redpanda는 admin_api_require_auth가 false로 기본 설정되고 인증되지 않은 요청이 처리되는 Admin API를 0.0.0.0: 9644로 바인딩합니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82266",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-82277",
+        "severity": "CRITICAL",
+        "summaryEn": "Argo Rollouts dashboard through 1.10.0 binds to all interfaces and exposes mutating Rollout operations without authentication, authorization…",
+        "summaryKo": "1.10.0을 통한 Argo 롤아웃 대시보드는 모든 인터페이스에 바인딩되며 인증, 권한 부여 없이 돌연변이 롤아웃 작업을 노출합니다…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82277",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-18527",
+        "severity": "CRITICAL",
+        "summaryEn": "IBM Administration Runtime Expert for i 1R1M0 IBM Application Runtime Expert (ARE) for i could allow a remote attacker to gain elevated priv…",
+        "summaryKo": "IBM Administration Runtime Expert for i 1R1M0 IBM Application Runtime Expert (ARE) for i는 원격 공격자가 더 높은 비공개 권한을 얻도록 허용할 수 있습니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18527",
+        "cvssScore": 9.9,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+      }
+    ]
   }
 ]
