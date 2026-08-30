@@ -306,5 +306,49 @@
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
       }
     ]
+  },
+  {
+    "date": "2026-08-30",
+    "count": 29,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-29T15%3A00%3A00.000Z&pubEndDate=2026-08-30T01%3A55%3A58.149Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-08-30T01:55:58.149Z",
+    "severity": {
+      "critical": 2,
+      "high": 8,
+      "medium": 12,
+      "low": 0,
+      "unrated": 7
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-82460",
+        "severity": "CRITICAL",
+        "summaryEn": "Cloud Commander before 19.20.2 contains a directory traversal vulnerability in REST file-operation and markdown endpoints that fails to prop…",
+        "summaryKo": "19.20.2 이전의 Cloud Commander에는 REST 파일 작동 및 감점 엔드포인트에 디렉토리 트래버설 취약성이 있으며 이는 prop에 실패합니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82460",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-15369",
+        "severity": "CRITICAL",
+        "summaryEn": "The Custom User Registration Fields for WooCommerce plugin for WordPress is vulnerable to Privilege Escalation in versions up to, and includ…",
+        "summaryKo": "WordPress용 WooCommerce 플러그인의 사용자 지정 사용자 등록 필드는 다음 버전까지의 권한 상승에 취약합니다.…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15369",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "id": "CVE-2026-82461",
+        "severity": "HIGH",
+        "summaryEn": "pac4j-oidc before 6.5.6 fails to verify access token signatures, issuers, audiences, or expiry when extracting Keycloak realm and client rol…",
+        "summaryKo": "keycloak 영역 및 클라이언트 롤을 추출할 때 6.5.6 이전의 pac4j-oidc가 액세스 토큰 서명, 발행자, 대상 또는 만료 여부를 확인하지 못함…",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82461",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+      }
+    ]
   }
 ]
