@@ -5,6 +5,31 @@ const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 const MAX_HIGHLIGHTS = 3;
 const SUMMARY_MAX_CHARS = 140;
+const CATEGORY_SAMPLE_SIZE = 20; // 심각도별로 이 개수만큼 설명을 받아 유형 분류 표본으로 사용 (호출 횟수는 늘지 않음, resultsPerPage만 늘림)
+
+// CVE 설명은 NVD가 정형화된 문구로 작성하는 경우가 많아("... allows remote attackers to execute arbitrary code" 등)
+// 키워드 매칭만으로도 꽤 신뢰할 수 있는 유형 분류가 가능함. 위에서 아래로 먼저 걸리는 규칙 하나만 적용.
+const CATEGORY_RULES = [
+  { key: 'rce', label: '원격 코드 실행', pattern: /remote code execution|arbitrary code execution|code injection|command injection|execute arbitrary code/i },
+  { key: 'auth-bypass', label: '인증 우회', pattern: /authentication bypass|missing authentication|without authentication|unauthenticated (attacker|user|caller)|bypass authentication/i },
+  { key: 'priv-esc', label: '권한 상승', pattern: /privilege escalation|elevation of privilege|escalate privileges|elevated privileges/i },
+  { key: 'sqli', label: 'SQL 인젝션', pattern: /sql injection/i },
+  { key: 'xss', label: '크로스사이트 스크립팅(XSS)', pattern: /cross-site scripting|\bxss\b/i },
+  { key: 'csrf', label: 'CSRF', pattern: /cross-site request forgery|\bcsrf\b/i },
+  { key: 'path-traversal', label: '경로 순회', pattern: /directory traversal|path traversal/i },
+  { key: 'buffer-overflow', label: '버퍼 오버플로우', pattern: /buffer overflow|out-of-bounds (read|write)|stack-based buffer|heap-based buffer/i },
+  { key: 'info-disclosure', label: '정보 노출', pattern: /information disclosure|sensitive information (exposure|disclosure)|expose sensitive/i },
+  { key: 'dos', label: '서비스 거부(DoS)', pattern: /denial of service|\bdos\b/i },
+  { key: 'deserialization', label: '역직렬화 취약점', pattern: /deserializ/i },
+  { key: 'ssrf', label: 'SSRF', pattern: /server-side request forgery|\bssrf\b/i },
+  { key: 'hardcoded-cred', label: '하드코딩된 자격증명', pattern: /hard-?coded credential|default credential/i },
+  { key: 'file-upload', label: '위험한 파일 업로드', pattern: /unrestricted upload|arbitrary file upload|malicious file upload/i },
+];
+
+function categorize(description) {
+  const rule = CATEGORY_RULES.find((r) => r.pattern.test(description));
+  return rule ? rule.key : 'other';
+}
 
 function kstDateString(date) {
   return new Intl.DateTimeFormat('en-CA', {
@@ -75,21 +100,27 @@ async function main() {
   const total = totalBody.totalResults;
 
   // 키 없이 호출하면 30초당 5회 제한(NVD 공식 문서) — 4개 심각도 질의를 여유 있게 간격을 두고 순차 호출.
-  // resultsPerPage를 늘려 같은 호출에서 건수(totalResults)와 대표 CVE 몇 건(vulnerabilities)을 함께 받는다.
+  // resultsPerPage를 늘려 같은 호출에서 건수(totalResults)·대표 CVE(vulnerabilities)·유형 분류용 표본을 함께 받는다(호출 횟수는 그대로 5회).
   const severity = {};
   const rawHighlights = [];
+  const categoryCounts = {};
+  let categorySampleSize = 0;
   for (const level of SEVERITIES) {
     await sleep(1500);
     const sevUrl = new URL(baseUrl);
     sevUrl.searchParams.set('cvssV3Severity', level);
-    sevUrl.searchParams.set('resultsPerPage', String(MAX_HIGHLIGHTS));
+    sevUrl.searchParams.set('resultsPerPage', String(CATEGORY_SAMPLE_SIZE));
     const body = await fetchJson(sevUrl);
     severity[level.toLowerCase()] = body.totalResults;
 
-    if (rawHighlights.length < MAX_HIGHLIGHTS) {
-      for (const { cve } of body.vulnerabilities || []) {
-        if (rawHighlights.length >= MAX_HIGHLIGHTS) break;
-        const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
+    for (const { cve } of body.vulnerabilities || []) {
+      const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
+
+      categorySampleSize += 1;
+      const categoryKey = categorize(desc);
+      categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
+
+      if (rawHighlights.length < MAX_HIGHLIGHTS) {
         const { text: shortEn, truncated } = truncate(desc, SUMMARY_MAX_CHARS);
         const metrics = cve.metrics || {};
         // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
@@ -108,6 +139,13 @@ async function main() {
   }
   const rated = severity.critical + severity.high + severity.medium + severity.low;
   severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
+
+  const categoryLabels = Object.fromEntries(CATEGORY_RULES.map((r) => [r.key, r.label]));
+  categoryLabels.other = '기타';
+  const categoryBreakdown = Object.entries(categoryCounts)
+    .map(([key, count]) => ({ key, label: categoryLabels[key], count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
   // 대표 CVE 요약을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
   const highlights = [];
@@ -134,13 +172,21 @@ async function main() {
     queriedAtUtc: now.toISOString(),
     severity,
     highlights,
+    categoryBreakdown,
+    categorySampleSize,
   };
 
   history.push(entry);
   history.sort((a, b) => a.date.localeCompare(b.date));
 
   writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2) + '\n');
-  console.log(`[saved] ${kstDate} -> ${entry.count}건`, severity, `highlights: ${highlights.length}`);
+  console.log(
+    `[saved] ${kstDate} -> ${entry.count}건`,
+    severity,
+    `highlights: ${highlights.length}`,
+    `categories(표본 ${categorySampleSize}건):`,
+    categoryBreakdown,
+  );
 }
 
 main().catch((err) => {

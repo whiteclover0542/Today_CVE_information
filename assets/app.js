@@ -91,6 +91,9 @@ const els = {
   riskMeter: document.getElementById('risk-meter'),
   riskMeterTrack: document.getElementById('risk-meter-track'),
   riskMeterCaption: document.getElementById('risk-meter-caption'),
+  categoryCard: document.getElementById('category-card'),
+  categoryBars: document.getElementById('category-bars'),
+  categoryNote: document.getElementById('category-note'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
   trendStats: document.getElementById('trend-stats'),
@@ -238,6 +241,31 @@ function renderRisk(entry) {
     `${risk.reason} · 기준: 심각 1건 이상=위험 · 없고 높음 1건 이상=주의 · 둘 다 0건=보통`;
 }
 
+// LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
+function renderCategory(entry) {
+  const breakdown = entry.categoryBreakdown;
+  if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
+    els.categoryCard.hidden = true;
+    return;
+  }
+  els.categoryCard.hidden = false;
+  const maxCount = Math.max(...breakdown.map((c) => c.count));
+
+  els.categoryBars.innerHTML = breakdown
+    .map((c) => {
+      const pct = Math.round((c.count / maxCount) * 100);
+      return `<li>
+        <span class="category-bar-label">${escapeHtml(c.label)}</span>
+        <span class="category-bar-track"><span class="category-bar-fill" style="width:${pct}%"></span></span>
+        <span class="category-bar-count">${c.count}건</span>
+      </li>`;
+    })
+    .join('');
+
+  els.categoryNote.textContent =
+    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 표본이라 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
+}
+
 const SEVERITY_COLOR = {
   CRITICAL: '#ff4d4f',
   HIGH: '#ff9f43',
@@ -366,6 +394,7 @@ function renderNormal(data) {
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
+    els.categoryCard.hidden = true;
     els.highlightsCard.hidden = true;
     els.trendStats.hidden = true;
     els.trendStatsNote.hidden = true;
@@ -383,6 +412,7 @@ function renderNormal(data) {
 
   renderSeverity(latest);
   renderRisk(latest);
+  renderCategory(latest);
   renderHighlights(latest);
   renderCompare(data);
   renderTrendStats(data);
@@ -414,6 +444,7 @@ function renderError(err) {
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
+    els.categoryCard.hidden = true;
     els.highlightsCard.hidden = true;
   }
 }

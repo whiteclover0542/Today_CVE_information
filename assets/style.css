@@ -101,6 +101,7 @@ header h1 {
 
 .value-card,
 .severity-card,
+.category-card,
 .highlights-card,
 .trend-card,
 .history-card,
@@ -215,6 +216,7 @@ header h1 {
 }
 
 .severity-card h2,
+.category-card h2,
 .highlights-card h2,
 .trend-card h2,
 .history-card h2,
@@ -310,6 +312,58 @@ header h1 {
   color: var(--muted);
   font-size: 0.78rem;
   margin: 1rem 0 0;
+}
+
+.category-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.category-bars li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.85rem;
+}
+
+.category-bar-label {
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.category-bar-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.category-bar-count {
+  width: 42px;
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.category-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin: 1rem 0 0;
+  line-height: 1.5;
 }
 
 .highlights-list {
