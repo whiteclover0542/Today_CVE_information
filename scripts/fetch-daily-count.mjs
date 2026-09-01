@@ -71,9 +71,37 @@ function decodeCvssVector(vector) {
   return labels.length ? labels.join(' · ') : null;
 }
 
-// 무키 번역: MyMemory Translation API (익명 사용, 하루 5000단어 한도) — 실패해도 영문 요약으로 대체되므로 치명적이지 않음
-async function translateToKorean(text) {
-  if (!text) return null;
+const MYMEMORY_CHAR_LIMIT = 490; // MyMemory 익명 사용 한도(500자)에 여유를 둔 값
+
+// 500자 넘는 설명을 문장 하나씩 보내면 호출이 너무 늘어나므로, 문장을 한도 안에서 최대한 크게 묶어 나눈다.
+// (문장 하나가 한도보다 길 때만 어쩔 수 없이 단어 경계에서 추가로 자름)
+function splitIntoChunks(text, limit) {
+  const sentences = text.match(/[^.!?]+[.!?]*\s*/g) || [text];
+  const chunks = [];
+  let current = '';
+  for (let sentence of sentences) {
+    while (sentence.length > limit) {
+      const cut = sentence.slice(0, limit);
+      const lastSpace = cut.lastIndexOf(' ');
+      const splitAt = lastSpace > limit * 0.6 ? lastSpace : limit;
+      if (current) {
+        chunks.push(current.trim());
+        current = '';
+      }
+      chunks.push(sentence.slice(0, splitAt).trim());
+      sentence = sentence.slice(splitAt).trim();
+    }
+    if (current.length + sentence.length > limit && current) {
+      chunks.push(current.trim());
+      current = '';
+    }
+    current += sentence;
+  }
+  if (current.trim()) chunks.push(current.trim());
+  return chunks;
+}
+
+async function translateChunk(text) {
   try {
     const url = new URL('https://api.mymemory.translated.net/get');
     url.searchParams.set('q', text);
@@ -84,9 +112,24 @@ async function translateToKorean(text) {
     if (body.responseStatus !== 200) return null;
     return body.responseData?.translatedText || null;
   } catch (e) {
-    console.warn(`[warn] 번역 실패, 영문으로 대체: ${e.message}`);
+    console.warn(`[warn] 번역 청크 실패: ${e.message}`);
     return null;
   }
+}
+
+// 무키 번역: MyMemory Translation API (익명 사용, 요청당 500자·하루 5000단어 한도)
+// 청크 중 하나라도 실패하면 짜깁기된 반쪽 번역 대신 전체를 null로 반환해 원문으로 대체한다.
+async function translateToKorean(text) {
+  if (!text) return null;
+  const chunks = splitIntoChunks(text, MYMEMORY_CHAR_LIMIT);
+  const translated = [];
+  for (const chunk of chunks) {
+    const result = await translateChunk(chunk);
+    if (!result) return null;
+    translated.push(result);
+    if (chunks.length > 1) await sleep(400);
+  }
+  return translated.join(' ');
 }
 
 async function main() {
