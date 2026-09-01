@@ -4,7 +4,8 @@ const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 const MAX_HIGHLIGHTS = 3;
-const CATEGORY_SAMPLE_SIZE = 20; // 심각도별로 이 개수만큼 설명을 받아 유형 분류 표본으로 사용 (호출 횟수는 늘지 않음, resultsPerPage만 늘림)
+const PAGE_SIZE = 2000; // NVD CVE API 2.0 공식 문서상 resultsPerPage 최대값 — 하루치 심각도별 CVE는 사실상 이 안에 다 들어와 대부분 한 번의 호출로 전량이 수집됨
+const NVD_REQUEST_INTERVAL_MS = 6500; // 무키 제한 30초당 5회 — 페이지가 늘어 호출이 몇 번이 되든 이 간격을 지키면 항상 제한 안쪽에 머문다
 const CATEGORY_EXAMPLES_LIMIT = 3; // 유형별로 원본 링크를 몇 건까지 같이 저장할지 (번역은 안 함 — API 호출 추가 없음)
 
 // CVE 설명은 NVD가 정형화된 문구로 작성하는 경우가 많아("... allows remote attackers to execute arbitrary code" 등)
@@ -156,6 +157,28 @@ async function translateChunk(text) {
   }
 }
 
+// 한 심각도의 CVE를 startIndex로 계속 넘겨가며 전량 수집한다 — 더 이상 앞쪽 일부만 보는 표본이 아니라
+// 그 심각도의 당일 등록분 전체(rated)를 받아옴. PAGE_SIZE(2000)가 NVD 최대치라 보통은 while이 한 번만 돈다.
+async function fetchAllForSeverity(baseUrl, level) {
+  const vulnerabilities = [];
+  let startIndex = 0;
+  let total = Infinity;
+  while (startIndex < total) {
+    await sleep(NVD_REQUEST_INTERVAL_MS);
+    const url = new URL(baseUrl);
+    url.searchParams.set('cvssV3Severity', level);
+    url.searchParams.set('resultsPerPage', String(PAGE_SIZE));
+    url.searchParams.set('startIndex', String(startIndex));
+    const body = await fetchJson(url);
+    total = body.totalResults;
+    const page = body.vulnerabilities || [];
+    vulnerabilities.push(...page);
+    if (page.length === 0) break; // 안전장치: 빈 응답이면 무한 루프 방지
+    startIndex += page.length;
+  }
+  return { total, vulnerabilities };
+}
+
 // 무키 번역: MyMemory Translation API (익명 사용, 요청당 500자·하루 5000단어 한도)
 // 청크 중 하나라도 실패하면 짜깁기된 반쪽 번역 대신 전체를 null로 반환해 원문으로 대체한다.
 async function translateToKorean(text) {
@@ -195,8 +218,8 @@ async function main() {
   const totalBody = await fetchJson(baseUrl);
   const total = totalBody.totalResults;
 
-  // 키 없이 호출하면 30초당 5회 제한(NVD 공식 문서) — 4개 심각도 질의를 여유 있게 간격을 두고 순차 호출.
-  // resultsPerPage를 늘려 같은 호출에서 건수(totalResults)·대표 CVE(vulnerabilities)·유형 분류용 표본을 함께 받는다(호출 횟수는 그대로 5회).
+  // 키 없이 호출하면 30초당 5회 제한(NVD 공식 문서) — 페이지가 몇 개로 늘어나든 매 호출 사이
+  // NVD_REQUEST_INTERVAL_MS만큼 쉬어 항상 이 제한 안에 머문다(fetchAllForSeverity 내부에서 적용).
   const severity = {};
   const rawHighlights = [];
   const usedHighlightIds = new Set();
@@ -205,18 +228,14 @@ async function main() {
   const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   const productCounts = {};
   const productExamples = {}; // 벤더·제품별 원본 CVE 링크 몇 건 — 유형과 동일한 방식
-  let categorySampleSize = 0;
+  let categorySampleSize = 0; // 심각도가 평가된(rated) CVE 전체 건수 — 전량 수집이라 rated 총합과 같아짐(unrated는 애초에 이 호출 대상이 아니라 여전히 빠짐)
   for (const level of SEVERITIES) {
-    await sleep(1500);
-    const sevUrl = new URL(baseUrl);
-    sevUrl.searchParams.set('cvssV3Severity', level);
-    sevUrl.searchParams.set('resultsPerPage', String(CATEGORY_SAMPLE_SIZE));
-    const body = await fetchJson(sevUrl);
-    severity[level.toLowerCase()] = body.totalResults;
+    const { total: levelTotal, vulnerabilities } = await fetchAllForSeverity(baseUrl, level);
+    severity[level.toLowerCase()] = levelTotal;
 
     const levelCandidates = []; // 이 심각도 안에서 대표 CVE 후보로 쓸 목록
 
-    for (const { cve } of body.vulnerabilities || []) {
+    for (const { cve } of vulnerabilities) {
       const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
 
       categorySampleSize += 1;
@@ -325,7 +344,7 @@ async function main() {
     `[saved] ${kstDate} -> ${entry.count}건`,
     severity,
     `highlights: ${highlights.length}`,
-    `categories(표본 ${categorySampleSize}건):`,
+    `categories(rated 전체 ${categorySampleSize}건):`,
     categoryBreakdown.map((c) => `${c.label}:${c.count}`).join(', '),
     `products:`,
     productBreakdown.map((p) => `${p.label}:${p.count}`).join(', '),

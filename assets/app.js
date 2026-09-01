@@ -412,10 +412,10 @@ function renderCategory(entry) {
   categoryPager.setData(breakdown);
 
   els.categoryNote.textContent =
-    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 표본이라 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
+    `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 전체를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 아직 심각도가 안 매겨진 CVE는 포함되지 않아 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
 }
 
-// 공격 유형과 같은 표본을 제품·벤더 이름 목록으로 한 번 더 분류한 결과 — 미리 정해둔 목록에 없으면 "기타"
+// 공격 유형과 같은 CVE 집합(심각도 평가된 전체)을 제품·벤더 이름 목록으로 한 번 더 분류한 결과 — 미리 정해둔 목록에 없으면 "기타"
 function renderProduct(entry) {
   const breakdown = entry.productBreakdown;
   if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
@@ -426,7 +426,7 @@ function renderProduct(entry) {
   productPager.setData(breakdown, { useGlossary: false });
 
   els.productNote.textContent =
-    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
+    `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
 }
 
 function monthKey(dateStr) {
@@ -435,13 +435,13 @@ function monthKey(dateStr) {
 
 const MONTHLY_EXAMPLES_LIMIT = 5;
 
-// 그 달에 속한 날짜들의 breakdown(유형 또는 제품)을 항목별로 더함 — 각 날짜가 이미 표본 기반이라 합산값도 표본 기반임
+// 그 달에 속한 날짜들의 breakdown(유형 또는 제품)을 항목별로 더함 — 각 날짜가 이미 rated 전체 기반이라 합산값도 rated 전체 기반임(unrated 제외)
 function aggregateMonthlyBreakdown(data, month, field) {
   const days = data.filter((e) => monthKey(e.date) === month && e[field] && e[field].length);
   const totals = new Map();
   let sampleSize = 0;
   for (const day of days) {
-    sampleSize += day.categorySampleSize || 0; // 유형·제품 둘 다 같은 표본에서 나온 것이라 표본 크기는 공용
+    sampleSize += day.categorySampleSize || 0; // 유형·제품 둘 다 같은 rated 집합에서 나온 것이라 건수는 공용
     for (const c of day[field]) {
       const prev = totals.get(c.key);
       if (prev) {
@@ -477,7 +477,7 @@ const MONTHLY_WIDGETS = [
     total: () => els.monthlyCategoryTotal,
     emptyNote: '이 달은 유형 분류 데이터가 없어요.',
     noteText: (month, dayCount) =>
-      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(AI·번역 없이 규칙 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
+      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(AI·번역 없이 규칙 매칭). 각 날짜도 심각도가 평가된 CVE만 대상이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
   },
   {
     field: 'productBreakdown',
