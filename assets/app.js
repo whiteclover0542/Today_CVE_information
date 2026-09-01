@@ -286,6 +286,18 @@ function escapeHtml(str) {
   ));
 }
 
+const HIGHLIGHT_PREVIEW_CHARS = 140;
+
+// 서버 쪽 truncate()와 같은 규칙: 단어 중간이 아니라 공백에서 잘라 미리보기를 만든다
+function truncatePreview(text, max) {
+  if (!text) return '';
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  const safe = lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut;
+  return `${safe.trimEnd()}…`;
+}
+
 function renderHighlights(entry) {
   const list = entry.highlights;
   if (!list || list.length === 0) {
@@ -297,15 +309,32 @@ function renderHighlights(entry) {
     .map((h) => {
       const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
       const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
-      const summary = h.summaryKo || h.summaryEn || h.summary || '';
+      const fullKo = h.summaryKo || '';
+      const fullEn = h.summaryEn || '';
+      const preview = truncatePreview(fullKo || fullEn, HIGHLIGHT_PREVIEW_CHARS);
       const cvss = h.cvssScore != null
         ? `<span class="hl-cvss" title="${escapeHtml(h.cvssVector || 'CVSS 벡터 없음')}">CVSS ${h.cvssScore.toFixed(1)}</span>`
+        : '';
+      const cvssPlain = h.cvssPlain
+        ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
+        : '';
+      const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
+      const originalBlock = fullEn
+        ? `<p class="hl-original"><span class="hl-original-label">원문(영어)</span>${escapeHtml(fullEn)}</p>`
         : '';
       return `<li>
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
         ${cvss}
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
-        <span class="hl-summary">${escapeHtml(summary)}</span>
+        <span class="hl-summary">${escapeHtml(preview)}</span>
+        ${cvssPlain}
+        <details class="hl-details">
+          <summary>자세히 보기</summary>
+          <div class="hl-full">
+            ${fullKoBlock}
+            ${originalBlock}
+          </div>
+        </details>
       </li>`;
     })
     .join('');

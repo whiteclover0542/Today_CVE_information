@@ -4,7 +4,6 @@ const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 const MAX_HIGHLIGHTS = 3;
-const SUMMARY_MAX_CHARS = 140;
 const CATEGORY_SAMPLE_SIZE = 20; // 심각도별로 이 개수만큼 설명을 받아 유형 분류 표본으로 사용 (호출 횟수는 늘지 않음, resultsPerPage만 늘림)
 
 // CVE 설명은 NVD가 정형화된 문구로 작성하는 경우가 많아("... allows remote attackers to execute arbitrary code" 등)
@@ -52,9 +51,24 @@ async function fetchJson(url) {
   return res.json();
 }
 
-function truncate(text, max) {
-  if (text.length <= max) return { text, truncated: false };
-  return { text: text.slice(0, max).trimEnd(), truncated: true };
+// CVSS 벡터는 NVD가 이미 정형화해 제공하는 구조적 데이터라 번역 없이 그대로 한글 대응만 하면 됨(오역 위험 없음)
+const CVSS_VECTOR_LABELS = {
+  AV: { N: '네트워크에서 접근 가능', A: '인접 네트워크에서 접근 가능', L: '로컬 접근 필요', P: '물리적 접근 필요' },
+  AC: { L: '공격 난이도 낮음', H: '공격 난이도 높음' },
+  PR: { N: '권한 불필요', L: '낮은 권한 필요', H: '높은 권한 필요' },
+  UI: { N: '사용자 개입 불필요', R: '사용자 개입 필요' },
+  S: { U: '영향 범위 변경 없음', C: '영향 범위 변경됨' },
+};
+
+function decodeCvssVector(vector) {
+  if (!vector) return null;
+  const parts = Object.fromEntries(
+    vector.replace(/^CVSS:[\d.]+\//, '').split('/').map((p) => p.split(':')),
+  );
+  const labels = ['AV', 'AC', 'PR', 'UI']
+    .map((key) => CVSS_VECTOR_LABELS[key]?.[parts[key]])
+    .filter(Boolean);
+  return labels.length ? labels.join(' · ') : null;
 }
 
 // 무키 번역: MyMemory Translation API (익명 사용, 하루 5000단어 한도) — 실패해도 영문 요약으로 대체되므로 치명적이지 않음
@@ -121,15 +135,13 @@ async function main() {
       categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
 
       if (rawHighlights.length < MAX_HIGHLIGHTS) {
-        const { text: shortEn, truncated } = truncate(desc, SUMMARY_MAX_CHARS);
         const metrics = cve.metrics || {};
         // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
         const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
         rawHighlights.push({
           id: cve.id,
           severity: level,
-          shortEn,
-          truncated,
+          fullEn: desc,
           url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
           cvssScore: cvss?.cvssData?.baseScore ?? null,
           cvssVector: cvss?.cvssData?.vectorString ?? null,
@@ -147,19 +159,21 @@ async function main() {
     .sort((a, b) => b.count - a.count)
     .slice(0, 6);
 
-  // 대표 CVE 요약을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
+  // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
+  // 화면에서 "자세히 보기"로 전문·원문을 다 보여줄 수 있도록 자르지 않고 그대로 저장한다.
   const highlights = [];
   for (const h of rawHighlights) {
     await sleep(500);
-    const ko = await translateToKorean(h.shortEn);
+    const ko = await translateToKorean(h.fullEn);
     highlights.push({
       id: h.id,
       severity: h.severity,
-      summaryEn: h.truncated ? `${h.shortEn}…` : h.shortEn,
-      summaryKo: ko ? (h.truncated ? `${ko}…` : ko) : null,
+      summaryEn: h.fullEn,
+      summaryKo: ko || null,
       url: h.url,
       cvssScore: h.cvssScore,
       cvssVector: h.cvssVector,
+      cvssPlain: decodeCvssVector(h.cvssVector),
     });
   }
 

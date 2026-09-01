@@ -423,6 +423,65 @@ header h1 {
   line-height: 1.5;
 }
 
+.hl-cvss-plain {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 0.74rem;
+  opacity: 0.85;
+}
+
+.hl-cvss-plain::before {
+  content: "⚙ ";
+}
+
+.hl-details {
+  flex-basis: 100%;
+  margin-top: 0.3rem;
+}
+
+.hl-details summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  list-style: none;
+}
+
+.hl-details summary::-webkit-details-marker { display: none; }
+
+.hl-full {
+  margin-top: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.hl-full p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.hl-full p + p {
+  margin-top: 0.6rem;
+}
+
+.hl-original {
+  color: var(--muted) !important;
+}
+
+.hl-original-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
 .trend-stats {
   display: flex;
   gap: 0.75rem;
