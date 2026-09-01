@@ -1,7 +1,7 @@
 # 오늘의 CVE 정보판 — 최종 제출 문서
 
-- **공개 주소**: https://whiteclover0542.github.io/today_information/
-- **저장소**: https://github.com/whiteclover0542/today_information
+- **공개 주소**: https://whiteclover0542.github.io/Today_CVE_information/
+- **저장소**: https://github.com/whiteclover0542/Today_CVE_information
 - **최종 확인일**: 2026-08-24 (KST)
 - **주제**: 오늘(KST) 새로 등록된 NVD CVE 건수 — 값·단위·출처·조회 시각 + 심각도·CVSS·위험도·날짜별 변화
 
@@ -41,7 +41,7 @@
 ## 3. 검증 안내서 (최종 제출물)
 
 **어디로 가나요**
-`https://whiteclover0542.github.io/today_information/` — 설치 없이 브라우저로 바로 열립니다.
+`https://whiteclover0542.github.io/Today_CVE_information/` — 설치 없이 브라우저로 바로 열립니다.
 
 **무엇을 하나요** (3단계)
 1. 공개 주소 접속 → 건수·단위·출처·조회 시각·심각도·위험도가 한 화면에 보이는지 확인

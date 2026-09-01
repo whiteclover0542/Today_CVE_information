@@ -2,7 +2,7 @@
 
 오늘(KST) 새로 등록된 [NVD](https://nvd.nist.gov/) 신규 CVE(보안 취약점) 건수를 값·단위·출처·조회 시각과 함께 보여주는 개인 정보판입니다. 설치 없이 브라우저로 바로 열립니다.
 
-**🔗 공개 주소: https://whiteclover0542.github.io/today_information/**
+**🔗 공개 주소: https://whiteclover0542.github.io/Today_CVE_information/**
 
 ![대시보드 스크린샷](docs/submission/screenshot-dashboard.png)
 

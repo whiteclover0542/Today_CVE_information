@@ -23,5 +23,5 @@
 | 2026-08-23 (2차, Actions 쓰기 경로 검증) | 187 | 187 | 187건 | 2026-08-22T23:19:01.045Z | 일치 |
 | 2026-08-23 (3차, 심각도 분포 필드 추가 후 재조회) | 208 (critical 2, high 11, medium 16, low 1, unrated 178) | 동일 | 208건 + 분포 그래프 | 2026-08-23T09:24:08.447Z | 일치 |
 
-> 대조 방법: `data/history.json`의 `sourceApiUrl`을 직접 열어 응답의 `totalResults`가 같은 파일의 `count`, 화면(`https://whiteclover0542.github.io/today_information/`)에 표시된 숫자와 같은지 확인. 심각도는 같은 날짜 범위에 `cvssV3Severity=CRITICAL|HIGH|MEDIUM|LOW`를 추가로 걸어 각각의 `totalResults`를 더해 확인.
+> 대조 방법: `data/history.json`의 `sourceApiUrl`을 직접 열어 응답의 `totalResults`가 같은 파일의 `count`, 화면(`https://whiteclover0542.github.io/Today_CVE_information/`)에 표시된 숫자와 같은지 확인. 심각도는 같은 날짜 범위에 `cvssV3Severity=CRITICAL|HIGH|MEDIUM|LOW`를 추가로 걸어 각각의 `totalResults`를 더해 확인.
 > 2·3차 기록은 실제 쓰기 경로 검증, 심각도 필드 추가를 위해 같은 날 재조회한 것 — 같은 KST 날짜라 값이 갱신됐을 뿐 위조가 아님(PROGRESS.md 설계 결정 이력 참고).

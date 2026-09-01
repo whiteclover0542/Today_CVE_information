@@ -81,6 +81,54 @@ header h1 {
 
 .about-details[open] summary { display: block; margin-bottom: 0.35rem; }
 
+.about-details.glossary-details {
+  display: block;
+  margin-left: 0;
+  margin-top: 0.6rem;
+}
+
+.glossary {
+  max-width: 760px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  margin-top: 0.5rem;
+}
+
+.glossary p {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.glossary p b {
+  color: var(--text);
+}
+
+.glossary-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.glossary-list > div { display: block; }
+
+.glossary-list dt {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.83rem;
+}
+
+.glossary-list dd {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
 .status-banner {
   padding: 0.85rem 1rem;
   border-radius: 8px;

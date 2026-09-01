@@ -14,7 +14,7 @@
 | 5 | `data/history.json` 스키마 정의 | ✅ | `{date, count, unit, timezone, sourceApiUrl, queriedAtUtc, severity:{...}, highlights:[{id,severity,summaryEn,summaryKo,url}]}` 배열 |
 | 6 | 일일 워크플로 작성 | ✅ | `daily-cve-count.yml`, KST 09:00 cron, 날짜 중복 방지(스크립트가 존재 시 skip) |
 | 7 | 워크플로 수동 실행 → Day 1 기록 확보 | ✅ | 2026-08-23 = 187건. 로컬 실행(184건)으로 1차 확보 후, 실제 쓰기 경로 검증을 위해 기록을 비우고 재실행 → Actions가 NVD 재조회·커밋(`08699ae`)·push까지 전부 성공 확인. 스킵(중복방지)·쓰기(신규커밋) 두 경로 모두 원격에서 검증 완료 |
-| 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/today_information/` 200 OK 확인 |
+| 8 | GitHub Pages 활성화 및 공개 주소 확정 | ✅ | `https://whiteclover0542.github.io/Today_CVE_information/` 200 OK 확인 |
 | 9 | 프론트엔드 렌더링 구현 | ✅ | 값·단위·출처·조회 시각·날짜별 기록 표·심각도 분포 그래프, 검정+흰색 테마로 재정비, 헤드리스 브라우저로 렌더 확인 |
 | 10 | 목적 문장 + 출처/항목/단위/시간대 정의표 작성 | ✅ | `docs/worksheet/definitions.md`, Day1 원자료-화면값 대조 포함 ㅍ
 | 11 | 출처 링크 동작 확인 | ✅ | href가 실제 NVD API 요청 URL로 연결됨을 확인 |
@@ -136,7 +136,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
 > ✅ 카드1~5 문구 모두 실제 2개 날짜(08-23·08-24) 데이터와 배포 화면 기준으로 확정, 여러 브라우저 확인까지 완료.
 
 **어디로 가나요**
-`https://whiteclover0542.github.io/today_information/` — 설치 없이 브라우저로 바로 열립니다.
+`https://whiteclover0542.github.io/Today_CVE_information/` — 설치 없이 브라우저로 바로 열립니다.
 
 **무엇을 하나요** (3단계)
 1. 공개 주소 접속 → 건수·단위·출처·조회 시각·심각도가 한 화면에 보이는지 확인
@@ -249,7 +249,7 @@ GitHub Pages 무료 사용 조건 = 저장소 **Public** → 커밋 기록 전�
 
 ## 부록: 배포
 - 정적 파일: GitHub Pages (`main` 브랜치 또는 `gh-pages`, Actions로 자동 배포)
-- 공개 주소: `https://whiteclover0542.github.io/today_information/` (2026-08-23 활성화 완료, 200 OK 확인)
+- 공개 주소: `https://whiteclover0542.github.io/Today_CVE_information/` (2026-08-23 활성화 완료, 200 OK 확인)
 
 ## 부록: 열린 질문 / 리스크
 - "오늘 하루 동안" 카운트가 0건이거나 NVD 쪽 지연으로 당일 데이터가 늦게 올라오는 날이 있을 수 있음 → "정상값 없음" 처리 기준을 워크플로에 명시할 것

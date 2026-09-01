@@ -1,6 +1,6 @@
 # 장애 5종 검사표 (카드3 자체 점검 근거)
 
-확인 방법: 공개 주소 뒤에 `?debug=1`을 붙여 접속(`https://whiteclover0542.github.io/today_information/index.html?debug=1`) → 장애 시연 패널 버튼 클릭.
+확인 방법: 공개 주소 뒤에 `?debug=1`을 붙여 접속(`https://whiteclover0542.github.io/Today_CVE_information/index.html?debug=1`) → 장애 시연 패널 버튼 클릭.
 검증 도구: 헤드리스 Chrome(puppeteer-core)으로 실제 클릭 후 DOM 상태 캡처(2026-08-23). 이후 2026-08-24, 배포 화면(13건 기준)에서 오너가 5개 버튼·다시 시도를 직접 클릭해 동일하게 재확인.
 
 | # | 장애 종류 | 재현 방법 | 화면 문구 | 마지막 정상값 처리 | 다시 시도 행동 |

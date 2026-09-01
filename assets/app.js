@@ -241,6 +241,25 @@ function renderRisk(entry) {
     `${risk.reason} · 기준: 심각 1건 이상=위험 · 없고 높음 1건 이상=주의 · 둘 다 0건=보통`;
 }
 
+// scripts/fetch-daily-count.mjs의 CATEGORY_RULES 라벨과 그대로 맞춰야 함 — 헤더의 "CVSS·유형 용어가 궁금해요" 설명과 같은 문구
+const CATEGORY_GLOSSARY = {
+  '원격 코드 실행': '공격자가 인터넷 너머에서 남의 컴퓨터·서버에 마음대로 프로그램을 실행시킬 수 있는 유형',
+  '인증 우회': '로그인 절차 없이, 또는 그 절차를 속여서 시스템에 들어갈 수 있는 유형',
+  '권한 상승': '일반 사용자로 시작했다가 관리자(최고 권한)까지 올라갈 수 있는 유형',
+  'SQL 인젝션': '웹사이트 입력창에 특수한 명령어를 넣어 데이터베이스를 마음대로 조회·수정할 수 있는 유형',
+  '크로스사이트 스크립팅(XSS)': '웹페이지에 악성 스크립트를 심어 방문자의 정보를 훔치거나 계정을 가로챌 수 있는 유형',
+  CSRF: '로그인된 사용자가 모르는 사이에 원치 않는 행동을 하게 만드는 유형',
+  '경로 순회': '원래 접근하면 안 되는 폴더·파일까지 들어가 내부 파일을 몰래 읽거나 바꿀 수 있는 유형',
+  '버퍼 오버플로우': '프로그램이 처리할 수 있는 데이터양을 넘겨서 오류를 내거나 악성 코드를 실행시키는 유형',
+  '정보 노출': '원래 보이면 안 되는 내부 정보가 외부에 그대로 드러나는 유형',
+  '서비스 거부(DoS)': '시스템을 다운시키거나 먹통으로 만들어 정상 사용을 못 하게 막는 유형',
+  '역직렬화 취약점': '전송·저장된 데이터를 프로그램이 복원하는 과정을 조작해 악성 코드를 실행시키는 유형',
+  SSRF: '서버가 공격자 대신 다른(원래 접근 못 하는 내부) 서버에 요청을 보내게 속이는 유형',
+  '하드코딩된 자격증명': '비밀번호나 키가 프로그램 코드 안에 그대로 박혀 있는 유형',
+  '위험한 파일 업로드': '실행 가능한 악성 파일을 서버에 올릴 수 있게 방치한 유형',
+  기타: '위 유형에 맞는 키워드가 설명 문구에 없어서 따로 분류하지 못한 CVE',
+};
+
 // LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
 function renderCategory(entry) {
   const breakdown = entry.categoryBreakdown;
@@ -254,8 +273,9 @@ function renderCategory(entry) {
   els.categoryBars.innerHTML = breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
+      const title = CATEGORY_GLOSSARY[c.label] || '';
       return `<li>
-        <span class="category-bar-label">${escapeHtml(c.label)}</span>
+        <span class="category-bar-label" title="${escapeHtml(title)}">${escapeHtml(c.label)}</span>
         <span class="category-bar-track"><span class="category-bar-fill" style="width:${pct}%"></span></span>
         <span class="category-bar-count">${c.count}건</span>
       </li>`;
@@ -318,8 +338,9 @@ function renderHighlights(entry) {
       const cvssPlain = h.cvssPlain
         ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
         : '';
+      const categoryTitle = CATEGORY_GLOSSARY[h.category] || '';
       const categoryTag = h.category
-        ? `<span class="hl-category">${escapeHtml(h.category)}</span>`
+        ? `<span class="hl-category" title="${escapeHtml(categoryTitle)}">${escapeHtml(h.category)}</span>`
         : '';
       const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
       const originalBlock = fullEn
