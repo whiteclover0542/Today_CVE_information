@@ -464,6 +464,13 @@ header h1 {
   line-height: 1.5;
 }
 
+.monthly-total {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .highlights-list {
   list-style: none;
   margin: 0;

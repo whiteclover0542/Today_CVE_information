@@ -31,6 +31,42 @@ function categorize(description) {
   return rule ? rule.key : 'other';
 }
 
+// 공격 유형과 달리 제품명은 문구가 정형화돼 있지 않아서(자유 서술) 미리 정해둔 벤더·제품 목록과
+// 매칭하는 방식만 씀 — 목록에 없는 제품은 다 "기타"로 묶임(문구 자체를 새로 추출하지 않음, AI 없음).
+const PRODUCT_RULES = [
+  { key: 'wordpress', label: 'WordPress', pattern: /wordpress|woocommerce/i },
+  { key: 'linux', label: 'Linux/커널', pattern: /\blinux\b/i },
+  { key: 'cisco', label: 'Cisco', pattern: /\bcisco\b/i },
+  { key: 'microsoft', label: 'Microsoft/Windows', pattern: /\bmicrosoft\b|\bwindows\b/i },
+  { key: 'apple', label: 'Apple/iOS/macOS', pattern: /\bapple\b|\bios\b|\bmacos\b|\biphone\b/i },
+  { key: 'google-android', label: 'Google/Android', pattern: /\bgoogle\b|\bandroid\b|\bchrome\b/i },
+  { key: 'd-link', label: 'D-Link', pattern: /d-link/i },
+  { key: 'tp-link', label: 'TP-Link', pattern: /tp-link/i },
+  { key: 'netgear', label: 'Netgear', pattern: /netgear/i },
+  { key: 'zyxel', label: 'Zyxel', pattern: /zyxel/i },
+  { key: 'huawei', label: 'Huawei', pattern: /huawei/i },
+  { key: 'ibm', label: 'IBM', pattern: /\bibm\b/i },
+  { key: 'adobe', label: 'Adobe', pattern: /\badobe\b/i },
+  { key: 'oracle-mysql', label: 'Oracle/MySQL', pattern: /\boracle\b|\bmysql\b|\bmariadb\b/i },
+  { key: 'sap', label: 'SAP', pattern: /\bsap\b/i },
+  { key: 'fortinet', label: 'Fortinet', pattern: /fortinet|fortigate/i },
+  { key: 'juniper', label: 'Juniper', pattern: /juniper/i },
+  { key: 'vmware', label: 'VMware', pattern: /vmware/i },
+  { key: 'apache', label: 'Apache', pattern: /\bapache\b/i },
+  { key: 'php', label: 'PHP', pattern: /\bphp\b/i },
+  { key: 'openssl', label: 'OpenSSL', pattern: /openssl/i },
+  { key: 'docker-k8s', label: 'Docker/Kubernetes', pattern: /\bdocker\b|kubernetes/i },
+  { key: 'gitlab-github', label: 'GitLab/GitHub', pattern: /gitlab|github/i },
+  { key: 'joomla-drupal', label: 'Joomla/Drupal', pattern: /joomla|drupal/i },
+  { key: 'qnap-synology', label: 'QNAP/Synology', pattern: /qnap|synology/i },
+  { key: 'samsung', label: 'Samsung', pattern: /samsung/i },
+];
+
+function categorizeProduct(description) {
+  const rule = PRODUCT_RULES.find((r) => r.pattern.test(description));
+  return rule ? rule.key : 'other';
+}
+
 function kstDateString(date) {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: TIMEZONE,
@@ -164,6 +200,8 @@ async function main() {
   const usedHighlightCategories = new Set(); // 대표 CVE 3건이 서로 다른 유형이 되도록 이미 뽑힌 유형은 건너뜀
   const categoryCounts = {};
   const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
+  const productCounts = {};
+  const productExamples = {};
   let categorySampleSize = 0;
   for (const level of SEVERITIES) {
     await sleep(1500);
@@ -183,6 +221,13 @@ async function main() {
       const examples = (categoryExamples[categoryKey] ||= []);
       if (examples.length < CATEGORY_EXAMPLES_LIMIT) {
         examples.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
+      }
+
+      const productKey = categorizeProduct(desc);
+      productCounts[productKey] = (productCounts[productKey] || 0) + 1;
+      const productExampleList = (productExamples[productKey] ||= []);
+      if (productExampleList.length < CATEGORY_EXAMPLES_LIMIT) {
+        productExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
       if (rawHighlights.length < MAX_HIGHLIGHTS && !usedHighlightCategories.has(categoryKey)) {
@@ -211,6 +256,12 @@ async function main() {
   // 월별 합산 그래프는 이 전체 목록을 더해야 작은 유형도 누락 없이 집계됨
   const categoryBreakdown = Object.entries(categoryCounts)
     .map(([key, count]) => ({ key, label: categoryLabels[key], count, examples: categoryExamples[key] || [] }))
+    .sort((a, b) => b.count - a.count);
+
+  const productLabels = Object.fromEntries(PRODUCT_RULES.map((r) => [r.key, r.label]));
+  productLabels.other = '기타';
+  const productBreakdown = Object.entries(productCounts)
+    .map(([key, count]) => ({ key, label: productLabels[key], count, examples: productExamples[key] || [] }))
     .sort((a, b) => b.count - a.count);
 
   // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
@@ -243,6 +294,7 @@ async function main() {
     highlights,
     categoryBreakdown,
     categorySampleSize,
+    productBreakdown,
   };
 
   history.push(entry);
@@ -254,7 +306,9 @@ async function main() {
     severity,
     `highlights: ${highlights.length}`,
     `categories(표본 ${categorySampleSize}건):`,
-    categoryBreakdown,
+    categoryBreakdown.map((c) => `${c.label}:${c.count}`).join(', '),
+    `products:`,
+    productBreakdown.map((p) => `${p.label}:${p.count}`).join(', '),
   );
 }
 

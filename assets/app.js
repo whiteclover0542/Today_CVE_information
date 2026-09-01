@@ -96,10 +96,19 @@ const els = {
   categoryCard: document.getElementById('category-card'),
   categoryBars: document.getElementById('category-bars'),
   categoryNote: document.getElementById('category-note'),
+  productCard: document.getElementById('product-card'),
+  productBars: document.getElementById('product-bars'),
+  productNote: document.getElementById('product-note'),
   monthlyCategoryCard: document.getElementById('monthly-category-card'),
   monthSelect: document.getElementById('month-select'),
+  monthlyCategoryTotal: document.getElementById('monthly-category-total'),
   monthlyCategoryBars: document.getElementById('monthly-category-bars'),
   monthlyCategoryNote: document.getElementById('monthly-category-note'),
+  monthlyProductCard: document.getElementById('monthly-product-card'),
+  monthProductSelect: document.getElementById('month-product-select'),
+  monthlyProductTotal: document.getElementById('monthly-product-total'),
+  monthlyProductBars: document.getElementById('monthly-product-bars'),
+  monthlyProductNote: document.getElementById('monthly-product-note'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
   trendStats: document.getElementById('trend-stats'),
@@ -285,13 +294,15 @@ const CATEGORY_GLOSSARY = {
 
 const DAILY_CATEGORY_LIMIT = 6;
 
-// category-bars 형식 <li> 마크업 생성 — 오늘 카드·월별 카드 둘 다 이걸 재사용
-function renderCategoryBarList(breakdown) {
+// category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
+// useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
+// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문
+function renderCategoryBarList(breakdown, useGlossary = true) {
   const maxCount = Math.max(...breakdown.map((c) => c.count));
   return breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
-      const desc = CATEGORY_GLOSSARY[c.label] || '';
+      const desc = useGlossary ? (CATEGORY_GLOSSARY[c.label] || '') : '';
       const examples = c.examples || [];
       const examplesHtml = examples.length
         ? `<ul class="category-bar-examples">${examples
@@ -328,20 +339,34 @@ function renderCategory(entry) {
     `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 표본이라 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
 }
 
+// 공격 유형과 같은 표본을 제품·벤더 이름 목록으로 한 번 더 분류한 결과 — 미리 정해둔 목록에 없으면 "기타"
+function renderProduct(entry) {
+  const breakdown = entry.productBreakdown;
+  if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
+    els.productCard.hidden = true;
+    return;
+  }
+  els.productCard.hidden = false;
+  els.productBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT), false);
+
+  els.productNote.textContent =
+    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 제품·벤더 이름을 찾아 분류한 결과예요(AI 없이 목록 매칭). 표본 기준이라 실제 비율과 다를 수 있고, 목록에 없는 제품이면 "기타"로 묶여요.`;
+}
+
 function monthKey(dateStr) {
   return dateStr.slice(0, 7); // "YYYY-MM"
 }
 
 const MONTHLY_EXAMPLES_LIMIT = 5;
 
-// 그 달에 속한 날짜들의 categoryBreakdown을 유형별로 더함 — 각 날짜가 이미 표본 기반이라 합산값도 표본 기반임
-function aggregateMonthlyCategories(data, month) {
-  const days = data.filter((e) => monthKey(e.date) === month && e.categoryBreakdown && e.categoryBreakdown.length);
+// 그 달에 속한 날짜들의 breakdown(유형 또는 제품)을 항목별로 더함 — 각 날짜가 이미 표본 기반이라 합산값도 표본 기반임
+function aggregateMonthlyBreakdown(data, month, field) {
+  const days = data.filter((e) => monthKey(e.date) === month && e[field] && e[field].length);
   const totals = new Map();
   let sampleSize = 0;
   for (const day of days) {
-    sampleSize += day.categorySampleSize || 0;
-    for (const c of day.categoryBreakdown) {
+    sampleSize += day.categorySampleSize || 0; // 유형·제품 둘 다 같은 표본에서 나온 것이라 표본 크기는 공용
+    for (const c of day[field]) {
       const prev = totals.get(c.key);
       if (prev) {
         prev.count += c.count;
@@ -358,38 +383,71 @@ function aggregateMonthlyCategories(data, month) {
   return { breakdown, sampleSize, dayCount: days.length };
 }
 
-function renderMonthlyCategoryBars(data, month) {
-  const { breakdown, dayCount } = aggregateMonthlyCategories(data, month);
+// 월별 유형/제품 카드 두 개가 구조는 같고 대상 필드·DOM만 다르므로 설정 객체로 공유
+const MONTHLY_WIDGETS = [
+  {
+    field: 'categoryBreakdown',
+    useGlossary: true,
+    card: () => els.monthlyCategoryCard,
+    select: () => els.monthSelect,
+    bars: () => els.monthlyCategoryBars,
+    note: () => els.monthlyCategoryNote,
+    total: () => els.monthlyCategoryTotal,
+    emptyNote: '이 달은 유형 분류 데이터가 없어요.',
+    noteText: (month, dayCount) =>
+      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(AI·번역 없이 규칙 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
+  },
+  {
+    field: 'productBreakdown',
+    useGlossary: false,
+    card: () => els.monthlyProductCard,
+    select: () => els.monthProductSelect,
+    bars: () => els.monthlyProductBars,
+    note: () => els.monthlyProductNote,
+    total: () => els.monthlyProductTotal,
+    emptyNote: '이 달은 제품·벤더 분류 데이터가 없어요.',
+    noteText: (month, dayCount) =>
+      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 제품·벤더 분류를 모두 더한 결과예요(AI 없이 목록 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
+  },
+];
+
+function renderMonthlyBreakdownBars(data, month, widget) {
+  const { breakdown, dayCount } = aggregateMonthlyBreakdown(data, month, widget.field);
+  const monthTotal = data
+    .filter((e) => monthKey(e.date) === month)
+    .reduce((sum, e) => sum + (e.count || 0), 0);
+  widget.total().textContent = `이 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록 (${month})`;
+
   if (breakdown.length === 0) {
-    els.monthlyCategoryBars.innerHTML = '';
-    els.monthlyCategoryNote.textContent = '이 달은 유형 분류 데이터가 없어요.';
+    widget.bars().innerHTML = '';
+    widget.note().textContent = widget.emptyNote;
     return;
   }
-  els.monthlyCategoryBars.innerHTML = renderCategoryBarList(breakdown);
-  els.monthlyCategoryNote.textContent =
-    `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(AI·번역 없이 규칙 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`;
+  widget.bars().innerHTML = renderCategoryBarList(breakdown, widget.useGlossary);
+  widget.note().textContent = widget.noteText(month, dayCount);
 }
 
 // 데이터에 실제로 있는 월만 선택지로 제공 — 없는 달을 만들어서 보여주지 않음
-function renderMonthlyCategory(data) {
+function renderMonthlyBreakdown(data, widget) {
   const months = [...new Set(
-    data.filter((e) => e.categoryBreakdown && e.categoryBreakdown.length).map((e) => monthKey(e.date)),
+    data.filter((e) => e[widget.field] && e[widget.field].length).map((e) => monthKey(e.date)),
   )].sort().reverse();
 
   if (months.length === 0) {
-    els.monthlyCategoryCard.hidden = true;
+    widget.card().hidden = true;
     return;
   }
-  els.monthlyCategoryCard.hidden = false;
+  widget.card().hidden = false;
 
-  const currentOptionValues = Array.from(els.monthSelect.options).map((o) => o.value);
+  const select = widget.select();
+  const currentOptionValues = Array.from(select.options).map((o) => o.value);
   if (currentOptionValues.join(',') !== months.join(',')) {
-    const keepValue = els.monthSelect.value;
-    els.monthSelect.innerHTML = months.map((m) => `<option value="${m}">${m}</option>`).join('');
-    els.monthSelect.value = months.includes(keepValue) ? keepValue : months[0];
+    const keepValue = select.value;
+    select.innerHTML = months.map((m) => `<option value="${m}">${m}</option>`).join('');
+    select.value = months.includes(keepValue) ? keepValue : months[0];
   }
 
-  renderMonthlyCategoryBars(data, els.monthSelect.value);
+  renderMonthlyBreakdownBars(data, select.value, widget);
 }
 
 const SEVERITY_COLOR = {
@@ -556,7 +614,9 @@ function renderNormal(data) {
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
     els.categoryCard.hidden = true;
+    els.productCard.hidden = true;
     els.monthlyCategoryCard.hidden = true;
+    els.monthlyProductCard.hidden = true;
     els.highlightsCard.hidden = true;
     els.trendStats.hidden = true;
     els.trendStatsNote.hidden = true;
@@ -576,7 +636,8 @@ function renderNormal(data) {
   renderSeverity(latest);
   renderRisk(latest);
   renderCategory(latest);
-  renderMonthlyCategory(data);
+  renderProduct(latest);
+  MONTHLY_WIDGETS.forEach((widget) => renderMonthlyBreakdown(data, widget));
   renderHighlights(latest);
   renderCompare(data);
   renderTrendStats(data);
@@ -609,7 +670,9 @@ function renderError(err) {
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
     els.categoryCard.hidden = true;
+    els.productCard.hidden = true;
     els.monthlyCategoryCard.hidden = true;
+    els.monthlyProductCard.hidden = true;
     els.highlightsCard.hidden = true;
   }
 }
@@ -631,22 +694,21 @@ els.highlightsList.addEventListener('click', (e) => {
   if (desc && desc.classList.contains('hl-category-desc')) desc.hidden = !desc.hidden;
 });
 
-els.categoryBars.addEventListener('click', (e) => {
+function toggleCategoryBarDesc(e) {
   const btn = e.target.closest('.category-bar-label');
   if (!btn) return;
   const desc = btn.closest('li').querySelector('.category-bar-desc');
   if (desc) desc.hidden = !desc.hidden;
+}
+
+[els.categoryBars, els.productBars, els.monthlyCategoryBars, els.monthlyProductBars].forEach((container) => {
+  container.addEventListener('click', toggleCategoryBarDesc);
 });
 
-els.monthlyCategoryBars.addEventListener('click', (e) => {
-  const btn = e.target.closest('.category-bar-label');
-  if (!btn) return;
-  const desc = btn.closest('li').querySelector('.category-bar-desc');
-  if (desc) desc.hidden = !desc.hidden;
-});
-
-els.monthSelect.addEventListener('change', () => {
-  if (lastGood) renderMonthlyCategoryBars(lastGood.data, els.monthSelect.value);
+MONTHLY_WIDGETS.forEach((widget) => {
+  widget.select().addEventListener('change', () => {
+    if (lastGood) renderMonthlyBreakdownBars(lastGood.data, widget.select().value, widget);
+  });
 });
 
 els.historyPrev.addEventListener('click', () => {
