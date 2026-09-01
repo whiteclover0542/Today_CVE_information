@@ -411,6 +411,28 @@ header h1 {
   line-height: 1.5;
 }
 
+.category-bar-desc p {
+  margin: 0;
+}
+
+.category-bar-examples {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+}
+
+.category-bar-examples a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 0.76rem;
+}
+
 .category-bar-track {
   flex: 1;
   height: 10px;

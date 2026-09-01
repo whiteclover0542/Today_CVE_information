@@ -400,8 +400,8 @@
     "count": 201,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A01%3A41.782Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-01T02:01:41.782Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A07%3A33.639Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-01T02:07:33.639Z",
     "severity": {
       "critical": 3,
       "high": 13,
@@ -448,52 +448,148 @@
       {
         "key": "other",
         "label": "기타",
-        "count": 12
+        "count": 12,
+        "examples": [
+          {
+            "id": "CVE-2026-82807",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82807"
+          },
+          {
+            "id": "CVE-2026-82815",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82815"
+          },
+          {
+            "id": "CVE-2026-82908",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82908"
+          }
+        ]
       },
       {
         "key": "rce",
         "label": "원격 코드 실행",
-        "count": 4
+        "count": 4,
+        "examples": [
+          {
+            "id": "CVE-2026-82971",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82971"
+          },
+          {
+            "id": "CVE-2026-83524",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83524"
+          },
+          {
+            "id": "CVE-2026-66047",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66047"
+          }
+        ]
       },
       {
         "key": "sqli",
         "label": "SQL 인젝션",
-        "count": 4
+        "count": 4,
+        "examples": [
+          {
+            "id": "CVE-2026-82701",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82701"
+          },
+          {
+            "id": "CVE-2026-82914",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82914"
+          },
+          {
+            "id": "CVE-2026-82922",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82922"
+          }
+        ]
       },
       {
         "key": "auth-bypass",
         "label": "인증 우회",
-        "count": 2
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-72001",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-72001"
+          },
+          {
+            "id": "CVE-2026-82906",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82906"
+          }
+        ]
       },
       {
         "key": "buffer-overflow",
         "label": "버퍼 오버플로우",
-        "count": 2
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-13732",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13732"
+          },
+          {
+            "id": "CVE-2026-82820",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82820"
+          }
+        ]
       },
       {
         "key": "ssrf",
         "label": "SSRF",
-        "count": 2
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-82957",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82957"
+          },
+          {
+            "id": "CVE-2026-82802",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82802"
+          }
+        ]
       },
       {
         "key": "path-traversal",
         "label": "경로 순회",
-        "count": 1
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82954",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82954"
+          }
+        ]
       },
       {
         "key": "file-upload",
         "label": "위험한 파일 업로드",
-        "count": 1
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82921",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82921"
+          }
+        ]
       },
       {
         "key": "deserialization",
         "label": "역직렬화 취약점",
-        "count": 1
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82803",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82803"
+          }
+        ]
       },
       {
         "key": "info-disclosure",
         "label": "정보 노출",
-        "count": 1
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82810",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82810"
+          }
+        ]
       }
     ],
     "categorySampleSize": 30

@@ -292,11 +292,23 @@ function renderCategoryBarList(breakdown) {
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
       const desc = CATEGORY_GLOSSARY[c.label] || '';
+      const examples = c.examples || [];
+      const examplesHtml = examples.length
+        ? `<ul class="category-bar-examples">${examples
+            .map((ex) => `<li><a href="${escapeHtml(ex.url)}" target="_blank" rel="noopener">${escapeHtml(ex.id)}</a></li>`)
+            .join('')}</ul>`
+        : '';
+      const detailBlock = desc || examplesHtml
+        ? `<div class="category-bar-desc" hidden>
+            ${desc ? `<p>${escapeHtml(desc)}</p>` : ''}
+            ${examplesHtml}
+          </div>`
+        : '';
       return `<li>
         <button type="button" class="category-bar-label">${escapeHtml(c.label)}</button>
         <span class="category-bar-track"><span class="category-bar-fill" style="width:${pct}%"></span></span>
         <span class="category-bar-count">${c.count}건</span>
-        ${desc ? `<p class="category-bar-desc" hidden>${escapeHtml(desc)}</p>` : ''}
+        ${detailBlock}
       </li>`;
     })
     .join('');
@@ -320,6 +332,8 @@ function monthKey(dateStr) {
   return dateStr.slice(0, 7); // "YYYY-MM"
 }
 
+const MONTHLY_EXAMPLES_LIMIT = 5;
+
 // 그 달에 속한 날짜들의 categoryBreakdown을 유형별로 더함 — 각 날짜가 이미 표본 기반이라 합산값도 표본 기반임
 function aggregateMonthlyCategories(data, month) {
   const days = data.filter((e) => monthKey(e.date) === month && e.categoryBreakdown && e.categoryBreakdown.length);
@@ -331,8 +345,12 @@ function aggregateMonthlyCategories(data, month) {
       const prev = totals.get(c.key);
       if (prev) {
         prev.count += c.count;
+        for (const ex of c.examples || []) {
+          if (prev.examples.length >= MONTHLY_EXAMPLES_LIMIT) break;
+          if (!prev.examples.some((e) => e.id === ex.id)) prev.examples.push(ex);
+        }
       } else {
-        totals.set(c.key, { label: c.label, count: c.count });
+        totals.set(c.key, { label: c.label, count: c.count, examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
       }
     }
   }

@@ -5,6 +5,7 @@ const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 const MAX_HIGHLIGHTS = 3;
 const CATEGORY_SAMPLE_SIZE = 20; // 심각도별로 이 개수만큼 설명을 받아 유형 분류 표본으로 사용 (호출 횟수는 늘지 않음, resultsPerPage만 늘림)
+const CATEGORY_EXAMPLES_LIMIT = 3; // 유형별로 원본 링크를 몇 건까지 같이 저장할지 (번역은 안 함 — API 호출 추가 없음)
 
 // CVE 설명은 NVD가 정형화된 문구로 작성하는 경우가 많아("... allows remote attackers to execute arbitrary code" 등)
 // 키워드 매칭만으로도 꽤 신뢰할 수 있는 유형 분류가 가능함. 위에서 아래로 먼저 걸리는 규칙 하나만 적용.
@@ -162,6 +163,7 @@ async function main() {
   const rawHighlights = [];
   const usedHighlightCategories = new Set(); // 대표 CVE 3건이 서로 다른 유형이 되도록 이미 뽑힌 유형은 건너뜀
   const categoryCounts = {};
+  const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   let categorySampleSize = 0;
   for (const level of SEVERITIES) {
     await sleep(1500);
@@ -177,6 +179,11 @@ async function main() {
       categorySampleSize += 1;
       const categoryKey = categorize(desc);
       categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
+
+      const examples = (categoryExamples[categoryKey] ||= []);
+      if (examples.length < CATEGORY_EXAMPLES_LIMIT) {
+        examples.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
+      }
 
       if (rawHighlights.length < MAX_HIGHLIGHTS && !usedHighlightCategories.has(categoryKey)) {
         usedHighlightCategories.add(categoryKey);
@@ -203,7 +210,7 @@ async function main() {
   // 잘라내지 않고 전부 저장 — 화면(오늘 카드)에서는 상위 6개만 보여주지만,
   // 월별 합산 그래프는 이 전체 목록을 더해야 작은 유형도 누락 없이 집계됨
   const categoryBreakdown = Object.entries(categoryCounts)
-    .map(([key, count]) => ({ key, label: categoryLabels[key], count }))
+    .map(([key, count]) => ({ key, label: categoryLabels[key], count, examples: categoryExamples[key] || [] }))
     .sort((a, b) => b.count - a.count);
 
   // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
