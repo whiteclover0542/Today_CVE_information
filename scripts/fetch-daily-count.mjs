@@ -197,7 +197,8 @@ async function main() {
   // resultsPerPage를 늘려 같은 호출에서 건수(totalResults)·대표 CVE(vulnerabilities)·유형 분류용 표본을 함께 받는다(호출 횟수는 그대로 5회).
   const severity = {};
   const rawHighlights = [];
-  const usedHighlightCategories = new Set(); // 대표 CVE 3건이 서로 다른 유형이 되도록 이미 뽑힌 유형은 건너뜀
+  const usedHighlightIds = new Set();
+  const usedHighlightCategories = new Set();
   const categoryCounts = {};
   const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   const productCounts = {};
@@ -210,6 +211,8 @@ async function main() {
     sevUrl.searchParams.set('resultsPerPage', String(CATEGORY_SAMPLE_SIZE));
     const body = await fetchJson(sevUrl);
     severity[level.toLowerCase()] = body.totalResults;
+
+    const levelCandidates = []; // 이 심각도 안에서 대표 CVE 후보로 쓸 목록
 
     for (const { cve } of body.vulnerabilities || []) {
       const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
@@ -230,7 +233,19 @@ async function main() {
         productExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
-      if (rawHighlights.length < MAX_HIGHLIGHTS && !usedHighlightCategories.has(categoryKey)) {
+      levelCandidates.push({ cve, desc, categoryKey });
+    }
+
+    // 대표 CVE 3건 선정: 심각도가 항상 먼저다 — 유형을 맞추려고 더 낮은 심각도로 넘어가지 않는다.
+    // 1차: 이 심각도 안에서 아직 안 나온 유형을 우선 채움. 2차: 그래도 자리가 남으면(이 심각도 안에서만)
+    // 유형이 겹쳐도 채운다. 두 패스 모두 이 심각도의 후보를 다 써도 부족해야 다음(더 낮은) 심각도로 넘어감.
+    const pickFromLevel = (allowDuplicateCategory) => {
+      for (const { cve, desc, categoryKey } of levelCandidates) {
+        if (rawHighlights.length >= MAX_HIGHLIGHTS) break;
+        if (usedHighlightIds.has(cve.id)) continue;
+        if (!allowDuplicateCategory && usedHighlightCategories.has(categoryKey)) continue;
+
+        usedHighlightIds.add(cve.id);
         usedHighlightCategories.add(categoryKey);
         const metrics = cve.metrics || {};
         // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
@@ -245,7 +260,9 @@ async function main() {
           cvssVector: cvss?.cvssData?.vectorString ?? null,
         });
       }
-    }
+    };
+    pickFromLevel(false);
+    pickFromLevel(true);
   }
   const rated = severity.critical + severity.high + severity.medium + severity.low;
   severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
