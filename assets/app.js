@@ -295,9 +295,8 @@ const CATEGORY_GLOSSARY = {
 const DAILY_CATEGORY_LIMIT = 6;
 
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
-// useGlossary=false면 설명 문구 없이 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
-// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문.
-// 유형 카드와 동일하게 라벨은 항상 "펼치기" 버튼 — 벤더(searchUrl)는 펼친 안에 NVD 검색 링크 하나가 나옴(누르는 순간 바로 새 탭 이동 X, 한 번 더 눌러야 이동).
+// useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
+// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문
 function renderCategoryBarList(breakdown, useGlossary = true) {
   const maxCount = Math.max(...breakdown.map((c) => c.count));
   return breakdown
@@ -305,14 +304,11 @@ function renderCategoryBarList(breakdown, useGlossary = true) {
       const pct = Math.round((c.count / maxCount) * 100);
       const desc = useGlossary ? (CATEGORY_GLOSSARY[c.label] || '') : '';
       const examples = c.examples || [];
-      let examplesHtml = '';
-      if (c.searchUrl) {
-        examplesHtml = `<ul class="category-bar-examples"><li><a href="${escapeHtml(c.searchUrl)}" target="_blank" rel="noopener">NVD에서 "${escapeHtml(c.label)}" 검색 결과 보기 ↗</a></li></ul>`;
-      } else if (examples.length) {
-        examplesHtml = `<ul class="category-bar-examples">${examples
-          .map((ex) => `<li><a href="${escapeHtml(ex.url)}" target="_blank" rel="noopener">${escapeHtml(ex.id)}</a></li>`)
-          .join('')}</ul>`;
-      }
+      const examplesHtml = examples.length
+        ? `<ul class="category-bar-examples">${examples
+            .map((ex) => `<li><a href="${escapeHtml(ex.url)}" target="_blank" rel="noopener">${escapeHtml(ex.id)}</a></li>`)
+            .join('')}</ul>`
+        : '';
       const detailBlock = desc || examplesHtml
         ? `<div class="category-bar-desc" hidden>
             ${desc ? `<p>${escapeHtml(desc)}</p>` : ''}
@@ -354,7 +350,7 @@ function renderProduct(entry) {
   els.productBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT), false);
 
   els.productNote.textContent =
-    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 NVD 검색 링크가 펼쳐지고, 그 링크를 누르면 새 탭으로 열려요.`;
+    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
 }
 
 function monthKey(dateStr) {
@@ -379,13 +375,7 @@ function aggregateMonthlyBreakdown(data, month, field) {
           if (!prev.examples.some((e) => e.id === ex.id)) prev.examples.push(ex);
         }
       } else {
-        // searchUrl(벤더 검색 링크)은 날짜와 무관하게 항상 같은 값이라 그대로 들고 감
-        totals.set(c.key, {
-          label: c.label,
-          count: c.count,
-          examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT),
-          searchUrl: c.searchUrl,
-        });
+        totals.set(c.key, { label: c.label, count: c.count, examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
       }
     }
   }
@@ -417,7 +407,7 @@ const MONTHLY_WIDGETS = [
     total: () => els.monthlyProductTotal,
     emptyNote: '이 달은 목록에 걸린 벤더·제품이 없어요.',
     noteText: (month, dayCount) =>
-      `${month} 한 달(기록 ${dayCount}일) 동안 미리 정해둔 벤더·제품 목록에 걸린 것만 더한 결과예요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 NVD 검색 링크가 펼쳐지고, 그 링크를 누르면 새 탭으로 열려요.`,
+      `${month} 한 달(기록 ${dayCount}일) 동안 미리 정해둔 벤더·제품 목록에 걸린 것만 더한 결과예요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`,
   },
 ];
 

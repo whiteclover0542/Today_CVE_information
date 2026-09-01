@@ -400,8 +400,8 @@
     "count": 202,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A26%3A44.232Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-01T02:26:44.232Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A35%3A45.555Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-01T02:35:45.555Z",
     "severity": {
       "critical": 3,
       "high": 13,
@@ -414,7 +414,7 @@
         "id": "CVE-2026-82954",
         "severity": "CRITICAL",
         "summaryEn": "A vulnerability was detected in Dokploy up to 0.29.7. This issue affects the function writeTraefikConfigInPath of the file packages/server/src/utils/traefik/application.ts of the component Settings. The manipulation of the argument path results in path traversal. The attack can be launched remotely. The exploit is now public and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-        "summaryKo": "Dokploy에서 최대 0.29.7의 취약점이 탐지되었습니다. 이 문제는 구성 요소 설정의 packages/server/src/utils/traefik/application.ts 파일의 writeTraefikConfigInPath 함수에 영향을 줍니다. 인수 경로를 조작하면 경로 트래버설이 발생합니다. 공격은 원격으로 시작할 수 있습니다. 이 익스플로잇은 이제 공개되며 사용될 수 있습니다. 벤더는 이 공개에 대해 일찍 연락을 받았지만 어떤 방식 으로든 응답하지 않았습니다.",
+        "summaryKo": null,
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82954",
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
@@ -609,19 +609,42 @@
         "key": "php",
         "label": "PHP",
         "count": 5,
-        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=PHP"
+        "examples": [
+          {
+            "id": "CVE-2026-83524",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83524"
+          },
+          {
+            "id": "CVE-2026-82701",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82701"
+          },
+          {
+            "id": "CVE-2026-82914",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82914"
+          }
+        ]
       },
       {
         "key": "wordpress",
         "label": "WordPress",
         "count": 1,
-        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=WordPress"
+        "examples": [
+          {
+            "id": "CVE-2026-66047",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66047"
+          }
+        ]
       },
       {
         "key": "google-android",
         "label": "Google/Android",
         "count": 1,
-        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Google"
+        "examples": [
+          {
+            "id": "CVE-2026-82810",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82810"
+          }
+        ]
       }
     ]
   }
