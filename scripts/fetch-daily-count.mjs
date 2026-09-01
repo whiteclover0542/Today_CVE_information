@@ -32,34 +32,35 @@ function categorize(description) {
 }
 
 // 공격 유형과 달리 제품명은 문구가 정형화돼 있지 않아서(자유 서술) 미리 정해둔 벤더·제품 목록과
-// 매칭하는 방식만 씀 — 목록에 없는 제품은 다 "기타"로 묶임(문구 자체를 새로 추출하지 않음, AI 없음).
+// 매칭하는 방식만 씀 — 목록에 없는 제품은 "기타"로 잡히지만 화면에는 노출하지 않음(목록에 확실히 있는 것만 보여줌).
+// search는 NVD API의 keywordSearch에 그대로 넣을 검색어 — CVE ID를 따로 저장하지 않고 벤더명으로 그때그때 검색 링크를 만듦.
 const PRODUCT_RULES = [
-  { key: 'wordpress', label: 'WordPress', pattern: /wordpress|woocommerce/i },
-  { key: 'linux', label: 'Linux/커널', pattern: /\blinux\b/i },
-  { key: 'cisco', label: 'Cisco', pattern: /\bcisco\b/i },
-  { key: 'microsoft', label: 'Microsoft/Windows', pattern: /\bmicrosoft\b|\bwindows\b/i },
-  { key: 'apple', label: 'Apple/iOS/macOS', pattern: /\bapple\b|\bios\b|\bmacos\b|\biphone\b/i },
-  { key: 'google-android', label: 'Google/Android', pattern: /\bgoogle\b|\bandroid\b|\bchrome\b/i },
-  { key: 'd-link', label: 'D-Link', pattern: /d-link/i },
-  { key: 'tp-link', label: 'TP-Link', pattern: /tp-link/i },
-  { key: 'netgear', label: 'Netgear', pattern: /netgear/i },
-  { key: 'zyxel', label: 'Zyxel', pattern: /zyxel/i },
-  { key: 'huawei', label: 'Huawei', pattern: /huawei/i },
-  { key: 'ibm', label: 'IBM', pattern: /\bibm\b/i },
-  { key: 'adobe', label: 'Adobe', pattern: /\badobe\b/i },
-  { key: 'oracle-mysql', label: 'Oracle/MySQL', pattern: /\boracle\b|\bmysql\b|\bmariadb\b/i },
-  { key: 'sap', label: 'SAP', pattern: /\bsap\b/i },
-  { key: 'fortinet', label: 'Fortinet', pattern: /fortinet|fortigate/i },
-  { key: 'juniper', label: 'Juniper', pattern: /juniper/i },
-  { key: 'vmware', label: 'VMware', pattern: /vmware/i },
-  { key: 'apache', label: 'Apache', pattern: /\bapache\b/i },
-  { key: 'php', label: 'PHP', pattern: /\bphp\b/i },
-  { key: 'openssl', label: 'OpenSSL', pattern: /openssl/i },
-  { key: 'docker-k8s', label: 'Docker/Kubernetes', pattern: /\bdocker\b|kubernetes/i },
-  { key: 'gitlab-github', label: 'GitLab/GitHub', pattern: /gitlab|github/i },
-  { key: 'joomla-drupal', label: 'Joomla/Drupal', pattern: /joomla|drupal/i },
-  { key: 'qnap-synology', label: 'QNAP/Synology', pattern: /qnap|synology/i },
-  { key: 'samsung', label: 'Samsung', pattern: /samsung/i },
+  { key: 'wordpress', label: 'WordPress', pattern: /wordpress|woocommerce/i, search: 'WordPress' },
+  { key: 'linux', label: 'Linux/커널', pattern: /\blinux\b/i, search: 'Linux' },
+  { key: 'cisco', label: 'Cisco', pattern: /\bcisco\b/i, search: 'Cisco' },
+  { key: 'microsoft', label: 'Microsoft/Windows', pattern: /\bmicrosoft\b|\bwindows\b/i, search: 'Microsoft' },
+  { key: 'apple', label: 'Apple/iOS/macOS', pattern: /\bapple\b|\bios\b|\bmacos\b|\biphone\b/i, search: 'Apple' },
+  { key: 'google-android', label: 'Google/Android', pattern: /\bgoogle\b|\bandroid\b|\bchrome\b/i, search: 'Google' },
+  { key: 'd-link', label: 'D-Link', pattern: /d-link/i, search: 'D-Link' },
+  { key: 'tp-link', label: 'TP-Link', pattern: /tp-link/i, search: 'TP-Link' },
+  { key: 'netgear', label: 'Netgear', pattern: /netgear/i, search: 'Netgear' },
+  { key: 'zyxel', label: 'Zyxel', pattern: /zyxel/i, search: 'Zyxel' },
+  { key: 'huawei', label: 'Huawei', pattern: /huawei/i, search: 'Huawei' },
+  { key: 'ibm', label: 'IBM', pattern: /\bibm\b/i, search: 'IBM' },
+  { key: 'adobe', label: 'Adobe', pattern: /\badobe\b/i, search: 'Adobe' },
+  { key: 'oracle-mysql', label: 'Oracle/MySQL', pattern: /\boracle\b|\bmysql\b|\bmariadb\b/i, search: 'Oracle' },
+  { key: 'sap', label: 'SAP', pattern: /\bsap\b/i, search: 'SAP' },
+  { key: 'fortinet', label: 'Fortinet', pattern: /fortinet|fortigate/i, search: 'Fortinet' },
+  { key: 'juniper', label: 'Juniper', pattern: /juniper/i, search: 'Juniper' },
+  { key: 'vmware', label: 'VMware', pattern: /vmware/i, search: 'VMware' },
+  { key: 'apache', label: 'Apache', pattern: /\bapache\b/i, search: 'Apache' },
+  { key: 'php', label: 'PHP', pattern: /\bphp\b/i, search: 'PHP' },
+  { key: 'openssl', label: 'OpenSSL', pattern: /openssl/i, search: 'OpenSSL' },
+  { key: 'docker-k8s', label: 'Docker/Kubernetes', pattern: /\bdocker\b|kubernetes/i, search: 'Docker' },
+  { key: 'gitlab-github', label: 'GitLab/GitHub', pattern: /gitlab|github/i, search: 'GitLab' },
+  { key: 'joomla-drupal', label: 'Joomla/Drupal', pattern: /joomla|drupal/i, search: 'Joomla' },
+  { key: 'qnap-synology', label: 'QNAP/Synology', pattern: /qnap|synology/i, search: 'QNAP' },
+  { key: 'samsung', label: 'Samsung', pattern: /samsung/i, search: 'Samsung' },
 ];
 
 function categorizeProduct(description) {
@@ -202,7 +203,6 @@ async function main() {
   const categoryCounts = {};
   const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   const productCounts = {};
-  const productExamples = {};
   let categorySampleSize = 0;
   for (const level of SEVERITIES) {
     await sleep(1500);
@@ -228,10 +228,6 @@ async function main() {
 
       const productKey = categorizeProduct(desc);
       productCounts[productKey] = (productCounts[productKey] || 0) + 1;
-      const productExampleList = (productExamples[productKey] ||= []);
-      if (productExampleList.length < CATEGORY_EXAMPLES_LIMIT) {
-        productExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
-      }
 
       levelCandidates.push({ cve, desc, categoryKey });
     }
@@ -275,10 +271,17 @@ async function main() {
     .map(([key, count]) => ({ key, label: categoryLabels[key], count, examples: categoryExamples[key] || [] }))
     .sort((a, b) => b.count - a.count);
 
-  const productLabels = Object.fromEntries(PRODUCT_RULES.map((r) => [r.key, r.label]));
-  productLabels.other = '기타';
+  // "기타"는 화면에 안 보여줄 거라 애초에 제외 — 목록에 확실히 있는 벤더만 건수와 함께 남김.
+  // CVE 링크를 따로 저장하지 않고, 벤더명으로 NVD keywordSearch 링크를 그때그때 만든다(검증된 API 파라미터).
+  const productRuleMap = Object.fromEntries(PRODUCT_RULES.map((r) => [r.key, r]));
   const productBreakdown = Object.entries(productCounts)
-    .map(([key, count]) => ({ key, label: productLabels[key], count, examples: productExamples[key] || [] }))
+    .filter(([key]) => key !== 'other')
+    .map(([key, count]) => {
+      const rule = productRuleMap[key];
+      const searchUrl = new URL('https://services.nvd.nist.gov/rest/json/cves/2.0');
+      searchUrl.searchParams.set('keywordSearch', rule.search);
+      return { key, label: rule.label, count, searchUrl: searchUrl.toString() };
+    })
     .sort((a, b) => b.count - a.count);
 
   // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)

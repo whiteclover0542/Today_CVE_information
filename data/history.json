@@ -400,8 +400,8 @@
     "count": 202,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A21%3A05.178Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-01T02:21:05.178Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A26%3A44.232Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-01T02:26:44.232Z",
     "severity": {
       "critical": 3,
       "high": 13,
@@ -425,7 +425,7 @@
         "id": "CVE-2026-82971",
         "severity": "CRITICAL",
         "summaryEn": "A vulnerability was determined in QVidium Opera11 3.3.2a26-Ax4x-opera11. This affects an unknown part of the file /cgi-bin/net_tr.cgi of the component CGI Script. This manipulation of the argument ipaddr causes command injection. The attack may be initiated remotely. The exploit has been publicly disclosed and may be utilized. The vendor explains: \"QVidium has now closed its doors and no longer will be able to sell products or provide support.\" This vulnerability only affects products that are no longer supported by the maintainer.",
-        "summaryKo": "QVidium Opera11 3.3.2a26-Ax4x-opera11에서 취약점이 확인되었습니다. 이는 구성 요소 CGI 스크립트의/cgi-bin/net_tr.cgi 파일의 알 수 없는 부분에 영향을 줍니다. 이렇게 ipaddr 인수를 조작하면 명령 주입이 발생합니다. 공격은 원격으로 시작될 수 있습니다. 이 익스플로잇은 공개적으로 공개되었으며 활용될 수 있습니다. 공급업체는 다음과 같이 설명합니다. \"QVidium은 이제 문을 닫았으며 더 이상 제품을 판매하거나 지원을 제공할 수 없습니다. \"이 취약점은 유지 관리자가 더 이상 지원하지 않는 제품에만 영향을 미칩니다.",
+        "summaryKo": null,
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82971",
         "cvssScore": 10,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
@@ -436,7 +436,7 @@
         "id": "CVE-2026-83524",
         "severity": "CRITICAL",
         "summaryEn": "A security vulnerability has been detected in RedPort Optimizer wXa-203, Optimizer wXa-213 and Optimizer wXa-223 up to 20260704. This impacts the function exec of the file /xgatev1/system/datetime.php of the component System Clock. The manipulation leads to command injection. The attack may be initiated remotely. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
-        "summaryKo": "RedPort Optimizer wXa-203, Optimizer wXa-213 및 Optimizer wXa-223에서 최대 20260704의 보안 취약점이 탐지되었습니다. 이는 구성 요소 시스템 클럭의/xgatev1/system/datetime.php 파일의 함수 exec에 영향을 미칩니다. 조작은 명령 주입으로 이어집니다. 공격은 원격으로 시작될 수 있습니다. 이 익스플로잇은 공개적으로 공개되었으며 사용될 수 있습니다. 벤더는 이 공개에 대해 일찍 연락을 받았지만 어떤 방식 으로든 응답하지 않았습니다.",
+        "summaryKo": null,
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83524",
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
@@ -606,64 +606,22 @@
     "categorySampleSize": 31,
     "productBreakdown": [
       {
-        "key": "other",
-        "label": "기타",
-        "count": 24,
-        "examples": [
-          {
-            "id": "CVE-2026-82954",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82954"
-          },
-          {
-            "id": "CVE-2026-82971",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82971"
-          },
-          {
-            "id": "CVE-2026-82807",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82807"
-          }
-        ]
-      },
-      {
         "key": "php",
         "label": "PHP",
         "count": 5,
-        "examples": [
-          {
-            "id": "CVE-2026-83524",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83524"
-          },
-          {
-            "id": "CVE-2026-82701",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82701"
-          },
-          {
-            "id": "CVE-2026-82914",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82914"
-          }
-        ]
+        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=PHP"
       },
       {
         "key": "wordpress",
         "label": "WordPress",
         "count": 1,
-        "examples": [
-          {
-            "id": "CVE-2026-66047",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66047"
-          }
-        ]
+        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=WordPress"
       },
       {
         "key": "google-android",
         "label": "Google/Android",
         "count": 1,
-        "examples": [
-          {
-            "id": "CVE-2026-82810",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82810"
-          }
-        ]
+        "searchUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Google"
       }
     ]
   }

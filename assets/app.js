@@ -296,12 +296,22 @@ const DAILY_CATEGORY_LIMIT = 6;
 
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
 // useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
-// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문
+// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문.
+// 항목에 searchUrl이 있으면(벤더) 펼치는 버튼 대신 라벨 자체가 NVD 검색으로 바로 연결되는 링크가 됨 — 저장된 예시 CVE가 필요 없음.
 function renderCategoryBarList(breakdown, useGlossary = true) {
   const maxCount = Math.max(...breakdown.map((c) => c.count));
   return breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
+
+      if (c.searchUrl) {
+        return `<li>
+          <a class="category-bar-label" href="${escapeHtml(c.searchUrl)}" target="_blank" rel="noopener">${escapeHtml(c.label)}</a>
+          <span class="category-bar-track"><span class="category-bar-fill" style="width:${pct}%"></span></span>
+          <span class="category-bar-count">${c.count}건</span>
+        </li>`;
+      }
+
       const desc = useGlossary ? (CATEGORY_GLOSSARY[c.label] || '') : '';
       const examples = c.examples || [];
       const examplesHtml = examples.length
@@ -350,7 +360,7 @@ function renderProduct(entry) {
   els.productBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT), false);
 
   els.productNote.textContent =
-    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 제품·벤더 이름을 찾아 분류한 결과예요(AI 없이 목록 매칭). 표본 기준이라 실제 비율과 다를 수 있고, 목록에 없는 제품이면 "기타"로 묶여요.`;
+    `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 NVD에서 그 이름으로 검색한 결과가 새 탭으로 열려요.`;
 }
 
 function monthKey(dateStr) {
@@ -375,7 +385,13 @@ function aggregateMonthlyBreakdown(data, month, field) {
           if (!prev.examples.some((e) => e.id === ex.id)) prev.examples.push(ex);
         }
       } else {
-        totals.set(c.key, { label: c.label, count: c.count, examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
+        // searchUrl(벤더 검색 링크)은 날짜와 무관하게 항상 같은 값이라 그대로 들고 감
+        totals.set(c.key, {
+          label: c.label,
+          count: c.count,
+          examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT),
+          searchUrl: c.searchUrl,
+        });
       }
     }
   }
@@ -405,9 +421,9 @@ const MONTHLY_WIDGETS = [
     bars: () => els.monthlyProductBars,
     note: () => els.monthlyProductNote,
     total: () => els.monthlyProductTotal,
-    emptyNote: '이 달은 제품·벤더 분류 데이터가 없어요.',
+    emptyNote: '이 달은 목록에 걸린 벤더·제품이 없어요.',
     noteText: (month, dayCount) =>
-      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 제품·벤더 분류를 모두 더한 결과예요(AI 없이 목록 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
+      `${month} 한 달(기록 ${dayCount}일) 동안 미리 정해둔 벤더·제품 목록에 걸린 것만 더한 결과예요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 NVD에서 그 이름으로 검색한 결과가 새 탭으로 열려요.`,
   },
 ];
 
