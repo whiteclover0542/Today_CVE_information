@@ -314,9 +314,11 @@ const BAR_LIST_PAGE_SIZE = 10;
 
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
 // useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
-// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문
-function renderCategoryBarList(breakdown, useGlossary = true) {
-  const maxCount = Math.max(...breakdown.map((c) => c.count));
+// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문.
+// maxCountOverride를 주면 breakdown 자체의 최댓값 대신 그 값을 100% 기준으로 씀 — 페이지네이션에서
+// 지금 보이는 조각이 아니라 전체 목록 기준으로 막대 비율을 고정할 때 씀(createBarListPager 참고).
+function renderCategoryBarList(breakdown, useGlossary = true, maxCountOverride = null) {
+  const maxCount = maxCountOverride ?? Math.max(...breakdown.map((c) => c.count));
   return breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
@@ -345,6 +347,8 @@ function renderCategoryBarList(breakdown, useGlossary = true) {
 
 // 유형/제품 막대 목록 하나를 맡는 페이저 — 10개씩 잘라 보여주고 이전/다음 버튼으로 넘김.
 // 데이터는 setData()로 받아 들고 있다가 버튼 클릭 시 다시 계산 없이 그 배열만 재슬라이스함.
+// 최댓값(막대 100% 기준)은 항상 "전체 목록" 기준으로 고정 — 페이지 단위로 다시 계산하면
+// 2페이지처럼 작은 값들만 모인 페이지에서 그중 최댓값이 100% 막대로 보여 착시가 생기기 때문.
 function createBarListPager(elsSet) {
   let breakdown = [];
   let useGlossary = true;
@@ -354,7 +358,8 @@ function createBarListPager(elsSet) {
     const totalPages = Math.max(1, Math.ceil(breakdown.length / BAR_LIST_PAGE_SIZE));
     page = Math.min(Math.max(page, 1), totalPages);
     const start = (page - 1) * BAR_LIST_PAGE_SIZE;
-    elsSet.bars.innerHTML = renderCategoryBarList(breakdown.slice(start, start + BAR_LIST_PAGE_SIZE), useGlossary);
+    const fullListMax = breakdown.length ? Math.max(...breakdown.map((c) => c.count)) : null;
+    elsSet.bars.innerHTML = renderCategoryBarList(breakdown.slice(start, start + BAR_LIST_PAGE_SIZE), useGlossary, fullListMax);
     elsSet.pagination.hidden = breakdown.length <= BAR_LIST_PAGE_SIZE;
     elsSet.pageInfo.textContent = `${page} / ${totalPages}`;
     elsSet.prevBtn.disabled = page <= 1;
