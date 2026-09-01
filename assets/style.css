@@ -418,6 +418,23 @@ header h1 {
   flex-shrink: 0;
 }
 
+.hl-category {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg-2);
+  color: var(--muted);
+  flex-shrink: 0;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.hl-category::before {
+  content: "🏷 ";
+}
+
 .hl-summary {
   color: var(--muted);
   line-height: 1.5;

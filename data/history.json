@@ -400,8 +400,8 @@
     "count": 201,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T01%3A19%3A38.774Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-01T01:19:38.774Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T01%3A27%3A03.429Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-01T01:27:03.429Z",
     "severity": {
       "critical": 3,
       "high": 13,
@@ -418,7 +418,8 @@
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82954",
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요"
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
       },
       {
         "id": "CVE-2026-82971",
@@ -428,7 +429,8 @@
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82971",
         "cvssScore": 10,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
-        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요"
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
       },
       {
         "id": "CVE-2026-83524",
@@ -438,7 +440,8 @@
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83524",
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
-        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요"
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
       }
     ],
     "categoryBreakdown": [

@@ -318,6 +318,9 @@ function renderHighlights(entry) {
       const cvssPlain = h.cvssPlain
         ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
         : '';
+      const categoryTag = h.category
+        ? `<span class="hl-category">${escapeHtml(h.category)}</span>`
+        : '';
       const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
       const originalBlock = fullEn
         ? `<p class="hl-original"><span class="hl-original-label">원문(영어)</span>${escapeHtml(fullEn)}</p>`
@@ -326,6 +329,7 @@ function renderHighlights(entry) {
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
         ${cvss}
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
+        ${categoryTag}
         <span class="hl-summary">${escapeHtml(preview)}</span>
         ${cvssPlain}
         <details class="hl-details">

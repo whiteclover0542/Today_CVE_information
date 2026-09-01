@@ -142,6 +142,7 @@ async function main() {
           id: cve.id,
           severity: level,
           fullEn: desc,
+          categoryKey,
           url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
           cvssScore: cvss?.cvssData?.baseScore ?? null,
           cvssVector: cvss?.cvssData?.vectorString ?? null,
@@ -174,6 +175,7 @@ async function main() {
       cvssScore: h.cvssScore,
       cvssVector: h.cvssVector,
       cvssPlain: decodeCvssVector(h.cvssVector),
+      category: categoryLabels[h.categoryKey],
     });
   }
 
