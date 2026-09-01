@@ -400,17 +400,6 @@ header h1 {
   border-bottom-color: var(--accent);
 }
 
-/* <a href>인 항목(벤더 검색 링크)만 — 펼치는 버튼과 구분되는 외부 링크 표시 */
-a.category-bar-label {
-  border-bottom-style: solid;
-}
-
-a.category-bar-label::after {
-  content: " ↗";
-  font-size: 0.7rem;
-  opacity: 0.7;
-}
-
 .category-bar-desc {
   flex-basis: 100%;
   margin: 0;
