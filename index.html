@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=34" />
+<link rel="stylesheet" href="assets/style.css?v=36" />
 </head>
 <body>
 <main class="dashboard">
@@ -82,12 +82,22 @@
   <section class="category-card" id="category-card" hidden>
     <h2>🏷️ 오늘 등록분 유형</h2>
     <ul class="category-bars" id="category-bars"></ul>
+    <div class="bar-pagination" id="category-pagination" hidden>
+      <button type="button" id="category-prev">← 이전 10개</button>
+      <span id="category-page-info" class="bar-page-info"></span>
+      <button type="button" id="category-next">다음 10개 →</button>
+    </div>
     <p class="category-note" id="category-note"></p>
   </section>
 
   <section class="category-card" id="product-card" hidden>
     <h2>🏭 오늘 등록분 제품·벤더</h2>
     <ul class="category-bars" id="product-bars"></ul>
+    <div class="bar-pagination" id="product-pagination" hidden>
+      <button type="button" id="product-prev">← 이전 10개</button>
+      <span id="product-page-info" class="bar-page-info"></span>
+      <button type="button" id="product-next">다음 10개 →</button>
+    </div>
     <p class="category-note" id="product-note"></p>
   </section>
 
@@ -98,6 +108,11 @@
     </div>
     <p class="monthly-total" id="monthly-category-total"></p>
     <ul class="category-bars" id="monthly-category-bars"></ul>
+    <div class="bar-pagination" id="monthly-category-pagination" hidden>
+      <button type="button" id="monthly-category-prev">← 이전 10개</button>
+      <span id="monthly-category-page-info" class="bar-page-info"></span>
+      <button type="button" id="monthly-category-next">다음 10개 →</button>
+    </div>
     <p class="category-note" id="monthly-category-note"></p>
   </section>
 
@@ -108,6 +123,11 @@
     </div>
     <p class="monthly-total" id="monthly-product-total"></p>
     <ul class="category-bars" id="monthly-product-bars"></ul>
+    <div class="bar-pagination" id="monthly-product-pagination" hidden>
+      <button type="button" id="monthly-product-prev">← 이전 10개</button>
+      <span id="monthly-product-page-info" class="bar-page-info"></span>
+      <button type="button" id="monthly-product-next">다음 10개 →</button>
+    </div>
     <p class="category-note" id="monthly-product-note"></p>
   </section>
 
@@ -160,6 +180,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=35"></script>
+<script src="assets/app.js?v=36"></script>
 </body>
 </html>

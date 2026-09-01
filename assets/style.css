@@ -731,15 +731,23 @@ td {
 
 tbody tr:hover { background: var(--card-bg-2); }
 
-.history-pagination {
+.history-pagination,
+.bar-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.6rem;
   margin-top: 1rem;
 }
 
-.history-page-info {
+.history-pagination button,
+.bar-pagination button {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.history-page-info,
+.bar-page-info {
   color: var(--muted);
   font-size: 0.82rem;
   font-variant-numeric: tabular-nums;

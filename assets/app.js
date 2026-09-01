@@ -96,19 +96,35 @@ const els = {
   categoryCard: document.getElementById('category-card'),
   categoryBars: document.getElementById('category-bars'),
   categoryNote: document.getElementById('category-note'),
+  categoryPagination: document.getElementById('category-pagination'),
+  categoryPrev: document.getElementById('category-prev'),
+  categoryNext: document.getElementById('category-next'),
+  categoryPageInfo: document.getElementById('category-page-info'),
   productCard: document.getElementById('product-card'),
   productBars: document.getElementById('product-bars'),
   productNote: document.getElementById('product-note'),
+  productPagination: document.getElementById('product-pagination'),
+  productPrev: document.getElementById('product-prev'),
+  productNext: document.getElementById('product-next'),
+  productPageInfo: document.getElementById('product-page-info'),
   monthlyCategoryCard: document.getElementById('monthly-category-card'),
   monthSelect: document.getElementById('month-select'),
   monthlyCategoryTotal: document.getElementById('monthly-category-total'),
   monthlyCategoryBars: document.getElementById('monthly-category-bars'),
   monthlyCategoryNote: document.getElementById('monthly-category-note'),
+  monthlyCategoryPagination: document.getElementById('monthly-category-pagination'),
+  monthlyCategoryPrev: document.getElementById('monthly-category-prev'),
+  monthlyCategoryNext: document.getElementById('monthly-category-next'),
+  monthlyCategoryPageInfo: document.getElementById('monthly-category-page-info'),
   monthlyProductCard: document.getElementById('monthly-product-card'),
   monthProductSelect: document.getElementById('month-product-select'),
   monthlyProductTotal: document.getElementById('monthly-product-total'),
   monthlyProductBars: document.getElementById('monthly-product-bars'),
   monthlyProductNote: document.getElementById('monthly-product-note'),
+  monthlyProductPagination: document.getElementById('monthly-product-pagination'),
+  monthlyProductPrev: document.getElementById('monthly-product-prev'),
+  monthlyProductNext: document.getElementById('monthly-product-next'),
+  monthlyProductPageInfo: document.getElementById('monthly-product-page-info'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
   trendStats: document.getElementById('trend-stats'),
@@ -294,7 +310,7 @@ const CATEGORY_GLOSSARY = {
   기타: '위 유형에 맞는 키워드가 설명 문구에 없어서 따로 분류하지 못한 CVE',
 };
 
-const DAILY_CATEGORY_LIMIT = 6;
+const BAR_LIST_PAGE_SIZE = 10;
 
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
 // useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
@@ -327,6 +343,59 @@ function renderCategoryBarList(breakdown, useGlossary = true) {
     .join('');
 }
 
+// 유형/제품 막대 목록 하나를 맡는 페이저 — 10개씩 잘라 보여주고 이전/다음 버튼으로 넘김.
+// 데이터는 setData()로 받아 들고 있다가 버튼 클릭 시 다시 계산 없이 그 배열만 재슬라이스함.
+function createBarListPager(elsSet) {
+  let breakdown = [];
+  let useGlossary = true;
+  let page = 1;
+
+  function render() {
+    const totalPages = Math.max(1, Math.ceil(breakdown.length / BAR_LIST_PAGE_SIZE));
+    page = Math.min(Math.max(page, 1), totalPages);
+    const start = (page - 1) * BAR_LIST_PAGE_SIZE;
+    elsSet.bars.innerHTML = renderCategoryBarList(breakdown.slice(start, start + BAR_LIST_PAGE_SIZE), useGlossary);
+    elsSet.pagination.hidden = breakdown.length <= BAR_LIST_PAGE_SIZE;
+    elsSet.pageInfo.textContent = `${page} / ${totalPages}`;
+    elsSet.prevBtn.disabled = page <= 1;
+    elsSet.nextBtn.disabled = page >= totalPages;
+  }
+
+  elsSet.prevBtn.addEventListener('click', () => {
+    if (page <= 1) return;
+    page -= 1;
+    render();
+  });
+  elsSet.nextBtn.addEventListener('click', () => {
+    page += 1;
+    render();
+  });
+
+  return {
+    setData(newBreakdown, { useGlossary: glossaryFlag = true, resetPage = false } = {}) {
+      breakdown = newBreakdown;
+      useGlossary = glossaryFlag;
+      if (resetPage) page = 1;
+      render();
+    },
+  };
+}
+
+const categoryPager = createBarListPager({
+  bars: els.categoryBars,
+  pagination: els.categoryPagination,
+  prevBtn: els.categoryPrev,
+  nextBtn: els.categoryNext,
+  pageInfo: els.categoryPageInfo,
+});
+const productPager = createBarListPager({
+  bars: els.productBars,
+  pagination: els.productPagination,
+  prevBtn: els.productPrev,
+  nextBtn: els.productNext,
+  pageInfo: els.productPageInfo,
+});
+
 // LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
 function renderCategory(entry) {
   const breakdown = entry.categoryBreakdown;
@@ -335,7 +404,7 @@ function renderCategory(entry) {
     return;
   }
   els.categoryCard.hidden = false;
-  els.categoryBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT));
+  categoryPager.setData(breakdown);
 
   els.categoryNote.textContent =
     `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 표본이라 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
@@ -349,7 +418,7 @@ function renderProduct(entry) {
     return;
   }
   els.productCard.hidden = false;
-  els.productBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT), false);
+  productPager.setData(breakdown, { useGlossary: false });
 
   els.productNote.textContent =
     `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
@@ -392,7 +461,13 @@ const MONTHLY_WIDGETS = [
     useGlossary: true,
     card: () => els.monthlyCategoryCard,
     select: () => els.monthSelect,
-    bars: () => els.monthlyCategoryBars,
+    pager: createBarListPager({
+      bars: els.monthlyCategoryBars,
+      pagination: els.monthlyCategoryPagination,
+      prevBtn: els.monthlyCategoryPrev,
+      nextBtn: els.monthlyCategoryNext,
+      pageInfo: els.monthlyCategoryPageInfo,
+    }),
     note: () => els.monthlyCategoryNote,
     total: () => els.monthlyCategoryTotal,
     emptyNote: '이 달은 유형 분류 데이터가 없어요.',
@@ -404,7 +479,13 @@ const MONTHLY_WIDGETS = [
     useGlossary: false,
     card: () => els.monthlyProductCard,
     select: () => els.monthProductSelect,
-    bars: () => els.monthlyProductBars,
+    pager: createBarListPager({
+      bars: els.monthlyProductBars,
+      pagination: els.monthlyProductPagination,
+      prevBtn: els.monthlyProductPrev,
+      nextBtn: els.monthlyProductNext,
+      pageInfo: els.monthlyProductPageInfo,
+    }),
     note: () => els.monthlyProductNote,
     total: () => els.monthlyProductTotal,
     emptyNote: '이 달은 목록에 걸린 벤더·제품이 없어요.',
@@ -413,20 +494,16 @@ const MONTHLY_WIDGETS = [
   },
 ];
 
-function renderMonthlyBreakdownBars(data, month, widget) {
+// resetPage=true는 사용자가 월을 직접 바꿨을 때만 — 그냥 데이터 새로고침으로는 보던 페이지가 안 튐
+function renderMonthlyBreakdownBars(data, month, widget, resetPage = false) {
   const { breakdown, dayCount } = aggregateMonthlyBreakdown(data, month, widget.field);
   const monthTotal = data
     .filter((e) => monthKey(e.date) === month)
     .reduce((sum, e) => sum + (e.count || 0), 0);
   widget.total().textContent = `이 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록 (${month})`;
 
-  if (breakdown.length === 0) {
-    widget.bars().innerHTML = '';
-    widget.note().textContent = widget.emptyNote;
-    return;
-  }
-  widget.bars().innerHTML = renderCategoryBarList(breakdown, widget.useGlossary);
-  widget.note().textContent = widget.noteText(month, dayCount);
+  widget.pager.setData(breakdown, { useGlossary: widget.useGlossary, resetPage });
+  widget.note().textContent = breakdown.length === 0 ? widget.emptyNote : widget.noteText(month, dayCount);
 }
 
 // 데이터에 실제로 있는 월만 선택지로 제공 — 없는 달을 만들어서 보여주지 않음
@@ -449,7 +526,9 @@ function renderMonthlyBreakdown(data, widget) {
     select.value = months.includes(keepValue) ? keepValue : months[0];
   }
 
-  renderMonthlyBreakdownBars(data, select.value, widget);
+  const resetPage = widget._lastMonth !== select.value;
+  widget._lastMonth = select.value;
+  renderMonthlyBreakdownBars(data, select.value, widget, resetPage);
 }
 
 const SEVERITY_COLOR = {
@@ -709,7 +788,9 @@ function toggleCategoryBarDesc(e) {
 
 MONTHLY_WIDGETS.forEach((widget) => {
   widget.select().addEventListener('change', () => {
-    if (lastGood) renderMonthlyBreakdownBars(lastGood.data, widget.select().value, widget);
+    if (!lastGood) return;
+    widget._lastMonth = widget.select().value;
+    renderMonthlyBreakdownBars(lastGood.data, widget.select().value, widget, true);
   });
 });
 
