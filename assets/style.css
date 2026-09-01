@@ -63,8 +63,9 @@ header h1 {
 }
 
 .about-details {
-  display: inline-block;
-  margin-left: 0.4rem;
+  display: block;
+  margin-left: 0;
+  margin-top: 0.5rem;
   font-size: 0.85rem;
 }
 
@@ -80,12 +81,6 @@ header h1 {
 .about-details summary::-webkit-details-marker { display: none; }
 
 .about-details[open] summary { display: block; margin-bottom: 0.35rem; }
-
-.about-details.glossary-details {
-  display: block;
-  margin-left: 0;
-  margin-top: 0.6rem;
-}
 
 .glossary {
   max-width: 760px;
