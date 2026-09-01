@@ -160,6 +160,7 @@ async function main() {
   // resultsPerPage를 늘려 같은 호출에서 건수(totalResults)·대표 CVE(vulnerabilities)·유형 분류용 표본을 함께 받는다(호출 횟수는 그대로 5회).
   const severity = {};
   const rawHighlights = [];
+  const usedHighlightCategories = new Set(); // 대표 CVE 3건이 서로 다른 유형이 되도록 이미 뽑힌 유형은 건너뜀
   const categoryCounts = {};
   let categorySampleSize = 0;
   for (const level of SEVERITIES) {
@@ -177,7 +178,8 @@ async function main() {
       const categoryKey = categorize(desc);
       categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
 
-      if (rawHighlights.length < MAX_HIGHLIGHTS) {
+      if (rawHighlights.length < MAX_HIGHLIGHTS && !usedHighlightCategories.has(categoryKey)) {
+        usedHighlightCategories.add(categoryKey);
         const metrics = cve.metrics || {};
         // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
         const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
