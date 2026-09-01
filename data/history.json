@@ -400,8 +400,8 @@
     "count": 202,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A35%3A45.555Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-01T02:35:45.555Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-08-31T15%3A00%3A00.000Z&pubEndDate=2026-09-01T02%3A39%3A42.687Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-01T02:39:42.687Z",
     "severity": {
       "critical": 3,
       "high": 13,
@@ -446,21 +446,21 @@
     ],
     "categoryBreakdown": [
       {
-        "key": "other",
-        "label": "기타",
-        "count": 12,
+        "key": "access-control",
+        "label": "접근 통제 오류",
+        "count": 6,
         "examples": [
-          {
-            "id": "CVE-2026-82807",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82807"
-          },
           {
             "id": "CVE-2026-82815",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82815"
           },
           {
-            "id": "CVE-2026-82908",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82908"
+            "id": "CVE-2026-82817",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82817"
+          },
+          {
+            "id": "CVE-2026-82818",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82818"
           }
         ]
       },
@@ -499,6 +499,25 @@
           {
             "id": "CVE-2026-82922",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82922"
+          }
+        ]
+      },
+      {
+        "key": "other",
+        "label": "기타",
+        "count": 4,
+        "examples": [
+          {
+            "id": "CVE-2026-83596",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83596"
+          },
+          {
+            "id": "CVE-2026-82882",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82882"
+          },
+          {
+            "id": "CVE-2026-82805",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82805"
           }
         ]
       },
@@ -555,6 +574,28 @@
           {
             "id": "CVE-2026-82954",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82954"
+          }
+        ]
+      },
+      {
+        "key": "priv-esc",
+        "label": "권한 상승",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82807",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82807"
+          }
+        ]
+      },
+      {
+        "key": "integer-overflow",
+        "label": "정수 오버플로우",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82908",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82908"
           }
         ]
       },
