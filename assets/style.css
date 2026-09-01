@@ -107,57 +107,6 @@ header h1 {
   color: var(--text);
 }
 
-.term-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.7rem;
-}
-
-.term {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--card-bg-2);
-  color: var(--text);
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: help;
-}
-
-.term:hover,
-.term:focus {
-  border-color: var(--accent);
-  outline: none;
-}
-
-.term-tip {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
-  z-index: 5;
-  width: max-content;
-  max-width: 260px;
-  padding: 0.55rem 0.7rem;
-  border-radius: 8px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.5;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-}
-
-.term:hover .term-tip,
-.term:focus .term-tip {
-  display: block;
-}
-
 .status-banner {
   padding: 0.85rem 1rem;
   border-radius: 8px;
@@ -402,6 +351,7 @@ header h1 {
 
 .category-bars li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.7rem;
   font-size: 0.85rem;
@@ -410,6 +360,31 @@ header h1 {
 .category-bar-label {
   width: 150px;
   flex-shrink: 0;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--muted);
+}
+
+.category-bar-label:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.category-bar-desc {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .category-bar-track {
@@ -496,6 +471,7 @@ header h1 {
 }
 
 .hl-category {
+  font: inherit;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.15rem 0.55rem;
@@ -506,10 +482,28 @@ header h1 {
   flex-shrink: 0;
   align-self: center;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.hl-category:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .hl-category::before {
   content: "🏷 ";
+}
+
+.hl-category-desc {
+  flex-basis: 100%;
+  margin: 0.3rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .hl-summary {

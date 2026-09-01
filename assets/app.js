@@ -241,7 +241,7 @@ function renderRisk(entry) {
     `${risk.reason} · 기준: 심각 1건 이상=위험 · 없고 높음 1건 이상=주의 · 둘 다 0건=보통`;
 }
 
-// scripts/fetch-daily-count.mjs의 CATEGORY_RULES 라벨과 그대로 맞춰야 함 — 헤더의 "CVSS·유형 용어가 궁금해요" 설명과 같은 문구
+// scripts/fetch-daily-count.mjs의 CATEGORY_RULES 라벨과 그대로 맞춰야 함 — 각 🏷 태그·유형 라벨을 누르면 이 설명이 바로 아래에 펼쳐짐
 const CATEGORY_GLOSSARY = {
   '원격 코드 실행': '공격자가 인터넷 너머에서 남의 컴퓨터·서버에 마음대로 프로그램을 실행시킬 수 있는 유형',
   '인증 우회': '로그인 절차 없이, 또는 그 절차를 속여서 시스템에 들어갈 수 있는 유형',
@@ -273,11 +273,12 @@ function renderCategory(entry) {
   els.categoryBars.innerHTML = breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
-      const title = CATEGORY_GLOSSARY[c.label] || '';
+      const desc = CATEGORY_GLOSSARY[c.label] || '';
       return `<li>
-        <span class="category-bar-label" title="${escapeHtml(title)}">${escapeHtml(c.label)}</span>
+        <button type="button" class="category-bar-label">${escapeHtml(c.label)}</button>
         <span class="category-bar-track"><span class="category-bar-fill" style="width:${pct}%"></span></span>
         <span class="category-bar-count">${c.count}건</span>
+        ${desc ? `<p class="category-bar-desc" hidden>${escapeHtml(desc)}</p>` : ''}
       </li>`;
     })
     .join('');
@@ -338,9 +339,10 @@ function renderHighlights(entry) {
       const cvssPlain = h.cvssPlain
         ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
         : '';
-      const categoryTitle = CATEGORY_GLOSSARY[h.category] || '';
+      const categoryDesc = CATEGORY_GLOSSARY[h.category] || '';
       const categoryTag = h.category
-        ? `<span class="hl-category" title="${escapeHtml(categoryTitle)}">${escapeHtml(h.category)}</span>`
+        ? `<button type="button" class="hl-category">${escapeHtml(h.category)}</button>
+           ${categoryDesc ? `<span class="hl-category-desc" hidden>${escapeHtml(categoryDesc)}</span>` : ''}`
         : '';
       const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
       const originalBlock = fullEn
@@ -511,6 +513,21 @@ async function load(simulateKind) {
     renderError(err);
   }
 }
+
+// 유형 태그·라벨을 누르면 그 자리 바로 아래에 설명을 펼침/접음 (매번 다시 그려지는 목록이라 컨테이너에 위임)
+els.highlightsList.addEventListener('click', (e) => {
+  const btn = e.target.closest('.hl-category');
+  if (!btn) return;
+  const desc = btn.nextElementSibling;
+  if (desc && desc.classList.contains('hl-category-desc')) desc.hidden = !desc.hidden;
+});
+
+els.categoryBars.addEventListener('click', (e) => {
+  const btn = e.target.closest('.category-bar-label');
+  if (!btn) return;
+  const desc = btn.closest('li').querySelector('.category-bar-desc');
+  if (desc) desc.hidden = !desc.hidden;
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   renderNextAutoCheck();
