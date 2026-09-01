@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=28" />
+<link rel="stylesheet" href="assets/style.css?v=29" />
 </head>
 <body>
 <main class="dashboard">
@@ -109,6 +109,11 @@
         <thead><tr><th>날짜</th><th>건수</th><th>조회 시각(UTC)</th></tr></thead>
         <tbody id="history-body"></tbody>
       </table>
+      <div class="history-pagination" id="history-pagination" hidden>
+        <button type="button" id="history-prev">← 이전 14일</button>
+        <span id="history-page-info" class="history-page-info"></span>
+        <button type="button" id="history-next">다음 14일 →</button>
+      </div>
     </section>
   </div>
 
@@ -129,6 +134,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=27"></script>
+<script src="assets/app.js?v=29"></script>
 </body>
 </html>

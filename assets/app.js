@@ -1,5 +1,7 @@
 const HISTORY_URL = 'data/history.json';
 const TIMEZONE = 'Asia/Seoul';
+const HISTORY_PAGE_SIZE = 14;
+let historyPage = 1;
 
 class SimulatedError extends Error {
   constructor(kind, message) {
@@ -104,17 +106,34 @@ const els = {
   trendNote: document.getElementById('trend-note'),
   trendChart: document.getElementById('trend-chart'),
   historyBody: document.getElementById('history-body'),
+  historyPagination: document.getElementById('history-pagination'),
+  historyPrev: document.getElementById('history-prev'),
+  historyNext: document.getElementById('history-next'),
+  historyPageInfo: document.getElementById('history-page-info'),
 };
 
 let lastGood = null; // { data, queriedAtIso }
 
+// 최신순으로 14일씩 페이지 단위로 보여줌 — 전체 기록은 계속 쌓이므로 표 하나에 다 넣지 않음
 function renderHistoryTable(data) {
+  const reversed = [...data].reverse();
+  const totalPages = Math.max(1, Math.ceil(reversed.length / HISTORY_PAGE_SIZE));
+  historyPage = Math.min(Math.max(historyPage, 1), totalPages);
+
+  const start = (historyPage - 1) * HISTORY_PAGE_SIZE;
+  const pageItems = reversed.slice(start, start + HISTORY_PAGE_SIZE);
+
   els.historyBody.innerHTML = '';
-  [...data].reverse().forEach((entry) => {
+  pageItems.forEach((entry) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${entry.date}</td><td>${entry.count}${entry.unit}</td><td>${entry.queriedAtUtc}</td>`;
     els.historyBody.appendChild(tr);
   });
+
+  els.historyPagination.hidden = reversed.length <= HISTORY_PAGE_SIZE;
+  els.historyPageInfo.textContent = `${historyPage} / ${totalPages}`;
+  els.historyPrev.disabled = historyPage <= 1;
+  els.historyNext.disabled = historyPage >= totalPages;
 }
 
 function renderCompare(data) {
@@ -457,6 +476,7 @@ function renderNormal(data) {
     els.trendChart.hidden = true;
     els.trendNote.hidden = false;
     els.historyBody.innerHTML = '';
+    els.historyPagination.hidden = true;
     return;
   }
 
@@ -527,6 +547,18 @@ els.categoryBars.addEventListener('click', (e) => {
   if (!btn) return;
   const desc = btn.closest('li').querySelector('.category-bar-desc');
   if (desc) desc.hidden = !desc.hidden;
+});
+
+els.historyPrev.addEventListener('click', () => {
+  if (historyPage <= 1 || !lastGood) return;
+  historyPage -= 1;
+  renderHistoryTable(lastGood.data);
+});
+
+els.historyNext.addEventListener('click', () => {
+  if (!lastGood) return;
+  historyPage += 1;
+  renderHistoryTable(lastGood.data);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
