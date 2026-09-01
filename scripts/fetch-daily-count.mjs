@@ -198,10 +198,11 @@ async function main() {
 
   const categoryLabels = Object.fromEntries(CATEGORY_RULES.map((r) => [r.key, r.label]));
   categoryLabels.other = '기타';
+  // 잘라내지 않고 전부 저장 — 화면(오늘 카드)에서는 상위 6개만 보여주지만,
+  // 월별 합산 그래프는 이 전체 목록을 더해야 작은 유형도 누락 없이 집계됨
   const categoryBreakdown = Object.entries(categoryCounts)
     .map(([key, count]) => ({ key, label: categoryLabels[key], count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
+    .sort((a, b) => b.count - a.count);
 
   // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
   // 화면에서 "자세히 보기"로 전문·원문을 다 보여줄 수 있도록 자르지 않고 그대로 저장한다.

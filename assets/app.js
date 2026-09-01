@@ -96,6 +96,10 @@ const els = {
   categoryCard: document.getElementById('category-card'),
   categoryBars: document.getElementById('category-bars'),
   categoryNote: document.getElementById('category-note'),
+  monthlyCategoryCard: document.getElementById('monthly-category-card'),
+  monthSelect: document.getElementById('month-select'),
+  monthlyCategoryBars: document.getElementById('monthly-category-bars'),
+  monthlyCategoryNote: document.getElementById('monthly-category-note'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
   trendStats: document.getElementById('trend-stats'),
@@ -279,17 +283,12 @@ const CATEGORY_GLOSSARY = {
   기타: '위 유형에 맞는 키워드가 설명 문구에 없어서 따로 분류하지 못한 CVE',
 };
 
-// LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
-function renderCategory(entry) {
-  const breakdown = entry.categoryBreakdown;
-  if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
-    els.categoryCard.hidden = true;
-    return;
-  }
-  els.categoryCard.hidden = false;
-  const maxCount = Math.max(...breakdown.map((c) => c.count));
+const DAILY_CATEGORY_LIMIT = 6;
 
-  els.categoryBars.innerHTML = breakdown
+// category-bars 형식 <li> 마크업 생성 — 오늘 카드·월별 카드 둘 다 이걸 재사용
+function renderCategoryBarList(breakdown) {
+  const maxCount = Math.max(...breakdown.map((c) => c.count));
+  return breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
       const desc = CATEGORY_GLOSSARY[c.label] || '';
@@ -301,9 +300,78 @@ function renderCategory(entry) {
       </li>`;
     })
     .join('');
+}
+
+// LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
+function renderCategory(entry) {
+  const breakdown = entry.categoryBreakdown;
+  if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
+    els.categoryCard.hidden = true;
+    return;
+  }
+  els.categoryCard.hidden = false;
+  els.categoryBars.innerHTML = renderCategoryBarList(breakdown.slice(0, DAILY_CATEGORY_LIMIT));
 
   els.categoryNote.textContent =
     `오늘 등록분 중 API 응답 표본 ${entry.categorySampleSize}건의 설명 문구를 키워드로 분류한 결과예요(AI·번역 없이 규칙 매칭). 표본이라 전체(${entry.count}건) 비율과는 다를 수 있고, 해당 키워드가 없으면 "기타"로 묶여요.`;
+}
+
+function monthKey(dateStr) {
+  return dateStr.slice(0, 7); // "YYYY-MM"
+}
+
+// 그 달에 속한 날짜들의 categoryBreakdown을 유형별로 더함 — 각 날짜가 이미 표본 기반이라 합산값도 표본 기반임
+function aggregateMonthlyCategories(data, month) {
+  const days = data.filter((e) => monthKey(e.date) === month && e.categoryBreakdown && e.categoryBreakdown.length);
+  const totals = new Map();
+  let sampleSize = 0;
+  for (const day of days) {
+    sampleSize += day.categorySampleSize || 0;
+    for (const c of day.categoryBreakdown) {
+      const prev = totals.get(c.key);
+      if (prev) {
+        prev.count += c.count;
+      } else {
+        totals.set(c.key, { label: c.label, count: c.count });
+      }
+    }
+  }
+  const breakdown = [...totals.values()].sort((a, b) => b.count - a.count);
+  return { breakdown, sampleSize, dayCount: days.length };
+}
+
+function renderMonthlyCategoryBars(data, month) {
+  const { breakdown, dayCount } = aggregateMonthlyCategories(data, month);
+  if (breakdown.length === 0) {
+    els.monthlyCategoryBars.innerHTML = '';
+    els.monthlyCategoryNote.textContent = '이 달은 유형 분류 데이터가 없어요.';
+    return;
+  }
+  els.monthlyCategoryBars.innerHTML = renderCategoryBarList(breakdown);
+  els.monthlyCategoryNote.textContent =
+    `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(AI·번역 없이 규칙 매칭). 각 날짜도 API 응답 표본 기준이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`;
+}
+
+// 데이터에 실제로 있는 월만 선택지로 제공 — 없는 달을 만들어서 보여주지 않음
+function renderMonthlyCategory(data) {
+  const months = [...new Set(
+    data.filter((e) => e.categoryBreakdown && e.categoryBreakdown.length).map((e) => monthKey(e.date)),
+  )].sort().reverse();
+
+  if (months.length === 0) {
+    els.monthlyCategoryCard.hidden = true;
+    return;
+  }
+  els.monthlyCategoryCard.hidden = false;
+
+  const currentOptionValues = Array.from(els.monthSelect.options).map((o) => o.value);
+  if (currentOptionValues.join(',') !== months.join(',')) {
+    const keepValue = els.monthSelect.value;
+    els.monthSelect.innerHTML = months.map((m) => `<option value="${m}">${m}</option>`).join('');
+    els.monthSelect.value = months.includes(keepValue) ? keepValue : months[0];
+  }
+
+  renderMonthlyCategoryBars(data, els.monthSelect.value);
 }
 
 const SEVERITY_COLOR = {
@@ -470,6 +538,7 @@ function renderNormal(data) {
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
     els.categoryCard.hidden = true;
+    els.monthlyCategoryCard.hidden = true;
     els.highlightsCard.hidden = true;
     els.trendStats.hidden = true;
     els.trendStatsNote.hidden = true;
@@ -489,6 +558,7 @@ function renderNormal(data) {
   renderSeverity(latest);
   renderRisk(latest);
   renderCategory(latest);
+  renderMonthlyCategory(data);
   renderHighlights(latest);
   renderCompare(data);
   renderTrendStats(data);
@@ -521,6 +591,7 @@ function renderError(err) {
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
     els.categoryCard.hidden = true;
+    els.monthlyCategoryCard.hidden = true;
     els.highlightsCard.hidden = true;
   }
 }
@@ -547,6 +618,17 @@ els.categoryBars.addEventListener('click', (e) => {
   if (!btn) return;
   const desc = btn.closest('li').querySelector('.category-bar-desc');
   if (desc) desc.hidden = !desc.hidden;
+});
+
+els.monthlyCategoryBars.addEventListener('click', (e) => {
+  const btn = e.target.closest('.category-bar-label');
+  if (!btn) return;
+  const desc = btn.closest('li').querySelector('.category-bar-desc');
+  if (desc) desc.hidden = !desc.hidden;
+});
+
+els.monthSelect.addEventListener('change', () => {
+  if (lastGood) renderMonthlyCategoryBars(lastGood.data, els.monthSelect.value);
 });
 
 els.historyPrev.addEventListener('click', () => {

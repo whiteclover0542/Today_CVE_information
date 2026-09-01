@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=29" />
+<link rel="stylesheet" href="assets/style.css?v=30" />
 </head>
 <body>
 <main class="dashboard">
@@ -80,6 +80,15 @@
     <p class="category-note" id="category-note"></p>
   </section>
 
+  <section class="category-card" id="monthly-category-card" hidden>
+    <div class="category-card-header">
+      <h2>📅 월별 유형 비교</h2>
+      <select id="month-select" class="month-select" aria-label="기준 월 선택"></select>
+    </div>
+    <ul class="category-bars" id="monthly-category-bars"></ul>
+    <p class="category-note" id="monthly-category-note"></p>
+  </section>
+
   <section class="highlights-card" id="highlights-card" hidden>
     <h2>🎯 오늘의 대표 CVE</h2>
     <ul class="highlights-list" id="highlights-list"></ul>
@@ -134,6 +143,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=29"></script>
+<script src="assets/app.js?v=30"></script>
 </body>
 </html>

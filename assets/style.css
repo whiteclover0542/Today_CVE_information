@@ -247,6 +247,35 @@ header h1 {
   font-size: 1.02rem;
 }
 
+.category-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.category-card-header h2 {
+  margin-bottom: 0;
+}
+
+.month-select {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg-2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.month-select:hover,
+.month-select:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
 .tz-note {
   color: var(--muted);
   font-size: 0.75rem;
