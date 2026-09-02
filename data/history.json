@@ -688,5 +688,232 @@
         ]
       }
     ]
+  },
+  {
+    "date": "2026-09-02",
+    "count": 319,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-01T15%3A00%3A00.000Z&pubEndDate=2026-09-02T01%3A36%3A19.397Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-02T01:36:19.397Z",
+    "severity": {
+      "critical": 4,
+      "high": 15,
+      "medium": 19,
+      "low": 0,
+      "unrated": 281
+    },
+    "highlights": [
+      {
+        "id": "CVE-2023-54391",
+        "severity": "CRITICAL",
+        "summaryEn": "Proxmox Virtual Environment (VE) 7.0 through 8.0 contains an authentication bypass vulnerability in libpve-access-control before 8.0.4 that allows unauthenticated attackers to authenticate as any existing enabled user without a configured second factor by supplying an arbitrary tfa-challenge value in the API login endpoint. Attackers can send a POST request to the access ticket API endpoint with any value in the tfa-challenge parameter to completely skip password verification, gaining unauthorized access including to the root@pam account. All affected releases are end of life.",
+        "summaryKo": "Proxmox Virtual Environment (VE) 7.0부터 8.0까지 libpve-access-control 8.0.4 이전 버전에는 인증되지 않은 공격자가 API 로그인 엔드포인트에 임의 tfa-challenge 값을 제공하여 구성된 두 번째 요소 없이 기존 활성화된 사용자로 인증할 수 있는 인증 우회 취약점이 있습니다. 공격자는 tfa-challenge 매개 변수의 모든 값으로 액세스 티켓 API 엔드포인트에 POST 요청을 보내 암호 확인을 완전히 건너뛰고 root @ PAM 계정을 포함한 무단 액세스 권한을 얻을 수 있습니다. 영향을 받는 모든 릴리스는 단종되었습니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-54391",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-84479",
+        "severity": "CRITICAL",
+        "summaryEn": "WWBN AVideo (current e01e41ecc and earlier) makes three login-time security controls depend solely on the client-supplied User-Agent header. The isAVideoEncoder()/isAVideoMobileApp() checks match HTTP_USER_AGENT against a hardcoded literal (\"AVideoEncoder\"/\"AVideoMobileApp\") with no IP check or shared secret. An attacker who submits valid credentials and sets User-Agent: AVideoEncoder bypasses two-factor authentication, skips brute-force captcha escalation, and avoids being recorded in the login/device audit history. No patch is available at the time of publication.",
+        "summaryKo": "WWBN AVideo (현재 e01e41ecc 및 이전 버전) 는 세 가지 로그인 시간 보안 제어를 클라이언트에서 제공한 User-Agent 헤더에만 의존합니다. isAVideoEncoder ()/isAVideoMobileApp () 은 IP 검사 또는 공유 암호 없이 하드 코딩된 리터럴 (\"AVideoEncoder\"/\"AVideoMobileApp\") 과 일치하는 HTTP_USER_AGENT를 검사합니다. 유효한 자격 증명을 제출하고 사용자 에이전트를 설정하는 공격자: AVideoEncoder는 2단계 인증을 우회하고, 무차별 대입 보안 문자 이관을 건너뛰며, 로그인/장치 감사 기록에 기록되지 않습니다. 게시 시점에 사용할 수 있는 패치가 없습니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84479",
+        "cvssScore": 9.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "기타"
+      },
+      {
+        "id": "CVE-2026-84480",
+        "severity": "CRITICAL",
+        "summaryEn": "WWBN AVideo fails to validate password recovery token expiration in userRecoverPassSave.json.php, allowing attackers to use expired tokens to reset account passwords indefinitely. Attackers who obtain a recovery token can use it at any time to change the target account's password and gain full account access.",
+        "summaryKo": "WWBN AVideo는 userRecoverPassSave.json.php에서 암호 복구 토큰 만료 유효성을 검사하지 못하므로 공격자는 만료된 토큰을 사용하여 계정 암호를 무기한 재설정할 수 있습니다. 복구 토큰을 획득한 공격자는 언제든지 이 토큰을 사용하여 대상 계정의 암호를 변경하고 전체 계정 액세스 권한을 얻을 수 있습니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84480",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "기타"
+      }
+    ],
+    "categoryBreakdown": [
+      {
+        "key": "other",
+        "label": "기타",
+        "count": 18,
+        "examples": [
+          {
+            "id": "CVE-2026-84479",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84479"
+          },
+          {
+            "id": "CVE-2026-84480",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84480"
+          },
+          {
+            "id": "CVE-2026-84233",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84233"
+          }
+        ]
+      },
+      {
+        "key": "auth-bypass",
+        "label": "인증 우회",
+        "count": 8,
+        "examples": [
+          {
+            "id": "CVE-2023-54391",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-54391"
+          },
+          {
+            "id": "CVE-2026-84699",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84699"
+          },
+          {
+            "id": "CVE-2026-8712",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8712"
+          }
+        ]
+      },
+      {
+        "key": "dos",
+        "label": "서비스 거부(DoS)",
+        "count": 5,
+        "examples": [
+          {
+            "id": "CVE-2026-84269",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84269"
+          },
+          {
+            "id": "CVE-2026-84287",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84287"
+          },
+          {
+            "id": "CVE-2026-84288",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84288"
+          }
+        ]
+      },
+      {
+        "key": "rce",
+        "label": "원격 코드 실행",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-45221",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45221"
+          },
+          {
+            "id": "CVE-2026-71981",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71981"
+          }
+        ]
+      },
+      {
+        "key": "xss",
+        "label": "크로스사이트 스크립팅(XSS)",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-84695",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84695"
+          },
+          {
+            "id": "CVE-2026-73524",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-73524"
+          }
+        ]
+      },
+      {
+        "key": "csrf",
+        "label": "CSRF",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84482",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84482"
+          }
+        ]
+      },
+      {
+        "key": "ssrf",
+        "label": "SSRF",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84697",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84697"
+          }
+        ]
+      },
+      {
+        "key": "buffer-overflow",
+        "label": "버퍼 오버플로우",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84698",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84698"
+          }
+        ]
+      }
+    ],
+    "categorySampleSize": 38,
+    "productBreakdown": [
+      {
+        "key": "php",
+        "label": "PHP",
+        "count": 6,
+        "examples": [
+          {
+            "id": "CVE-2026-84480",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84480"
+          },
+          {
+            "id": "CVE-2026-71981",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71981"
+          },
+          {
+            "id": "CVE-2026-84208",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84208"
+          }
+        ]
+      },
+      {
+        "key": "microsoft",
+        "label": "Microsoft/Windows",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-45221",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45221"
+          }
+        ]
+      },
+      {
+        "key": "gitlab-github",
+        "label": "GitLab/GitHub",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84423",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84423"
+          }
+        ]
+      },
+      {
+        "key": "docker-k8s",
+        "label": "Docker/Kubernetes",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84694",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84694"
+          }
+        ]
+      }
+    ]
   }
 ]
