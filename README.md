@@ -108,15 +108,16 @@ scripts/
 .github/workflows/
 └── daily-cve-count.yml         # 매일 09:00 KST 실행 배치
 docs/
-├── screenshots/                # 이 README에 쓰인 스크린샷
-├── SUBMISSION.md / .pdf        # 최종 제출 문서 (카드5개·검증안내서·체크리스트 등)
+└── screenshots/                # 이 README에 쓰인 스크린샷
+assignment/                     # 과제 제출 관련 자료 (실 서비스 문서와 분리)
+├── ASSIGNMENT.md              # 과제 원문 (동결)
+├── PROGRESS.md                # 진행 상황·설계 결정 이력
+├── SUBMISSION.md / .pdf       # 최종 제출 문서
 └── worksheet/                  # 정의표·장애 검사표·손계산 대조표 등 근거 자료
-PROGRESS.md                     # 진행 상황·설계 결정 이력
-ASSIGNMENT.md                   # 과제 원문 (동결)
 ```
 
 ## 문서
 
-- [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — 목적·정의, 과제 카드 5개, 검증 안내서, AI 3줄, 체크리스트, 스크린샷을 담은 최종 제출 문서
-- [`PROGRESS.md`](PROGRESS.md) — 진행 상황과 설계 결정 이력
-- [`docs/worksheet/`](docs/worksheet/) — 정의표·장애 5종 검사표·손계산 대조표 등 근거 자료
+- [`assignment/SUBMISSION.md`](assignment/SUBMISSION.md) — 목적·정의, 과제 카드 5개, 검증 안내서, AI 3줄, 체크리스트, 스크린샷을 담은 최종 제출 문서
+- [`assignment/PROGRESS.md`](assignment/PROGRESS.md) — 진행 상황과 설계 결정 이력
+- [`assignment/worksheet/`](assignment/worksheet/) — 정의표·장애 5종 검사표·손계산 대조표 등 근거 자료

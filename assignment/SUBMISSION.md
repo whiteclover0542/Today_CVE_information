@@ -112,5 +112,5 @@
 | 정의표 (카드1) | [`worksheet/definitions.md`](worksheet/definitions.md) |
 | 장애 5종 검사표 (카드3) | [`worksheet/failure-matrix.md`](worksheet/failure-matrix.md) |
 | 손계산 대조표 (카드5) | [`worksheet/comparison-table.md`](worksheet/comparison-table.md) |
-| 진행 관리·설계 결정 이력 | [`../PROGRESS.md`](../PROGRESS.md) |
-| 과제 원문 (동결) | [`../ASSIGNMENT.md`](../ASSIGNMENT.md) |
+| 진행 관리·설계 결정 이력 | [`PROGRESS.md`](PROGRESS.md) |
+| 과제 원문 (동결) | [`ASSIGNMENT.md`](ASSIGNMENT.md) |
