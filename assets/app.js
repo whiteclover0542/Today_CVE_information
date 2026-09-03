@@ -78,6 +78,7 @@ const els = {
   statusBanner: document.getElementById('status-banner'),
   valueNumber: document.getElementById('value-number'),
   valueUnit: document.getElementById('value-unit'),
+  valueDate: document.getElementById('value-date'),
   valueSeverityRow: document.getElementById('value-severity-row'),
   sourceLink: document.getElementById('source-link'),
   queriedAt: document.getElementById('queried-at'),
@@ -86,6 +87,7 @@ const els = {
   compareCard: document.getElementById('compare-card'),
   compareArrow: document.getElementById('compare-arrow'),
   compareText: document.getElementById('compare-text'),
+  compareDetail: document.getElementById('compare-detail'),
   compareWindowNote: document.getElementById('compare-window-note'),
   compareWindowCaveat: document.getElementById('compare-window-caveat'),
   compareWindowTimes: document.getElementById('compare-window-times'),
@@ -97,6 +99,7 @@ const els = {
   riskMeterCaption: document.getElementById('risk-meter-caption'),
   categoryCard: document.getElementById('category-card'),
   categoryBars: document.getElementById('category-bars'),
+  categoryLead: document.getElementById('category-lead'),
   categoryNote: document.getElementById('category-note'),
   categoryPagination: document.getElementById('category-pagination'),
   categoryPrev: document.getElementById('category-prev'),
@@ -104,6 +107,7 @@ const els = {
   categoryPageInfo: document.getElementById('category-page-info'),
   productCard: document.getElementById('product-card'),
   productBars: document.getElementById('product-bars'),
+  productLead: document.getElementById('product-lead'),
   productNote: document.getElementById('product-note'),
   productPagination: document.getElementById('product-pagination'),
   productPrev: document.getElementById('product-prev'),
@@ -129,6 +133,7 @@ const els = {
   monthlyProductPageInfo: document.getElementById('monthly-product-page-info'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
+  highlightsLead: document.getElementById('highlights-lead'),
   highlightsMoreWrap: document.getElementById('highlights-more-wrap'),
   highlightsMore: document.getElementById('highlights-more'),
   highlightsPagination: document.getElementById('highlights-pagination'),
@@ -137,6 +142,7 @@ const els = {
   highlightsPageInfo: document.getElementById('highlights-page-info'),
   highlightsSecondary: document.getElementById('highlights-secondary'),
   highlightsSecondaryList: document.getElementById('highlights-secondary-list'),
+  trendLead: document.getElementById('trend-lead'),
   trendStats: document.getElementById('trend-stats'),
   trendStatsNote: document.getElementById('trend-stats-note'),
   statAvg: document.getElementById('stat-avg'),
@@ -192,10 +198,14 @@ function renderCompare(data) {
   els.compareCard.hidden = false;
   els.compareCard.className = `compare-inline ${cls}`;
   els.compareArrow.textContent = arrow;
-  els.compareText.textContent =
-    `${sign}${diff}${latest.unit} (${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit}, ${direction})`;
+  // 첫 화면에는 "어제 대비 얼마"만 남기고, 어느 날짜끼리 비교했는지는 아래 접힌 영역으로 내림
+  els.compareText.textContent = diff === 0
+    ? '어제와 같음'
+    : `어제보다 ${sign}${diff}${latest.unit}`;
 
   els.compareWindowNote.hidden = false;
+  els.compareDetail.textContent =
+    `${prev.date} ${prev.count}${prev.unit} → ${latest.date} ${latest.count}${latest.unit} (${direction})`;
   els.compareWindowCaveat.textContent =
     '※ 각 값은 자정(KST)부터 조회 시각까지의 누적치예요. 조회 시각이 다르면 위 증감폭에 실제 발생량 차이 외에 측정 구간 차이도 섞여 있어요.';
   els.compareWindowTimes.innerHTML = '';
@@ -271,7 +281,11 @@ function renderValueSeverityRow(entry) {
     .filter(([key]) => key !== 'unrated')
     .map(([key, label, color]) => {
       const v = entry.severity[key] || 0;
-      return `<li><span class="dot" style="background:${color}"></span>${label} <b>${v}</b></li>`;
+      const zero = v === 0 ? ' is-zero' : '';
+      return `<li class="sev-tile${zero}" style="--tile-color:${color}">
+        <span class="sev-count">${v}</span>
+        <span class="sev-label">${label}</span>
+      </li>`;
     })
     .join('');
 }
@@ -437,6 +451,20 @@ const productPager = createBarListPager({
   pageInfo: els.productPageInfo,
 });
 
+// 막대 차트 위에 "1위가 무엇인지"를 한 문장으로 먼저 말해주는 결론 문구
+function renderTopLead(el, breakdown, unit) {
+  const [first, second] = breakdown;
+  if (!first) {
+    el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  const runnerUp = second
+    ? `<span class="card-lead-sub">다음은 ${escapeHtml(second.label)} ${second.count}${unit}</span>`
+    : '';
+  el.innerHTML = `<b>${escapeHtml(first.label)}</b> ${first.count}${unit}${runnerUp}`;
+}
+
 // NVD 공식 CWE(취약점 유형) 분류를 집계한 결과 — data/history.json의 cweBreakdown을 그대로 시각화
 function renderCategory(entry) {
   const breakdown = entry.cweBreakdown;
@@ -446,6 +474,9 @@ function renderCategory(entry) {
   }
   els.categoryCard.hidden = false;
   categoryPager.setData(breakdown);
+  // 차트 제목만으로는 "그래서 뭐가 많다는 건데"가 안 읽혀서, 1위 항목을 문장으로 먼저 말해준다.
+  // 'none'(CWE 미분류)은 유형이 아니라 "분류가 없음"이라 1위여도 결론으로 쓰지 않는다.
+  renderTopLead(els.categoryLead, breakdown.filter((c) => c.key !== 'none'), '건');
 
   els.categoryNote.textContent =
     `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건을 NVD 공식 CWE(취약점 유형) 분류로 집계한 결과예요. CVE 하나에 CWE가 여러 개 매겨져 있으면 그중 첫 번째(주 분류)만 반영하고, NVD가 아직 CWE를 안 매긴 CVE는 "CWE 미분류"로 묶여요. 아직 심각도가 안 매겨진 CVE는 포함되지 않아 전체(${entry.count}건) 비율과는 다를 수 있어요.`;
@@ -460,6 +491,7 @@ function renderProduct(entry) {
   }
   els.productCard.hidden = false;
   productPager.setData(breakdown);
+  renderTopLead(els.productLead, breakdown, '건');
 
   els.productNote.textContent =
     `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
@@ -487,7 +519,7 @@ function aggregateMonthlyBreakdown(data, month, field) {
           if (!prev.examples.some((e) => e.id === ex.id)) prev.examples.push(ex);
         }
       } else {
-        totals.set(c.key, { label: c.label, count: c.count, desc: c.desc || '', examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
+        totals.set(c.key, { key: c.key, label: c.label, count: c.count, desc: c.desc || '', examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
       }
     }
   }
@@ -539,7 +571,10 @@ function renderMonthlyBreakdownBars(data, month, widget, resetPage = false) {
   const monthTotal = data
     .filter((e) => monthKey(e.date) === month)
     .reduce((sum, e) => sum + (e.count || 0), 0);
-  widget.total().textContent = `이 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록 (${month})`;
+  const top = breakdown.filter((c) => c.key !== 'none')[0];
+  widget.total().innerHTML = top
+    ? `<b>${escapeHtml(top.label)}</b> ${top.count}건<span class="card-lead-sub">${month} 한 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록</span>`
+    : `${month} 한 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록`;
 
   widget.pager.setData(breakdown, { resetPage });
   widget.note().textContent = breakdown.length === 0 ? widget.emptyNote : widget.noteText(month, dayCount);
@@ -622,8 +657,13 @@ function renderHighlightItems(list) {
       const originalBlock = fullEn
         ? `<p class="hl-original"><span class="hl-original-label">원문(영어)</span>${escapeHtml(fullEn)}</p>`
         : '';
+      // 카드 기본 상태에서는 한 줄 해석까지만 보여준다 — 해석이 없으면 번역문을 대신 줄여 쓰고, 둘 다 없으면 생략.
+      const lead = h.interpretation
+        ? `<p class="hl-lead"><span class="hl-lead-tag">AI 해석</span>${escapeHtml(h.interpretation)}</p>`
+        : fullKo
+          ? `<p class="hl-lead">${escapeHtml(fullKo)}</p>`
+          : '';
       const aiFields = [
-        h.interpretation && `<p><span class="hl-ai-label">해석</span>${escapeHtml(h.interpretation)}</p>`,
         h.cause && `<p><span class="hl-ai-label">발생 원인</span>${escapeHtml(h.cause)}</p>`,
         h.mitigation && `<p><span class="hl-ai-label">방지·완화 방법</span>${escapeHtml(h.mitigation)}</p>`,
       ]
@@ -635,21 +675,32 @@ function renderHighlightItems(list) {
             ${aiFields}
           </div>`
         : '';
-      return `<li>
-        <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
-        ${cvss}
-        <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
-        ${cweTag}
-        ${categoryTag}
-        ${cvssPlain}
-        <details class="hl-details hl-title-details">
-          <summary class="hl-title">${escapeHtml(title)}</summary>
-          <div class="hl-full">
+      // 공격 조건(CVSS 벡터 풀이)은 기본 화면에서 한 줄을 더 차지해 카드가 나열처럼 보여서 상세 안으로 넣음
+      const detailBody = fullKoBlock || originalBlock || cvssPlain
+        ? `<div class="hl-full">
             ${fullKoBlock}
             ${originalBlock}
-          </div>
-          ${aiBlock}
-        </details>
+            ${cvssPlain}
+          </div>`
+        : '';
+      const detailsBlock = detailBody || aiBlock
+        ? `<details class="hl-details">
+            <summary class="hl-more">자세히 보기 · 원문과 AI 해설</summary>
+            ${detailBody}
+            ${aiBlock}
+          </details>`
+        : '';
+      return `<li class="hl-card">
+        <div class="hl-head">
+          <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
+          ${cvss}
+          <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
+          ${cweTag}
+          ${categoryTag}
+        </div>
+        <h3 class="hl-headline">${escapeHtml(title)}</h3>
+        ${lead}
+        ${detailsBlock}
       </li>`;
     })
     .join('');
@@ -694,6 +745,15 @@ function renderHighlights(entry) {
   }
   els.highlightsCard.hidden = false;
 
+  // 목록은 CVSS 내림차순이라 맨 앞이 그날 가장 위험한 CVE — 스크롤 전에 그걸 먼저 알려준다.
+  const top = list[0];
+  els.highlightsLead.hidden = !top;
+  if (top) {
+    const cvssText = top.cvssScore != null ? ` · CVSS ${top.cvssScore.toFixed(1)}` : '';
+    els.highlightsLead.innerHTML =
+      `<b>${escapeHtml(top.id)}</b>${cvssText}<span class="card-lead-sub">해설을 붙인 ${list.length}건을 위험한 순서로 정렬했어요</span>`;
+  }
+
   els.highlightsSecondary.hidden = !hasSecondary;
   if (hasSecondary) {
     els.highlightsSecondaryList.innerHTML = renderSecondaryHighlightItems(secondaryList);
@@ -734,6 +794,7 @@ function renderHighlights(entry) {
 
 function renderTrendStats(data) {
   if (data.length < 2) {
+    els.trendLead.hidden = true;
     els.trendStats.hidden = true;
     els.trendStatsNote.hidden = true;
     return;
@@ -743,6 +804,13 @@ function renderTrendStats(data) {
   const avg = counts.reduce((a, b) => a + b, 0) / week.length;
   const maxEntry = week.reduce((a, b) => (b.count > a.count ? b : a));
   const minEntry = week.reduce((a, b) => (b.count < a.count ? b : a));
+
+  const latest = week[week.length - 1];
+  const vsAvg = latest.count - avg;
+  els.trendLead.hidden = false;
+  els.trendLead.innerHTML = Math.abs(vsAvg) < 0.5
+    ? `오늘은 최근 ${week.length}일 평균과 <b>비슷한</b> 수준이에요`
+    : `오늘은 최근 ${week.length}일 평균보다 <b>${Math.abs(vsAvg).toFixed(1)}건 ${vsAvg > 0 ? '많아요' : '적어요'}</b>`;
 
   els.trendStats.hidden = false;
   els.statAvg.textContent = `${avg.toFixed(1)}건`;
@@ -832,6 +900,7 @@ function renderNormal(data) {
 
   els.valueNumber.textContent = latest.count;
   els.valueUnit.textContent = latest.unit;
+  els.valueDate.textContent = `${latest.date} (KST)`;
   els.sourceLink.href = latest.sourceApiUrl;
   els.queriedAt.textContent = formatKst(latest.queriedAtUtc);
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;

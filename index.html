@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='5' fill='%23050506'/><path d='M12 3 5 5.7v5.4c0 4.7 3 8.9 7 10 4-1.1 7-5.3 7-10V5.7L12 3Z' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linejoin='round'/><path d='m9 12 2 2 4-4.3' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=46" />
+<link rel="stylesheet" href="assets/style.css?v=47" />
 </head>
 <body>
 <main class="dashboard">
@@ -66,31 +66,38 @@
   <div class="tab-panel" data-tab-panel="today" role="tabpanel">
   <div class="grid-2">
     <section class="value-card">
+      <div class="value-eyebrow">
+        <span>오늘 새로 등록된 취약점</span>
+        <span class="value-date" id="value-date">-</span>
+      </div>
       <div class="value-main">
         <span class="value-number" id="value-number">—</span>
         <span class="value-unit" id="value-unit"></span>
       </div>
-      <ul class="value-severity-row" id="value-severity-row" hidden></ul>
       <div class="compare-inline" id="compare-card" hidden>
         <span class="compare-arrow" id="compare-arrow"></span>
         <span id="compare-text">-</span>
       </div>
-      <details class="note-details compare-window-note" id="compare-window-note" hidden>
-        <summary>측정 구간이 다를 수 있어요</summary>
-        <p id="compare-window-caveat"></p>
-        <ul class="compare-window-times" id="compare-window-times"></ul>
+      <ul class="value-severity-row" id="value-severity-row" hidden></ul>
+      <details class="note-details value-meta-details">
+        <summary>출처·조회 시각 보기</summary>
+        <dl class="meta">
+          <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
+          <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
+          <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
+          <div><dt>다음 자동 확인</dt><dd id="next-check">-</dd></div>
+        </dl>
+        <p class="refresh-note">※ "조회 시각"은 지금 보고 있는 시각이 아니라, 매일 09:00 KST 자동 배치가 NVD에 실제로 물어본 시각이에요.</p>
+        <div class="compare-window-note" id="compare-window-note" hidden>
+          <p class="compare-detail" id="compare-detail"></p>
+          <p id="compare-window-caveat"></p>
+          <ul class="compare-window-times" id="compare-window-times"></ul>
+        </div>
       </details>
-      <dl class="meta">
-        <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
-        <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
-        <div><dt>기준 날짜</dt><dd id="record-date">-</dd></div>
-        <div><dt>다음 자동 확인</dt><dd id="next-check">-</dd></div>
-      </dl>
-      <p class="refresh-note">※ "조회 시각"은 지금 보고 있는 시각이 아니라, 매일 09:00 KST 자동 배치가 NVD에 실제로 물어본 시각이에요.</p>
     </section>
 
     <section class="severity-card" id="severity-card" hidden>
-      <h2>오늘 등록분 심각도</h2>
+      <h2>오늘의 위험도 판단</h2>
       <div class="risk-meter" id="risk-meter" hidden>
         <div class="risk-meter-track" id="risk-meter-track"></div>
         <p class="risk-meter-caption" id="risk-meter-caption"></p>
@@ -108,7 +115,8 @@
   </div>
 
   <section class="highlights-card" id="highlights-card" hidden>
-    <h2>오늘의 대표 CVE</h2>
+    <h2>오늘 가장 위험한 CVE</h2>
+    <p class="card-lead" id="highlights-lead" hidden></p>
     <details class="note-details">
       <summary>어떻게 골랐나요?</summary>
       <p class="highlights-note">심각·높음·중간 등급 중 NVD 공식 CWE 분류가 있는 CVE는 전부 보여줘요(해설의 근거가 있어야 해서요). 번역·CVSS 등은 원자료 그대로, "AI 해설"은 그 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
@@ -134,7 +142,8 @@
   </section>
 
   <section class="category-card" id="category-card" hidden>
-    <h2>오늘 등록분 CWE 유형</h2>
+    <h2>오늘 가장 많이 발견된 취약점 유형</h2>
+    <p class="card-lead" id="category-lead" hidden></p>
     <ul class="category-bars" id="category-bars"></ul>
     <div class="bar-pagination" id="category-pagination" hidden>
       <button type="button" id="category-prev">← 이전 10개</button>
@@ -148,7 +157,8 @@
   </section>
 
   <section class="category-card" id="product-card" hidden>
-    <h2>오늘 등록분 제품·벤더</h2>
+    <h2>오늘 가장 많이 지목된 제품·벤더</h2>
+    <p class="card-lead" id="product-lead" hidden></p>
     <ul class="category-bars" id="product-bars"></ul>
     <div class="bar-pagination" id="product-pagination" hidden>
       <button type="button" id="product-prev">← 이전 10개</button>
@@ -204,6 +214,7 @@
   <div class="grid-2">
     <section class="trend-card">
       <h2>최근 추이</h2>
+      <p class="card-lead" id="trend-lead" hidden></p>
       <div class="trend-stats" id="trend-stats" hidden>
         <div class="stat"><span class="stat-label">일평균</span><span class="stat-value" id="stat-avg">-</span></div>
         <div class="stat"><span class="stat-label">최고</span><span class="stat-value" id="stat-max">-</span></div>
@@ -251,6 +262,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=46"></script>
+<script src="assets/app.js?v=47"></script>
 </body>
 </html>
