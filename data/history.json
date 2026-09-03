@@ -921,8 +921,8 @@
     "count": 166,
     "unit": "건",
     "timezone": "Asia/Seoul",
-    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-02T15%3A00%3A00.000Z&pubEndDate=2026-09-03T01%3A40%3A50.025Z&resultsPerPage=1",
-    "queriedAtUtc": "2026-09-03T01:40:50.025Z",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-02T15%3A00%3A00.000Z&pubEndDate=2026-09-03T01%3A43%3A58.301Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-03T01:43:58.301Z",
     "severity": {
       "critical": 1,
       "high": 6,

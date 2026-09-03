@@ -14,7 +14,7 @@ const CATEGORY_RULES = [
   { key: 'rce', label: '원격 코드 실행', pattern: /remote code execution|arbitrary code execution|code injection|command injection|execute arbitrary code/i },
   { key: 'auth-bypass', label: '인증 우회', pattern: /authentication bypass|missing authentication|without authentication|unauthenticated (attacker|user|caller)|bypass authentication/i },
   { key: 'priv-esc', label: '권한 상승', pattern: /privilege escalation|elevation of privilege|escalate privileges|elevated privileges|improper privilege management/i },
-  { key: 'access-control', label: '접근 통제 오류', pattern: /improper access control|missing access control|access control bypass|broken access control|incorrect access control/i },
+  { key: 'access-control', label: '접근 통제 오류', pattern: /improper access control|missing access control|access control bypass|broken access control|incorrect access control|missing authorization|improper authorization/i },
   { key: 'sqli', label: 'SQL 인젝션', pattern: /sql injection/i },
   { key: 'xss', label: '크로스사이트 스크립팅(XSS)', pattern: /cross-site scripting|\bxss\b/i },
   { key: 'csrf', label: 'CSRF', pattern: /cross-site request forgery|\bcsrf\b/i },
@@ -27,11 +27,121 @@ const CATEGORY_RULES = [
   { key: 'ssrf', label: 'SSRF', pattern: /server-side request forgery|\bssrf\b/i },
   { key: 'hardcoded-cred', label: '하드코딩된 자격증명', pattern: /hard-?coded credential|default credential/i },
   { key: 'file-upload', label: '위험한 파일 업로드', pattern: /unrestricted upload|arbitrary file upload|malicious file upload/i },
+  { key: 'use-after-free', label: '메모리 해제 후 사용(UAF)', pattern: /use-after-free|use after free/i },
+  { key: 'race-condition', label: '경쟁 조건', pattern: /race condition|time-of-check.{0,20}time-of-use|\btoctou\b/i },
+  { key: 'null-deref', label: 'NULL 포인터 역참조', pattern: /null pointer dereference/i },
+  { key: 'type-confusion', label: '타입 컨퓨전', pattern: /type confusion/i },
+  { key: 'xxe', label: 'XML 외부 개체 주입(XXE)', pattern: /xml external entity|\bxxe\b/i },
+  { key: 'open-redirect', label: '오픈 리다이렉트', pattern: /open redirect/i },
+  { key: 'cert-validation', label: '인증서 검증 오류', pattern: /improper certificate validation|certificate validation/i },
+  { key: 'format-string', label: '포맷 스트링 취약점', pattern: /format string/i },
+  { key: 'ldap-injection', label: 'LDAP 인젝션', pattern: /ldap injection/i },
+  { key: 'weak-crypto', label: '취약한 암호화·난수 사용', pattern: /broken or risky cryptographic algorithm|weak encryption algorithm|insufficiently random values|insecure randomness/i },
+  { key: 'cleartext', label: '평문 전송(암호화 누락)', pattern: /cleartext transmission|missing encryption of sensitive data|transmitted in clear text/i },
+  { key: 'idor', label: '취약한 직접 개체 참조(IDOR)', pattern: /insecure direct object reference|\bidor\b/i },
+  { key: 'input-validation', label: '입력값 검증 미흡', pattern: /improper input validation|insufficient input validation/i },
 ];
 
 function categorize(description) {
   const rule = CATEGORY_RULES.find((r) => r.pattern.test(description));
   return rule ? rule.key : 'other';
+}
+
+// 규칙 매칭에서 "기타"로 빠진 CVE만 모아 LLM(Gemini 무료 티어)에 한 번에 보내 재분류한다.
+// LLM은 위 CATEGORY_RULES 라벨 중에서만 고르도록 강제(닫힌 집합) — 새 유형을 마음대로 만들면
+// 유형 목록이 계속 늘어나 일관성이 깨지므로, 정말 안 맞을 때만 'other'를 유지하게 한다.
+// 키 없음/네트워크 실패/무료 티어 한도 초과 등 어떤 이유로든 실패하면 규칙 분류 결과(전부 '기타') 그대로 둔다 — 번역과 동일한 폴백 원칙.
+const LLM_RECLASSIFY_LIMIT = 300; // 하루 재분류 대상 상한(무료 티어 요청 크기 안전장치) — 초과분은 '기타'로 남음
+const GEMINI_MODEL = 'gemini-3.5-flash-lite'; // 무료 티어의 가장 가벼운 모델 — 이 이름이 만료되면 https://aistudio.google.com 에서 현재 무료 티어 모델명으로 교체
+const CATEGORY_KEYS = [...CATEGORY_RULES.map((r) => r.key), 'other'];
+
+async function classifyOthersWithLlm(items) {
+  if (items.length === 0) return {};
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.log('[skip] GEMINI_API_KEY 없음 — 기타 재분류 건너뜀(규칙 매칭 결과만 사용)');
+    return {};
+  }
+
+  const targets = items.slice(0, LLM_RECLASSIFY_LIMIT);
+  const categoryList = CATEGORY_RULES.map((r) => `${r.key}: ${r.label}`).join('\n');
+
+  const responseSchema = {
+    type: 'object',
+    properties: {
+      results: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            key: { type: 'string', enum: CATEGORY_KEYS },
+          },
+          required: ['id', 'key'],
+        },
+      },
+    },
+    required: ['results'],
+  };
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [
+            {
+              text:
+                '너는 CVE 취약점 설명을 읽고 아래 유형 목록 중 하나로 분류하는 보안 분석가야. ' +
+                '반드시 목록에 있는 key만 사용해. 설명을 읽어도 목록 중 어디에도 명확히 해당하지 않으면 "other"를 사용해.\n\n' +
+                categoryList,
+            },
+          ],
+        },
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: JSON.stringify(targets.map((t) => ({ id: t.id, description: t.desc }))) }],
+          },
+        ],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema,
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      console.warn(`[warn] 기타 재분류 실패: HTTP ${res.status} ${await res.text()}`);
+      return {};
+    }
+
+    const body = await res.json();
+    const usage = body.usageMetadata;
+    if (usage) {
+      console.log(
+        `[llm] 기타 ${targets.length}건 재분류 — 입력 ${usage.promptTokenCount} / 출력 ${usage.candidatesTokenCount} 토큰 (무료 티어)`,
+      );
+    }
+
+    const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      console.warn('[warn] 기타 재분류 응답이 비어 있음 — 규칙 매칭 결과만 사용');
+      return {};
+    }
+
+    const parsed = JSON.parse(text);
+    const map = {};
+    for (const r of parsed.results || []) {
+      map[r.id] = r.key;
+    }
+    return map;
+  } catch (e) {
+    console.warn(`[warn] 기타 재분류 실패: ${e.message}`);
+    return {};
+  }
 }
 
 // 공격 유형과 달리 제품명은 문구가 정형화돼 있지 않아서(자유 서술) 미리 정해둔 벤더·제품 목록과
@@ -228,6 +338,7 @@ async function main() {
   const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   const productCounts = {};
   const productExamples = {}; // 벤더·제품별 원본 CVE 링크 몇 건 — 유형과 동일한 방식
+  const otherCandidates = []; // 규칙 매칭에서 '기타'로 빠진 CVE — 나중에 LLM으로 한 번에 재분류
   let categorySampleSize = 0; // 심각도가 평가된(rated) CVE 전체 건수 — 전량 수집이라 rated 총합과 같아짐(unrated는 애초에 이 호출 대상이 아니라 여전히 빠짐)
   for (const level of SEVERITIES) {
     const { total: levelTotal, vulnerabilities } = await fetchAllForSeverity(baseUrl, level);
@@ -241,6 +352,9 @@ async function main() {
       categorySampleSize += 1;
       const categoryKey = categorize(desc);
       categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
+      if (categoryKey === 'other') {
+        otherCandidates.push({ id: cve.id, desc });
+      }
 
       const examples = (categoryExamples[categoryKey] ||= []);
       if (examples.length < CATEGORY_EXAMPLES_LIMIT) {
@@ -287,6 +401,25 @@ async function main() {
   }
   const rated = severity.critical + severity.high + severity.medium + severity.low;
   severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
+
+  const reclassified = await classifyOthersWithLlm(otherCandidates);
+  for (const [id, newKey] of Object.entries(reclassified)) {
+    if (newKey === 'other' || !CATEGORY_KEYS.includes(newKey)) continue;
+
+    categoryCounts.other -= 1;
+    categoryCounts[newKey] = (categoryCounts[newKey] || 0) + 1;
+
+    const otherExamples = categoryExamples.other || [];
+    const idx = otherExamples.findIndex((e) => e.id === id);
+    if (idx !== -1) {
+      const [moved] = otherExamples.splice(idx, 1);
+      const newExamples = (categoryExamples[newKey] ||= []);
+      if (newExamples.length < CATEGORY_EXAMPLES_LIMIT) newExamples.push(moved);
+    }
+
+    const highlight = rawHighlights.find((h) => h.id === id);
+    if (highlight) highlight.categoryKey = newKey;
+  }
 
   const categoryLabels = Object.fromEntries(CATEGORY_RULES.map((r) => [r.key, r.label]));
   categoryLabels.other = '기타';
