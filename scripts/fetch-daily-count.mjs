@@ -3,7 +3,10 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
-const MAX_HIGHLIGHTS = 10; // 심각도 상위 CVE만 대상(그날 등록분 전체 아님) — 정확한 상한은 LLM 호출 한도 실측 후 조정 예정, PROGRESS.md 참고
+// 심각·높음·중간 중 CWE 있는 CVE는 전부 대표로 올리는 게 목표라 상한을 넉넉하게 잡음(과거 기록 기준 이 세 등급 합계는
+// 보통 20~50건대). 그래도 유난히 많은 날을 대비한 안전장치로만 존재 — 실제 배치 로그 보면서 필요시 조정, PROGRESS.md 참고.
+const MAX_HIGHLIGHTS = 50;
+const HIGHLIGHT_ELIGIBLE_SEVERITIES = new Set(['CRITICAL', 'HIGH', 'MEDIUM']); // LOW는 대표 후보에서 제외(요청사항)
 const MAX_SECONDARY_HIGHLIGHTS = 20; // CWE 분류가 없어 대표(AI 해설 대상)로 못 올린 CVE를 목록으로만 따로 보여줄 상한
 const PAGE_SIZE = 2000; // NVD CVE API 2.0 공식 문서상 resultsPerPage 최대값 — 하루치 심각도별 CVE는 사실상 이 안에 다 들어와 대부분 한 번의 호출로 전량이 수집됨
 const NVD_REQUEST_INTERVAL_MS = 6500; // 무키 제한 30초당 5회 — 페이지가 늘어 호출이 몇 번이 되든 이 간격을 지키면 항상 제한 안쪽에 머문다
@@ -222,6 +225,12 @@ function decodeCvssVector(vector) {
   return labels.length ? labels.join(' · ') : null;
 }
 
+// v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
+function pickCvss(cve) {
+  const metrics = cve.metrics || {};
+  return (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0] || null;
+}
+
 const HIGHLIGHT_LLM_INTERVAL_MS = 4500; // Gemini 무료 티어 분당 요청 한도가 공개돼 있지 않아 보수적으로 잡은 호출 간격 — 배치 로그의 usageMetadata로 계속 점검하며 조정
 
 // CWE(Common Weakness Enumeration)는 NVD가 공식적으로 매기는 "취약점 유형" 표준 분류.
@@ -418,7 +427,6 @@ async function main() {
   const rawHighlights = [];
   const secondaryHighlights = []; // CWE 분류가 없는 CVE — AI 해설 없이 목록으로만 아래에 따로 보여줌
   const usedHighlightIds = new Set();
-  const usedHighlightCategories = new Set();
   const productCounts = {};
   const productExamples = {}; // 벤더·제품별 원본 CVE 링크 몇 건 — 유형과 동일한 방식
   const otherCandidates = []; // 규칙 매칭에서 '기타'로 빠진 CVE — 나중에 LLM으로 한 번에 재분류(대표 CVE 카드의 🏷 유형 태그용)
@@ -456,25 +464,24 @@ async function main() {
         cweExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
-      levelCandidates.push({ cve, desc, categoryKey, cwe });
+      levelCandidates.push({ cve, desc, categoryKey, cwe, cvss: pickCvss(cve) });
     }
 
-    // 대표 CVE 선정: 심각도가 항상 먼저다 — 유형을 맞추려고 더 낮은 심각도로 넘어가지 않는다.
+    // 대표 CVE 선정: 심각도가 항상 먼저다(CRITICAL → HIGH → MEDIUM 순으로 이 바깥 for문이 이미 그 순서로 돎).
     // NVD 공식 CWE 분류가 있는 CVE만 대표(=AI 해설 대상)로 올린다 — "발생 원인"을 근거 있게 grounding하기 위함.
-    // 1차: 이 심각도 안에서 아직 안 나온 유형을 우선 채움. 2차: 그래도 자리가 남으면(이 심각도 안에서만)
-    // 유형이 겹쳐도 채운다. 두 패스 모두 이 심각도의 후보를 다 써도 부족해야 다음(더 낮은) 심각도로 넘어감.
-    const pickFromLevel = (allowDuplicateCategory) => {
-      for (const { cve, desc, categoryKey, cwe } of levelCandidates) {
+    // 예전엔 유형 다양성을 우선했지만, 지금은 "심각·높음·중간은 CWE 있는 건 전부 보여준다"가 목표라 그런 샘플링 없이
+    // CWE 있는 후보를 CVSS 높은 순으로 정렬해 상한(MAX_HIGHLIGHTS)까지 채운다 — 어쩔 수 없이 잘릴 때도 더 위험한 것부터 남게.
+    // LOW는 HIGHLIGHT_ELIGIBLE_SEVERITIES에 없어 대표 후보 자체에서 제외된다.
+    if (HIGHLIGHT_ELIGIBLE_SEVERITIES.has(level)) {
+      const eligible = levelCandidates
+        .filter((c) => c.cwe.length > 0)
+        .sort((a, b) => (b.cvss?.cvssData?.baseScore ?? 0) - (a.cvss?.cvssData?.baseScore ?? 0));
+
+      for (const { cve, desc, categoryKey, cwe, cvss } of eligible) {
         if (rawHighlights.length >= MAX_HIGHLIGHTS) break;
         if (usedHighlightIds.has(cve.id)) continue;
-        if (cwe.length === 0) continue; // CWE 없는 CVE는 대표로 안 올림 — 아래 secondary 선정에서 따로 처리
-        if (!allowDuplicateCategory && usedHighlightCategories.has(categoryKey)) continue;
 
         usedHighlightIds.add(cve.id);
-        usedHighlightCategories.add(categoryKey);
-        const metrics = cve.metrics || {};
-        // v3.1 우선, 없으면 v3.0, 그마저 없으면 v2 순으로 대체(NVD가 오래된 CVE엔 v3를 안 매기는 경우가 있음)
-        const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
         rawHighlights.push({
           id: cve.id,
           severity: level,
@@ -486,19 +493,15 @@ async function main() {
           cvssVector: cvss?.cvssData?.vectorString ?? null,
         });
       }
-    };
-    pickFromLevel(false);
-    pickFromLevel(true);
+    }
 
     // CWE가 없어 대표로 못 올린 CVE 중 심각도 상위부터 목록에만 채움 — LLM 호출은 안 함(비용 절감 + 애초에 grounding할 CWE가 없어서 해설을 붙일 근거가 없음).
-    for (const { cve, categoryKey, cwe } of levelCandidates) {
+    for (const { cve, categoryKey, cwe, cvss } of levelCandidates) {
       if (secondaryHighlights.length >= MAX_SECONDARY_HIGHLIGHTS) break;
       if (usedHighlightIds.has(cve.id)) continue;
       if (cwe.length > 0) continue; // CWE 있는 건 대표 후보 몫 — 자리가 없어 못 들어갔어도 이 목록 취지와 다르므로 제외
 
       usedHighlightIds.add(cve.id);
-      const metrics = cve.metrics || {};
-      const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
       secondaryHighlights.push({
         id: cve.id,
         severity: level,

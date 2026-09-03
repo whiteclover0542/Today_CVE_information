@@ -14,13 +14,14 @@
 | 3 | 배포 재설정 | ⬜ | 현재는 GitHub Pages 유지 중 — 재점검 방식(그대로 유지 vs 이전)은 착수 시 결정 |
 | 4 | 대표 CVE 번역을 LLM 기반으로 교체 | ✅ | MyMemory Translation API 제거, Gemini(`explainHighlightWithLlm`)로 교체. 실패/키 없음 시 원문 노출 폴백 유지 |
 | 5 | 대표 CVE 노출 UI를 1건 → 더보기 → 5건씩 페이지네이션으로 변경 | ✅ | `assets/app.js`에 `renderHighlights`/`renderHighlightItems` 구현, Playwright로 1건→더보기→2페이지 전환 스크린샷 확인 완료 |
-| 6 | "더보기" 노출 대상 상한 건수 확정 | ✅ | `MAX_HIGHLIGHTS = 10`으로 실제 GitHub Actions 배치 실행(#16, 3분 26초, Success) 완료 — Gemini 호출 11회(재분류 1 + 해설 10)가 한도 안에서 안정적으로 끝남 확인. 앞으로 CWE 필터링으로 실제 대표 건수는 날마다 달라질 수 있어 계속 관찰 |
+| 6 | "더보기" 노출 대상 상한 건수 확정 | 🔄 | `MAX_HIGHLIGHTS = 10`으로 배치 3회(#16~#18) 검증 완료 후, "심각·높음·중간은 CWE 있는 CVE 전부"로 정책이 바뀌어 50으로 재설정(#13 참고) — 50 기준 실제 배치 검증은 아직 |
 | 7 | CVE별 설명/발생 원인/방지법 해설 카드 | ✅ | CWE(`weaknesses` 필드) 추출 + `CWE_INFO` 매핑을 근거로 Gemini가 해석·발생 원인·방지법을 함께 생성, 근거 부족 시 빈 문자열(미노출)로 폴백. 실제 배치 결과로 확인 완료(10건 중 9건 완전히 채워짐, 1건은 매핑에 없는 CWE라 `cause`만 정상적으로 빈 값) |
 | 8 | LLM 기반 "오늘의 브리핑" 요약 카드 | ⬜ | 아직 없음 — 필요성·형태부터 검토 |
 | 9 | 대표 CVE 카드에 LLM 생성 제목 추가 + 클릭해야 내용 노출 | ✅ | 내용을 바로 나열하지 않고, Gemini가 생성한 한 줄 제목을 먼저 보여주고 클릭(`<details>`)해야 번역·원문·AI 해설이 펼쳐지도록 변경 |
 | 10 | 대표 CVE를 "CWE 있음"만으로 제한 + CWE 없는 CVE는 별도 목록 | ✅ | 대표(AI 해설) 후보를 CWE 있는 CVE로만 한정, CWE 없는 CVE는 `secondaryHighlights`에 담아 카드 하단에 번역·해설 없이 목록으로만 노출 |
 | 11 | 대표 CVE 카드: CWE·유형 태그 순서 변경 + CWE 클릭 시 설명 노출 | ✅ | CWE 태그를 유형 태그보다 앞에 배치, CWE 태그도 유형 태그처럼 클릭하면 `CWE_INFO`의 hint가 펼쳐지도록 변경 |
 | 12 | "오늘 등록분 유형"/"월별 유형 비교"를 CWE 기반 집계로 전환 | ✅ | 정규식+Gemini 보정 방식(`categoryBreakdown`)을 폐지하고 NVD 공식 CWE를 그대로 집계하는 `cweBreakdown`으로 교체. CVE당 대표 CWE 1개만 집계, CWE 없으면 "CWE 미분류". 실제 배치(#18)로 합계 정확성까지 검증 완료 |
+| 13 | 대표 CVE 선정을 "심각·높음·중간은 CWE 있는 것 전부"로 확대 | 🔄 | 유형 다양성 샘플링 방식 폐지, LOW 등급은 대상 제외, CVSS 내림차순으로 정렬해 상한(`MAX_HIGHLIGHTS = 50`)까지 채우도록 변경. 로직은 격리 테스트로 확인(심각도 우선순위·LOW 제외·CVSS 정렬 전부 의도대로 동작), 실제 배치로는 아직 검증 전 |
 | 13 | 헤더에 "CWE가 뭔가요?" 설명 추가 | ✅ | CVE·CVSS 글로서리 옆에 CWE 개념(공식 표준 유형 분류, CVE=사건번호·CWE=죄목 비유) 설명 추가 |
 
 ## 지금 서비스에 이미 있는 것 (과제 단계에서 완성, 유지)
@@ -49,13 +50,15 @@
 - 2026-09-03: 카드 위에 규칙 기반 🏷 유형 태그와 공식 CWE 태그가 나란히 있는 게 중복스럽다는 지적을 받아 CWE를 1차 정보로 정리. (1) 카드에서 CWE 태그를 유형 태그보다 앞에 배치하고 클릭하면 설명이 펼쳐지도록 변경(`extractCwe`가 CWE_INFO의 `hint`도 함께 반환하도록 확장). (2) "오늘 등록분 유형"/"월별 유형 비교" 집계 자체를 규칙 기반(`categoryBreakdown`)에서 NVD 공식 CWE 기반(`cweBreakdown`)으로 전환 — 이 집계는 이제 규칙 매칭이나 Gemini 재분류를 전혀 안 씀. 카드의 🏷 유형 태그(개별 CVE용)는 기존 규칙 시스템을 그대로 유지 — 이번 변경은 "집계 차트"에만 적용되고 "카드의 유형 태그" 존재 자체는 안 건드림. (3) 헤더에 "CWE가 뭔가요?" 설명 추가.
 - 2026-09-03: `renderCategoryBarList`/`createBarListPager`에서 `useGlossary` 플래그 + 프론트 `CATEGORY_GLOSSARY` 조회 방식을 제거하고, 각 breakdown 항목이 백엔드에서 만든 `desc` 필드를 직접 들고 오도록 바꿈 — 서버·클라 설명이 어긋날 일이 없어짐(제품 목록은 원래도 설명이 없어서 그대로 영향 없음).
 - 2026-09-03: `workflow_dispatch`로 실제 배치를 재실행(Actions run #18, 3분 32초, Success)해 CWE 기반 유형 집계까지 최종 검증 완료. `cweBreakdown` 16개 항목이 정상 생성되고(합계 24건 = `categorySampleSize`와 정확히 일치, 이중 집계·누락 없음), 매핑 안 된 CWE(예: CWE-404, CWE-693)는 라벨을 원래 ID 그대로 보여주고 `desc`는 빈 값으로 남아 지어내지 않음을 확인. `highlights[].cwe[].hint`도 정상 포함. 오늘은 심각도 상위 10건 전부 CWE가 있어 `secondaryHighlights`는 0건. 실제 배포된 GitHub Pages를 Playwright로 직접 열어 카드 태그 순서·CWE 클릭 설명·CWE 유형 차트·페이지네이션까지 스크린샷으로 확인, 콘솔 에러 없음 — 이번 단계의 구현·검증을 모두 마침.
+- 2026-09-03: LLM 호출 한도 우려(RPD는 하루 1회 배치라 문제 없음, RPM은 4.5초 간격 유지로 개수와 무관하게 일정, TPM도 여유 충분 — 실제로 늘어나는 건 배치 실행 시간뿐)를 확인한 뒤, 대표 CVE 선정 방식을 "심각·높음·중간 등급 중 CWE 있는 CVE 전부"로 바꾸기로 함. 유형 다양성 위주로 샘플링하던 `pickFromLevel`의 2-pass 로직(및 `usedHighlightCategories`)을 제거하고, 해당 등급의 CWE'd 후보 전체를 CVSS 점수 내림차순 정렬해 상한까지 채우는 방식으로 교체. LOW 등급은 `HIGHLIGHT_ELIGIBLE_SEVERITIES`에서 제외해 대표 후보 자체가 안 됨. 상한(`MAX_HIGHLIGHTS`)은 최근 6일 심각·높음·중간 합계(22~50건)를 참고해 10 → 50으로 올림. 격리된 로직 테스트로 심각도 우선순위·LOW 제외·CVSS 정렬이 의도대로 동작함을 확인(node -e로 severity별 후보 배열을 흉내내 검증), 아직 실제 배치로는 못 돌려봄.
 
 ## 다음에 할 일
 
-1. CWE 필터링 적용 후 실제로 대표 CVE가 매일 몇 건씩 나오는지(=CWE 있는 CVE 비율) 며칠 지켜보고, 너무 적게 나오는 날이 있으면 기준을 다시 검토
-2. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
-3. "오늘의 브리핑" 요약 카드 필요성·형태 검토
-4. CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등 실제로 자주 보이는 것들)를 발견되는 대로 매핑에 추가해 설명 커버리지를 넓히기
+1. 새 선정 로직(심각·높음·중간 전부 + 상한 50)을 커밋·push하고 `workflow_dispatch`로 재실행해 실제로 몇 건이 뽑히는지, Gemini 호출·배치 실행 시간이 문제없는지 확인
+2. CWE 필터링 적용 후 실제로 대표 CVE가 매일 몇 건씩 나오는지(=CWE 있는 CVE 비율) 며칠 지켜보고, 너무 적거나(예: 상한을 못 채움) 너무 많은(상한에 자주 걸림) 날이 있으면 `MAX_HIGHLIGHTS`를 다시 검토
+3. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
+4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
+5. CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등 실제로 자주 보이는 것들)를 발견되는 대로 매핑에 추가해 설명 커버리지를 넓히기
 
 ## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 
@@ -64,4 +67,4 @@
   - `highlights[]`(CWE 있는 CVE만, AI 해설 포함) — `interpretation`(해석)·`cause`(발생 원인)·`mitigation`(방지·완화 방법)·`cwe`(`[{id, label, hint}]`)·`title`(제목, 클릭해야 보이는 상세 내용의 진입점)·`summaryKo`(Gemini 번역).
   - `secondaryHighlights[]`(CWE 없는 CVE) — `id`·`severity`·`url`·`cvssScore`·`cvssVector`·`cvssPlain`·`category`만, 번역·AI 해설 없음.
   - `cweBreakdown[]`(그날 심각도 평가된 CVE 전체를 CWE로 집계) — `key`(CWE id 또는 `'none'`)·`label`·`count`·`desc`(hint)·`examples`. 기존 `categoryBreakdown` 필드는 더 이상 저장하지 않음(과거 날짜 기록에는 남아있지만 새 프론트는 안 읽음 — 그런 날은 "오늘 등록분 CWE 유형" 카드가 자연히 빈 상태로 표시됨).
-- 검증 상태: 전부 실제 배치로 확인 완료. 번역+해설(title 이전 버전) — #16, title+CWE 필터링/`secondaryHighlights` — #17, CWE 기반 `cweBreakdown`+카드 태그 순서/클릭 — #18. 배포된 GitHub Pages도 Playwright로 직접 열어 최종 확인함. 남은 건 §"다음에 할 일"의 관찰·튜닝 항목뿐.
+- 검증 상태: 번역+해설(title 이전 버전) — #16, title+CWE 필터링/`secondaryHighlights` — #17, CWE 기반 `cweBreakdown`+카드 태그 순서/클릭 — #18까지 전부 실제 배치+배포 사이트로 확인 완료. **"심각·높음·중간 전부 + 상한 50"으로 바뀐 최신 선정 로직은 아직 격리 로직 테스트만 했고 실제 배치로는 미검증** — 다음 실행에서 확인 필요.
