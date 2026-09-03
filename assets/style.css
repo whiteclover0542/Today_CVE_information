@@ -631,6 +631,46 @@ header h1 {
   margin-bottom: 0.25rem;
 }
 
+.hl-cwe {
+  flex-shrink: 0;
+  align-self: center;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.hl-ai-details summary {
+  color: #63e6a5;
+}
+
+.hl-ai-full {
+  border-color: #63e6a544;
+}
+
+.hl-ai-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #63e6a5;
+  margin-bottom: 0.2rem;
+}
+
+.highlights-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: -0.2rem 0 1rem;
+}
+
+.highlights-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
 .trend-stats {
   display: flex;
   gap: 0.75rem;

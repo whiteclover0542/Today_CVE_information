@@ -127,6 +127,12 @@ const els = {
   monthlyProductPageInfo: document.getElementById('monthly-product-page-info'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
+  highlightsMoreWrap: document.getElementById('highlights-more-wrap'),
+  highlightsMore: document.getElementById('highlights-more'),
+  highlightsPagination: document.getElementById('highlights-pagination'),
+  highlightsPrev: document.getElementById('highlights-prev'),
+  highlightsNext: document.getElementById('highlights-next'),
+  highlightsPageInfo: document.getElementById('highlights-page-info'),
   trendStats: document.getElementById('trend-stats'),
   trendStatsNote: document.getElementById('trend-stats-note'),
   statAvg: document.getElementById('stat-avg'),
@@ -581,14 +587,8 @@ function truncatePreview(text, max) {
   return `${safe.trimEnd()}…`;
 }
 
-function renderHighlights(entry) {
-  const list = entry.highlights;
-  if (!list || list.length === 0) {
-    els.highlightsCard.hidden = true;
-    return;
-  }
-  els.highlightsCard.hidden = false;
-  els.highlightsList.innerHTML = list
+function renderHighlightItems(list) {
+  return list
     .map((h) => {
       const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
       const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
@@ -606,27 +606,84 @@ function renderHighlights(entry) {
         ? `<button type="button" class="hl-category">${escapeHtml(h.category)}</button>
            ${categoryDesc ? `<span class="hl-category-desc" hidden>${escapeHtml(categoryDesc)}</span>` : ''}`
         : '';
+      const cweTag = (h.cwe || [])
+        .map((c) => `<span class="hl-cwe">${escapeHtml(c.id)}${c.label ? ` · ${escapeHtml(c.label)}` : ''}</span>`)
+        .join('');
       const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
       const originalBlock = fullEn
         ? `<p class="hl-original"><span class="hl-original-label">원문(영어)</span>${escapeHtml(fullEn)}</p>`
+        : '';
+      const aiFields = [
+        h.interpretation && `<p><span class="hl-ai-label">해석</span>${escapeHtml(h.interpretation)}</p>`,
+        h.cause && `<p><span class="hl-ai-label">발생 원인</span>${escapeHtml(h.cause)}</p>`,
+        h.mitigation && `<p><span class="hl-ai-label">방지·완화 방법</span>${escapeHtml(h.mitigation)}</p>`,
+      ]
+        .filter(Boolean)
+        .join('');
+      const aiBlock = aiFields
+        ? `<details class="hl-details hl-ai-details">
+            <summary>🤖 AI 해설 보기 (해석 · 발생 원인 · 방지법)</summary>
+            <div class="hl-full hl-ai-full">${aiFields}</div>
+          </details>`
         : '';
       return `<li>
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
         ${cvss}
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
         ${categoryTag}
+        ${cweTag}
         <span class="hl-summary">${escapeHtml(preview)}</span>
         ${cvssPlain}
         <details class="hl-details">
-          <summary>자세히 보기</summary>
+          <summary>원문·번역 보기</summary>
           <div class="hl-full">
             ${fullKoBlock}
             ${originalBlock}
           </div>
         </details>
+        ${aiBlock}
       </li>`;
     })
     .join('');
+}
+
+const HIGHLIGHTS_PAGE_SIZE = 5;
+let highlightsExpanded = false;
+let highlightsPage = 1;
+let highlightsLastDate = null;
+
+function renderHighlights(entry) {
+  const list = entry.highlights;
+  if (!list || list.length === 0) {
+    els.highlightsCard.hidden = true;
+    return;
+  }
+  els.highlightsCard.hidden = false;
+
+  // 날짜(=오늘 기록)가 바뀌면 새로 1건부터 보여주고, 같은 날 다시 그리는 것뿐이면 펼침 상태를 유지한다.
+  if (highlightsLastDate !== entry.date) {
+    highlightsExpanded = false;
+    highlightsPage = 1;
+    highlightsLastDate = entry.date;
+  }
+
+  if (!highlightsExpanded) {
+    els.highlightsList.innerHTML = renderHighlightItems(list.slice(0, 1));
+    els.highlightsMoreWrap.hidden = list.length <= 1;
+    els.highlightsPagination.hidden = true;
+    return;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(list.length / HIGHLIGHTS_PAGE_SIZE));
+  highlightsPage = Math.min(Math.max(highlightsPage, 1), totalPages);
+  const start = (highlightsPage - 1) * HIGHLIGHTS_PAGE_SIZE;
+
+  els.highlightsList.innerHTML = renderHighlightItems(list.slice(start, start + HIGHLIGHTS_PAGE_SIZE));
+  els.highlightsMoreWrap.hidden = true;
+  els.highlightsPagination.hidden = list.length <= HIGHLIGHTS_PAGE_SIZE;
+  els.highlightsPageInfo.textContent = `${highlightsPage} / ${totalPages}`;
+  els.highlightsPrev.disabled = highlightsPage <= 1;
+  els.highlightsNext.disabled = highlightsPage >= totalPages;
 }
 
 function renderTrendStats(data) {
@@ -810,6 +867,25 @@ MONTHLY_WIDGETS.forEach((widget) => {
     widget._lastMonth = widget.select().value;
     renderMonthlyBreakdownBars(lastGood.data, widget.select().value, widget, true);
   });
+});
+
+els.highlightsMore.addEventListener('click', () => {
+  if (!lastGood) return;
+  highlightsExpanded = true;
+  highlightsPage = 1;
+  renderHighlights(lastGood.data[lastGood.data.length - 1]);
+});
+
+els.highlightsPrev.addEventListener('click', () => {
+  if (highlightsPage <= 1 || !lastGood) return;
+  highlightsPage -= 1;
+  renderHighlights(lastGood.data[lastGood.data.length - 1]);
+});
+
+els.highlightsNext.addEventListener('click', () => {
+  if (!lastGood) return;
+  highlightsPage += 1;
+  renderHighlights(lastGood.data[lastGood.data.length - 1]);
 });
 
 els.historyPrev.addEventListener('click', () => {

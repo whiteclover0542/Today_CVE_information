@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
-const MAX_HIGHLIGHTS = 3;
+const MAX_HIGHLIGHTS = 10; // 심각도 상위 CVE만 대상(그날 등록분 전체 아님) — 정확한 상한은 LLM 호출 한도 실측 후 조정 예정, PROGRESS.md 참고
 const PAGE_SIZE = 2000; // NVD CVE API 2.0 공식 문서상 resultsPerPage 최대값 — 하루치 심각도별 CVE는 사실상 이 안에 다 들어와 대부분 한 번의 호출로 전량이 수집됨
 const NVD_REQUEST_INTERVAL_MS = 6500; // 무키 제한 30초당 5회 — 페이지가 늘어 호출이 몇 번이 되든 이 간격을 지키면 항상 제한 안쪽에 머문다
 const CATEGORY_EXAMPLES_LIMIT = 3; // 유형별로 원본 링크를 몇 건까지 같이 저장할지 (번역은 안 함 — API 호출 추가 없음)
@@ -221,48 +221,138 @@ function decodeCvssVector(vector) {
   return labels.length ? labels.join(' · ') : null;
 }
 
-const MYMEMORY_CHAR_LIMIT = 490; // MyMemory 익명 사용 한도(500자)에 여유를 둔 값
+const HIGHLIGHT_LLM_INTERVAL_MS = 4500; // Gemini 무료 티어 분당 요청 한도가 공개돼 있지 않아 보수적으로 잡은 호출 간격 — 배치 로그의 usageMetadata로 계속 점검하며 조정
 
-// 500자 넘는 설명을 문장 하나씩 보내면 호출이 너무 늘어나므로, 문장을 한도 안에서 최대한 크게 묶어 나눈다.
-// (문장 하나가 한도보다 길 때만 어쩔 수 없이 단어 경계에서 추가로 자름)
-function splitIntoChunks(text, limit) {
-  const sentences = text.match(/[^.!?]+[.!?]*\s*/g) || [text];
-  const chunks = [];
-  let current = '';
-  for (let sentence of sentences) {
-    while (sentence.length > limit) {
-      const cut = sentence.slice(0, limit);
-      const lastSpace = cut.lastIndexOf(' ');
-      const splitAt = lastSpace > limit * 0.6 ? lastSpace : limit;
-      if (current) {
-        chunks.push(current.trim());
-        current = '';
-      }
-      chunks.push(sentence.slice(0, splitAt).trim());
-      sentence = sentence.slice(splitAt).trim();
+// CWE(Common Weakness Enumeration)는 NVD가 공식적으로 매기는 "취약점 유형" 표준 분류.
+// 이걸 LLM에게 근거로 같이 주면 "왜 발생했는지"를 그럴듯하게 지어내는 대신 표준 분류에 발 붙이고 설명하게 만들 수 있다.
+// 전체 CWE를 다 담지는 않고 NVD 응답에서 실제로 자주 보이는 것 위주로만 채움 — 목록에 없으면 라벨 없이 ID만 노출(위조 금지).
+const CWE_INFO = {
+  'CWE-79': { label: '크로스사이트 스크립팅(XSS)', hint: '사용자 입력을 검증·이스케이프 없이 웹페이지에 그대로 출력해서 발생' },
+  'CWE-89': { label: 'SQL 인젝션', hint: '사용자 입력을 SQL 문에 그대로 이어붙여서 발생' },
+  'CWE-78': { label: 'OS 명령 인젝션', hint: '사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생' },
+  'CWE-77': { label: '명령 인젝션', hint: '사용자 입력이 실행할 명령의 일부로 해석되도록 방치해서 발생' },
+  'CWE-94': { label: '코드 인젝션', hint: '사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생' },
+  'CWE-22': { label: '경로 순회', hint: '파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생' },
+  'CWE-352': { label: 'CSRF', hint: '요청이 실제 사용자의 의도인지 확인하는 토큰·검증이 없어서 발생' },
+  'CWE-306': { label: '인증 누락', hint: '반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생' },
+  'CWE-287': { label: '부적절한 인증', hint: '인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생' },
+  'CWE-269': { label: '부적절한 권한 관리', hint: '권한을 부여·회수·검사하는 로직이 허술해서 발생' },
+  'CWE-284': { label: '부적절한 접근 통제', hint: '자원에 누가 접근할 수 있는지 제대로 제한하지 않아서 발생' },
+  'CWE-862': { label: '권한 검사 누락', hint: '기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생' },
+  'CWE-863': { label: '부정확한 권한 검사', hint: '권한 검사는 있지만 조건이 잘못돼 있어서 발생' },
+  'CWE-798': { label: '하드코딩된 자격증명', hint: '비밀번호·키가 소스코드나 설정 파일에 고정값으로 박혀 있어서 발생' },
+  'CWE-434': { label: '위험한 파일 업로드', hint: '업로드되는 파일의 종류·내용을 제한하지 않아서 발생' },
+  'CWE-502': { label: '역직렬화 취약점', hint: '신뢰할 수 없는 데이터를 검증 없이 객체로 복원해서 발생' },
+  'CWE-611': { label: 'XML 외부 개체 주입(XXE)', hint: 'XML 파서가 외부 개체 참조를 제한 없이 처리해서 발생' },
+  'CWE-918': { label: 'SSRF', hint: '서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생' },
+  'CWE-190': { label: '정수 오버플로우', hint: '계산 결과가 변수가 담을 수 있는 범위를 넘는지 확인하지 않아서 발생' },
+  'CWE-125': { label: '버퍼 범위 밖 읽기', hint: '읽으려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생' },
+  'CWE-787': { label: '버퍼 범위 밖 쓰기', hint: '쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생' },
+  'CWE-416': { label: '메모리 해제 후 사용(UAF)', hint: '이미 해제한 메모리를 계속 참조할 수 있는 상태로 남겨둬서 발생' },
+  'CWE-476': { label: 'NULL 포인터 역참조', hint: '값이 비어 있을 수 있는 상황을 확인하지 않고 그대로 사용해서 발생' },
+  'CWE-843': { label: '타입 컨퓨전', hint: '데이터의 실제 타입을 확인하지 않고 다른 타입인 것처럼 다뤄서 발생' },
+  'CWE-367': { label: '경쟁 조건(TOCTOU)', hint: '확인한 시점과 실제 사용하는 시점 사이에 상태가 바뀔 수 있어서 발생' },
+  'CWE-134': { label: '포맷 스트링 취약점', hint: '사용자 입력을 포맷 문자열로 그대로 사용해서 발생' },
+  'CWE-90': { label: 'LDAP 인젝션', hint: '사용자 입력을 LDAP 조회문에 그대로 이어붙여서 발생' },
+  'CWE-327': { label: '취약한 암호화 알고리즘', hint: '이미 깨진 것으로 알려진 암호화 방식을 사용해서 발생' },
+  'CWE-330': { label: '예측 가능한 난수 사용', hint: '보안에 쓰기에 충분히 무작위하지 않은 값을 난수로 사용해서 발생' },
+  'CWE-319': { label: '평문 전송', hint: '민감한 정보를 암호화하지 않고 그대로 주고받아서 발생' },
+  'CWE-311': { label: '암호화 누락', hint: '저장·전송 과정에서 필요한 암호화 자체를 적용하지 않아서 발생' },
+  'CWE-639': { label: '취약한 직접 개체 참조(IDOR)', hint: '요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생' },
+  'CWE-20': { label: '부적절한 입력값 검증', hint: '입력값의 형식·범위·내용을 충분히 검증하지 않아서 발생' },
+  'CWE-400': { label: '자원 소비 과다(DoS)', hint: '처리량·자원 사용을 제한하지 않아 과도한 요청에 시스템이 마비될 수 있어서 발생' },
+  'CWE-295': { label: '인증서 검증 오류', hint: '통신 상대의 인증서를 제대로 검증하지 않아서 발생' },
+  'CWE-601': { label: '오픈 리다이렉트', hint: '이동시킬 주소를 검증하지 않고 사용자가 지정한 값을 그대로 사용해서 발생' },
+  'CWE-200': { label: '민감 정보 노출', hint: '노출되면 안 되는 정보를 접근 제한 없이 응답에 포함해서 발생' },
+  'CWE-522': { label: '보호되지 않은 자격증명', hint: '비밀번호 등 인증 정보를 암호화·해시 없이 저장해서 발생' },
+  'CWE-732': { label: '잘못된 권한 설정', hint: '파일·자원의 접근 권한을 필요한 범위보다 넓게 설정해서 발생' },
+};
+
+function extractCwe(cve) {
+  const ids = new Set();
+  for (const w of cve.weaknesses || []) {
+    for (const d of w.description || []) {
+      if (d.lang === 'en' && /^CWE-\d+$/.test(d.value)) ids.add(d.value);
     }
-    if (current.length + sentence.length > limit && current) {
-      chunks.push(current.trim());
-      current = '';
-    }
-    current += sentence;
   }
-  if (current.trim()) chunks.push(current.trim());
-  return chunks;
+  return [...ids].map((id) => ({ id, label: CWE_INFO[id]?.label || null }));
 }
 
-async function translateChunk(text) {
+// 대표 CVE 한 건을 번역+해석+발생 원인+방지법까지 한 번의 LLM 호출로 생성한다(번역 전용 API를 따로 안 씀 — 이번 개선 목표).
+// CWE 정보가 있으면 근거로 같이 주고, 없거나 설명 문구로 확인할 수 없는 내용은 빈 문자열로 남기게 못박아 지어내지 않게 한다.
+// 키가 없거나 호출이 실패하면 null을 반환하고, 호출부가 원문만 노출하는 기존 폴백 원칙을 그대로 따른다.
+async function explainHighlightWithLlm(desc, cweList) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.log('[skip] GEMINI_API_KEY 없음 — 대표 CVE 번역·해설 건너뜀(원문만 노출)');
+    return null;
+  }
+
+  const cweContext = (cweList || [])
+    .map((c) => {
+      const info = CWE_INFO[c.id];
+      return info ? `${c.id} (${info.label}): 일반적으로 ${info.hint}` : `${c.id} (목록에 없는 분류)`;
+    })
+    .join('\n');
+
+  const responseSchema = {
+    type: 'object',
+    properties: {
+      summaryKo: { type: 'string' },
+      interpretation: { type: 'string' },
+      cause: { type: 'string' },
+      mitigation: { type: 'string' },
+    },
+    required: ['summaryKo', 'interpretation', 'cause', 'mitigation'],
+  };
+
   try {
-    const url = new URL('https://api.mymemory.translated.net/get');
-    url.searchParams.set('q', text);
-    url.searchParams.set('langpair', 'en|ko');
-    const res = await fetch(url);
-    if (!res.ok) return null;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [
+            {
+              text:
+                '너는 CVE(보안 취약점) 설명을 한국 독자에게 풀어 설명하는 보안 분석가야. 아래 4가지를 채워:\n' +
+                '1) summaryKo: 영문 설명을 자연스러운 한국어로 번역\n' +
+                '2) interpretation: 보안 지식이 없는 사람도 이해할 수 있게 쉽게 풀어 쓴 해석 1~2문장\n' +
+                '3) cause: 이런 취약점이 보통 왜 생기는지 1~2문장. 아래 CWE 분류 정보가 주어지면 그 근거를 우선 사용하고, ' +
+                '없거나 설명 문구로 확인할 수 없으면 지어내지 말고 빈 문자열("")로 남겨\n' +
+                '4) mitigation: 방지·완화 방법 1~2문장(패치 적용, 설정 점검 등 일반적 대응). 근거가 부족하면 빈 문자열로 남겨\n' +
+                '모든 필드는 한국어로 작성하고, 확신이 없는 내용은 빈 문자열로 남겨(지어내지 마).' +
+                (cweContext
+                  ? `\n\n이 CVE의 공식 CWE(취약점 유형) 분류:\n${cweContext}`
+                  : '\n\n이 CVE에는 공식 CWE 분류 정보가 없음.'),
+            },
+          ],
+        },
+        contents: [{ role: 'user', parts: [{ text: desc }] }],
+        generationConfig: { responseMimeType: 'application/json', responseSchema },
+      }),
+    });
+
+    if (!res.ok) {
+      console.warn(`[warn] 대표 CVE 해설 생성 실패: HTTP ${res.status} ${await res.text()}`);
+      return null;
+    }
+
     const body = await res.json();
-    if (body.responseStatus !== 200) return null;
-    return body.responseData?.translatedText || null;
+    const usage = body.usageMetadata;
+    if (usage) {
+      console.log(`[llm] 대표 CVE 해설 생성 — 입력 ${usage.promptTokenCount} / 출력 ${usage.candidatesTokenCount} 토큰`);
+    }
+
+    const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      console.warn('[warn] 대표 CVE 해설 응답이 비어 있음 — 원문만 노출');
+      return null;
+    }
+    return JSON.parse(text);
   } catch (e) {
-    console.warn(`[warn] 번역 청크 실패: ${e.message}`);
+    console.warn(`[warn] 대표 CVE 해설 생성 실패: ${e.message}`);
     return null;
   }
 }
@@ -287,21 +377,6 @@ async function fetchAllForSeverity(baseUrl, level) {
     startIndex += page.length;
   }
   return { total, vulnerabilities };
-}
-
-// 무키 번역: MyMemory Translation API (익명 사용, 요청당 500자·하루 5000단어 한도)
-// 청크 중 하나라도 실패하면 짜깁기된 반쪽 번역 대신 전체를 null로 반환해 원문으로 대체한다.
-async function translateToKorean(text) {
-  if (!text) return null;
-  const chunks = splitIntoChunks(text, MYMEMORY_CHAR_LIMIT);
-  const translated = [];
-  for (const chunk of chunks) {
-    const result = await translateChunk(chunk);
-    if (!result) return null;
-    translated.push(result);
-    if (chunks.length > 1) await sleep(400);
-  }
-  return translated.join(' ');
 }
 
 async function main() {
@@ -390,6 +465,7 @@ async function main() {
           severity: level,
           fullEn: desc,
           categoryKey,
+          cwe: extractCwe(cve),
           url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
           cvssScore: cvss?.cvssData?.baseScore ?? null,
           cvssVector: cvss?.cvssData?.vectorString ?? null,
@@ -436,17 +512,22 @@ async function main() {
     .map(([key, count]) => ({ key, label: productLabels[key], count, examples: productExamples[key] || [] }))
     .sort((a, b) => b.count - a.count);
 
-  // 대표 CVE 설명 전문을 한국어로 번역 (NVD 호출과 별개 서비스라 위 5회 제한과 무관, 그래도 예의상 간격을 둠)
+  // 대표 CVE마다 번역+해석+발생 원인+방지법을 LLM 호출 한 번으로 생성 (NVD 호출과 별개 서비스라 위 5회 제한과 무관,
+  // 대신 Gemini 쪽 한도를 위해 HIGHLIGHT_LLM_INTERVAL_MS만큼 간격을 둠).
   // 화면에서 "자세히 보기"로 전문·원문을 다 보여줄 수 있도록 자르지 않고 그대로 저장한다.
   const highlights = [];
   for (const h of rawHighlights) {
-    await sleep(500);
-    const ko = await translateToKorean(h.fullEn);
+    await sleep(HIGHLIGHT_LLM_INTERVAL_MS);
+    const llm = await explainHighlightWithLlm(h.fullEn, h.cwe);
     highlights.push({
       id: h.id,
       severity: h.severity,
       summaryEn: h.fullEn,
-      summaryKo: ko || null,
+      summaryKo: llm?.summaryKo || null,
+      interpretation: llm?.interpretation || null,
+      cause: llm?.cause || null,
+      mitigation: llm?.mitigation || null,
+      cwe: h.cwe,
       url: h.url,
       cvssScore: h.cvssScore,
       cvssVector: h.cvssVector,

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=36" />
+<link rel="stylesheet" href="assets/style.css?v=37" />
 </head>
 <body>
 <main class="dashboard">
@@ -76,7 +76,16 @@
 
   <section class="highlights-card" id="highlights-card" hidden>
     <h2>🎯 오늘의 대표 CVE</h2>
+    <p class="highlights-note">심각도 상위 CVE부터 보여줘요. 번역·CVSS 등은 원자료 그대로, "AI 해설"은 공식 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
     <ul class="highlights-list" id="highlights-list"></ul>
+    <div class="highlights-more" id="highlights-more-wrap" hidden>
+      <button type="button" id="highlights-more">더보기</button>
+    </div>
+    <div class="bar-pagination" id="highlights-pagination" hidden>
+      <button type="button" id="highlights-prev">← 이전 5개</button>
+      <span id="highlights-page-info" class="bar-page-info"></span>
+      <button type="button" id="highlights-next">다음 5개 →</button>
+    </div>
   </section>
 
   <section class="category-card" id="category-card" hidden>
@@ -180,6 +189,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=36"></script>
+<script src="assets/app.js?v=37"></script>
 </body>
 </html>
