@@ -97,6 +97,8 @@ timeout · 인증 실패 · 호출 제한 · 오프라인 · 응답 형식 변�
 ## 프로젝트 구조
 
 ```
+PLAN.md                         # 실 서비스 전환 기획서
+PROGRESS.md                     # 실 서비스 전환 진행 상황
 index.html                      # 정보판 화면
 assets/
 ├── app.js                      # fetch·렌더링·장애 시뮬레이터·비교/위험도/월별 집계 계산
@@ -118,6 +120,8 @@ assignment/                     # 과제 제출 관련 자료 (실 서비스 문
 
 ## 문서
 
+- [`PLAN.md`](PLAN.md) — 실 서비스 전환 기획서 (배포 재설정, LLM 기반 번역·요약 개선 등)
+- [`PROGRESS.md`](PROGRESS.md) — 실 서비스 전환 진행 상황
 - [`assignment/SUBMISSION.md`](assignment/SUBMISSION.md) — 목적·정의, 과제 카드 5개, 검증 안내서, AI 3줄, 체크리스트, 스크린샷을 담은 최종 제출 문서
-- [`assignment/PROGRESS.md`](assignment/PROGRESS.md) — 진행 상황과 설계 결정 이력
+- [`assignment/PROGRESS.md`](assignment/PROGRESS.md) — 과제 진행 당시의 상황과 설계 결정 이력
 - [`assignment/worksheet/`](assignment/worksheet/) — 정의표·장애 5종 검사표·손계산 대조표 등 근거 자료
