@@ -246,10 +246,10 @@ function renderSeverity(entry) {
 
   els.severityDonut.innerHTML = `
     <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="오늘 등록분 심각도 분포">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a2230" stroke-width="${strokeWidth}"></circle>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#232326" stroke-width="${strokeWidth}"></circle>
       ${rings}
       <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#f1f5f9">${total}</text>
-      <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="12" fill="#8b98a8">${entry.unit}</text>
+      <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="12" fill="#98979c">${entry.unit}</text>
     </svg>`;
 
   els.severityLegend.innerHTML = SEVERITY_LEVELS
@@ -787,14 +787,14 @@ function renderTrend(data) {
       const h = Math.max(6, ratio * plotH);
       const y = padTop + (plotH - h);
       const isLast = i === n - 1;
-      const fill = isLast ? '#6ea8ff' : 'rgba(110,168,255,0.4)';
+      const fill = isLast ? '#ffffff' : 'rgba(255,255,255,0.32)';
       const shortDate = entry.date.slice(5); // MM-DD
       return `
         <g>
           <title>${entry.date}: ${entry.count}${entry.unit}</title>
           <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${fill}"></rect>
           <text x="${x + barW / 2}" y="${y - 8}" text-anchor="middle" font-size="11" fill="#f1f5f9">${entry.count}</text>
-          <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#8b98a8">${shortDate}</text>
+          <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#98979c">${shortDate}</text>
         </g>`;
     })
     .join('');

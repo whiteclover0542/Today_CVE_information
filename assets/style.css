@@ -1,14 +1,13 @@
 :root {
-  /* SOC 대시보드 팔레트 — 검정 한 톤이 아니라 남색이 살짝 도는 다크, UI는 차분한 블루 액센트로 통일 */
-  --bg: #080b10;
-  --card-bg: #0f141c;
-  --card-bg-2: #151c26;
+  /* 검정 위주 다크 테마 — 배경/카드는 파랑기 없는 순수 무채색, 파랑은 링크 등 아주 좁은 곳에만 씀 */
+  --bg: #050506;
+  --card-bg: #121214;
+  --card-bg-2: #1a1a1d;
   --text: #f1f5f9;
-  --muted: #8b98a8;
-  --accent: #6ea8ff;
-  --accent-soft: rgba(110, 168, 255, 0.16);
-  --accent-dim: rgba(110, 168, 255, 0.45);
-  --border: #283244;
+  --muted: #98979c;
+  --edge: rgba(255, 255, 255, 0.22); /* 카드 왼쪽 강조선 등 "칙칙하지 않게"만 쓰는 무채색 하이라이트 */
+  --accent: #6ea8ff; /* 링크·탭 활성 표시 등 정말 눌러야 하는 곳에만 — 배경/큰 면적엔 안 씀 */
+  --border: #2a2a2e;
   --stale-bg: #2c2408;
   --stale-text: #f6c945;
   --empty-bg: #2b1414;
@@ -255,20 +254,11 @@ header h1 {
 .debug-panel {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--edge);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
-}
-
-/* 그래프가 있는 카드는 전부 같은 액센트 강조선으로 통일 */
-#category-card,
-#monthly-category-card,
-#product-card,
-#monthly-product-card,
-.trend-card {
-  border-left-color: var(--accent);
 }
 
 .value-main {
@@ -280,9 +270,9 @@ header h1 {
 .value-number {
   font-size: 3.5rem;
   font-weight: 800;
-  color: var(--accent);
+  color: var(--text);
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 44px rgba(110, 168, 255, 0.35);
+  text-shadow: 0 0 44px rgba(255, 255, 255, 0.18);
 }
 
 .value-unit {
@@ -606,26 +596,11 @@ header h1 {
   overflow: hidden;
 }
 
-#category-bars .category-bar-track,
-#monthly-category-bars .category-bar-track,
-#product-bars .category-bar-track,
-#monthly-product-bars .category-bar-track {
-  background: var(--accent-soft);
-}
-
 .category-bar-fill {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: rgba(255, 255, 255, 0.55);
   border-radius: 999px;
-}
-
-/* 막대 색은 전부 보라로 통일 — 길이(=수치)만으로 충분히 비교되니 막대별로 색을 더 쪼개지 않음 */
-#category-bars .category-bar-fill,
-#monthly-category-bars .category-bar-fill,
-#product-bars .category-bar-fill,
-#monthly-product-bars .category-bar-fill {
-  background: var(--accent);
 }
 
 .category-bar-count {
@@ -799,7 +774,7 @@ header h1 {
 
 .hl-details summary {
   cursor: pointer;
-  color: var(--accent);
+  color: var(--text);
   font-size: 0.78rem;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -826,7 +801,7 @@ header h1 {
 
 .hl-title::before {
   content: "▸ ";
-  color: var(--accent);
+  color: var(--muted);
 }
 
 .hl-title-details[open] > .hl-title::before {
