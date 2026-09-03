@@ -769,7 +769,7 @@ function renderTrend(data) {
       const h = Math.max(6, ratio * plotH);
       const y = padTop + (plotH - h);
       const isLast = i === n - 1;
-      const fill = isLast ? '#3dd9a0' : 'rgba(25,158,112,0.45)';
+      const fill = isLast ? '#9085e9' : 'rgba(144,133,233,0.45)';
       const shortDate = entry.date.slice(5); // MM-DD
       return `
         <g>
@@ -931,7 +931,27 @@ els.historyNext.addEventListener('click', () => {
   renderHistoryTable(lastGood.data);
 });
 
+// 오늘 / 월별 비교 / 추이·기록 구역 전환 — 데이터는 이미 다 불러와 있고 보이는 구역만 토글하는 것뿐이라 재조회 없음
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabPanels = document.querySelectorAll('[data-tab-panel]');
+
+function activateTab(tab) {
+  tabButtons.forEach((btn) => {
+    const active = btn.dataset.tab === tab;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', String(active));
+  });
+  tabPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.tabPanel !== tab;
+  });
+}
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+  activateTab('today');
   renderNextAutoCheck();
 
   const params = new URLSearchParams(location.search);

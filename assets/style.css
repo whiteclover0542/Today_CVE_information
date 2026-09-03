@@ -13,13 +13,10 @@
   --up: #ff6b6b;
   --down: #63e6a5;
 
-  /* 데이터 종류별 고정 색상 — CWE=파랑, 제품·벤더=주황, 추이=청록(스킬 팔레트 slot 1/2/3, 고정 순서) */
-  --seq-blue: #3987e5;
-  --seq-blue-soft: rgba(57, 135, 229, 0.16);
-  --seq-orange: #d95926;
-  --seq-orange-soft: rgba(217, 89, 38, 0.16);
-  --seq-aqua: #199e70;
-  --seq-aqua-soft: rgba(25, 158, 112, 0.16);
+  /* 그래프(CWE 유형·제품·벤더·추이) 공통 색상 — 보라 한 가지로 통일 */
+  --seq-purple: #9085e9;
+  --seq-purple-soft: rgba(144, 133, 233, 0.16);
+  --seq-purple-dim: rgba(144, 133, 233, 0.45);
 
   /* 상태(심각도) 전용 색상 — 시리즈 색상과 절대 겹치지 않게 별도로 고정 */
   --status-critical: #d03b3b;
@@ -44,6 +41,36 @@ body {
   max-width: 1040px;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 4rem;
+}
+
+/* 오늘 / 월별 비교 / 추이·기록 구역 전환 — 쭉 나열하지 않고 필요한 구역만 보여줌 */
+.tab-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.65rem 0.3rem;
+  margin-bottom: -1px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  border-bottom-color: var(--border);
+}
+
+.tab-btn.active {
+  color: var(--text);
+  border-bottom-color: var(--seq-purple);
 }
 
 .grid-2 {
@@ -182,19 +209,13 @@ header h1 {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
 }
 
-/* 카드마다 데이터 종류를 색으로 구분 — CWE=파랑, 제품·벤더=주황, 추이=청록. 훑어볼 때 같은 계열 카드가 한눈에 묶여 보임. */
+/* 그래프가 있는 카드는 전부 같은 보라색 강조선으로 통일 */
 #category-card,
-#monthly-category-card {
-  border-left-color: var(--seq-blue);
-}
-
+#monthly-category-card,
 #product-card,
-#monthly-product-card {
-  border-left-color: var(--seq-orange);
-}
-
+#monthly-product-card,
 .trend-card {
-  border-left-color: var(--seq-aqua);
+  border-left-color: var(--seq-purple);
 }
 
 .value-main {
@@ -504,13 +525,10 @@ header h1 {
 }
 
 #category-bars .category-bar-track,
-#monthly-category-bars .category-bar-track {
-  background: var(--seq-blue-soft);
-}
-
+#monthly-category-bars .category-bar-track,
 #product-bars .category-bar-track,
 #monthly-product-bars .category-bar-track {
-  background: var(--seq-orange-soft);
+  background: var(--seq-purple-soft);
 }
 
 .category-bar-fill {
@@ -520,15 +538,12 @@ header h1 {
   border-radius: 999px;
 }
 
-/* 막대 색도 카드 색과 맞춤(파랑=CWE, 주황=제품·벤더) — 길이(=수치)만으로 충분히 비교되니 막대별로 색을 더 쪼개지 않음 */
+/* 막대 색은 전부 보라로 통일 — 길이(=수치)만으로 충분히 비교되니 막대별로 색을 더 쪼개지 않음 */
 #category-bars .category-bar-fill,
-#monthly-category-bars .category-bar-fill {
-  background: var(--seq-blue);
-}
-
+#monthly-category-bars .category-bar-fill,
 #product-bars .category-bar-fill,
 #monthly-product-bars .category-bar-fill {
-  background: var(--seq-orange);
+  background: var(--seq-purple);
 }
 
 .category-bar-count {

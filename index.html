@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=40" />
+<link rel="stylesheet" href="assets/style.css?v=41" />
 </head>
 <body>
 <main class="dashboard">
@@ -54,6 +54,13 @@
 
   <section id="status-banner" class="status-banner" hidden></section>
 
+  <nav class="tab-nav" role="tablist" aria-label="정보판 구역">
+    <button type="button" class="tab-btn" role="tab" data-tab="today">오늘</button>
+    <button type="button" class="tab-btn" role="tab" data-tab="monthly">월별 비교</button>
+    <button type="button" class="tab-btn" role="tab" data-tab="trend">추이·기록</button>
+  </nav>
+
+  <div class="tab-panel" data-tab-panel="today" role="tabpanel">
   <div class="grid-2">
     <section class="value-card">
       <div class="value-main">
@@ -145,7 +152,9 @@
       <p class="category-note" id="product-note"></p>
     </details>
   </section>
+  </div>
 
+  <div class="tab-panel" data-tab-panel="monthly" role="tabpanel" hidden>
   <section class="category-card" id="monthly-category-card" hidden>
     <div class="category-card-header">
       <h2>📅 월별 CWE 유형 비교</h2>
@@ -181,7 +190,9 @@
       <p class="category-note" id="monthly-product-note"></p>
     </details>
   </section>
+  </div>
 
+  <div class="tab-panel" data-tab-panel="trend" role="tabpanel" hidden>
   <div class="grid-2">
     <section class="trend-card">
       <h2>📈 최근 추이</h2>
@@ -213,6 +224,7 @@
       </div>
     </section>
   </div>
+  </div>
 
   <section id="debug-panel" class="debug-panel" hidden>
     <h2>🧪 장애 시연 (?debug=1)</h2>
@@ -231,6 +243,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=40"></script>
+<script src="assets/app.js?v=41"></script>
 </body>
 </html>
