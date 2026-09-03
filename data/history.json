@@ -915,5 +915,205 @@
         ]
       }
     ]
+  },
+  {
+    "date": "2026-09-03",
+    "count": 166,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-02T15%3A00%3A00.000Z&pubEndDate=2026-09-03T01%3A40%3A50.025Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-03T01:40:50.025Z",
+    "severity": {
+      "critical": 1,
+      "high": 6,
+      "medium": 13,
+      "low": 0,
+      "unrated": 146
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-66786",
+        "severity": "CRITICAL",
+        "summaryEn": "A flaw was found in submariner. In cert-auth mode, the connection configuration is built using free-form strings from the Custom Resource Definition (CRD) without proper validation. A malicious cluster can exploit this by publishing a CableName that includes newlines and ipsec.conf directives. This allows an attacker to inject arbitrary configuration parameters or execute commands through leftupdown hooks, leading to remote code execution as root on the gateway node.",
+        "summaryKo": "잠수함에서 결함이 발견되었습니다. cert-auth 모드에서 연결 구성은 적절한 검증 없이 CRD (Custom Resource Definition) 의 자유 형식 문자열을 사용하여 구축됩니다. 악의적인 클러스터는 줄 바꿈과 ipsec.conf 지시어를 포함하는 CableName을 게시하여 이를 이용할 수 있습니다. 이를 통해 공격자는 임의 구성 매개 변수를 주입하거나 왼쪽 업다운 후크를 통해 명령을 실행하여 게이트웨이 노드에서 루트로 원격 코드를 실행할 수 있습니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66786",
+        "cvssScore": 9.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-18058",
+        "severity": "HIGH",
+        "summaryEn": "The mobile Smart Connect dashboard UI was subject to manipulation\nby 3rd party apps. When paired with a phishing attack, this manipulation could\nresult in escalated privileges of an attacker within the system.",
+        "summaryKo": "모바일 Smart Connect 대시보드 UI가 조작 대상이었습니다.\n타사 앱을 통해. 피싱 공격과 짝을 이룰 때, 이 조작은\n시스템 내에서 공격자의 권한이 상승됩니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18058",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 필요",
+        "category": "기타"
+      },
+      {
+        "id": "CVE-2026-78408",
+        "severity": "HIGH",
+        "summaryEn": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+        "summaryKo": "Nsenter --join-cgroup 옵션은 대상 cgroup.procs 파일을 루트로 열고 나중에 네임스페이스와 자격 증명 변경 및 execve () 에서 해당 파일 설명자를 열어 둡니다. 커널은 원래 오픈의 자격 증명을 사용하여 나중에 cgroup 마이그레이션을 검사하기 때문에 공격자가 제어하는 대상에서 실행되는 프로그램은 cgroup 간에 호스트 프로세스를 이동하는 루트의 기능을 상속할 수 있습니다. 권한이 있는 운영자가 해당 대상에 대해 --join-cgroup을 사용한 후 권한이 없는 사용자는 관련 없는 루트 프로세스를 마이그레이션하고 종료할 수 있습니다.",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+        "cvssScore": 7.9,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 필요",
+        "category": "기타"
+      }
+    ],
+    "categoryBreakdown": [
+      {
+        "key": "other",
+        "label": "기타",
+        "count": 14,
+        "examples": [
+          {
+            "id": "CVE-2026-18058",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18058"
+          },
+          {
+            "id": "CVE-2026-78408",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408"
+          },
+          {
+            "id": "CVE-2026-78409",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409"
+          }
+        ]
+      },
+      {
+        "key": "auth-bypass",
+        "label": "인증 우회",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-84839",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84839"
+          },
+          {
+            "id": "CVE-2026-84840",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84840"
+          }
+        ]
+      },
+      {
+        "key": "rce",
+        "label": "원격 코드 실행",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-66786",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66786"
+          }
+        ]
+      },
+      {
+        "key": "priv-esc",
+        "label": "권한 상승",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-75134",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134"
+          }
+        ]
+      },
+      {
+        "key": "path-traversal",
+        "label": "경로 순회",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84852",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852"
+          }
+        ]
+      },
+      {
+        "key": "dos",
+        "label": "서비스 거부(DoS)",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84856",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84856"
+          }
+        ]
+      }
+    ],
+    "categorySampleSize": 20,
+    "productBreakdown": [
+      {
+        "key": "microsoft",
+        "label": "Microsoft/Windows",
+        "count": 3,
+        "examples": [
+          {
+            "id": "CVE-2026-75135",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75135"
+          },
+          {
+            "id": "CVE-2026-75136",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75136"
+          },
+          {
+            "id": "CVE-2026-75137",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75137"
+          }
+        ]
+      },
+      {
+        "key": "linux",
+        "label": "Linux/커널",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-78409",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409"
+          },
+          {
+            "id": "CVE-2026-78410",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410"
+          }
+        ]
+      },
+      {
+        "key": "php",
+        "label": "PHP",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82524",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82524"
+          }
+        ]
+      },
+      {
+        "key": "wordpress",
+        "label": "WordPress",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-75134",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134"
+          }
+        ]
+      },
+      {
+        "key": "google-android",
+        "label": "Google/Android",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84852",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852"
+          }
+        ]
+      }
+    ]
   }
 ]
