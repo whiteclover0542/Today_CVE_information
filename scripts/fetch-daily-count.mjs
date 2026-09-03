@@ -4,6 +4,7 @@ const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
 const SEVERITIES = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 const MAX_HIGHLIGHTS = 10; // 심각도 상위 CVE만 대상(그날 등록분 전체 아님) — 정확한 상한은 LLM 호출 한도 실측 후 조정 예정, PROGRESS.md 참고
+const MAX_SECONDARY_HIGHLIGHTS = 20; // CWE 분류가 없어 대표(AI 해설 대상)로 못 올린 CVE를 목록으로만 따로 보여줄 상한
 const PAGE_SIZE = 2000; // NVD CVE API 2.0 공식 문서상 resultsPerPage 최대값 — 하루치 심각도별 CVE는 사실상 이 안에 다 들어와 대부분 한 번의 호출로 전량이 수집됨
 const NVD_REQUEST_INTERVAL_MS = 6500; // 무키 제한 30초당 5회 — 페이지가 늘어 호출이 몇 번이 되든 이 간격을 지키면 항상 제한 안쪽에 머문다
 const CATEGORY_EXAMPLES_LIMIT = 3; // 유형별로 원본 링크를 몇 건까지 같이 저장할지 (번역은 안 함 — API 호출 추가 없음)
@@ -298,12 +299,13 @@ async function explainHighlightWithLlm(desc, cweList) {
   const responseSchema = {
     type: 'object',
     properties: {
+      title: { type: 'string' },
       summaryKo: { type: 'string' },
       interpretation: { type: 'string' },
       cause: { type: 'string' },
       mitigation: { type: 'string' },
     },
-    required: ['summaryKo', 'interpretation', 'cause', 'mitigation'],
+    required: ['title', 'summaryKo', 'interpretation', 'cause', 'mitigation'],
   };
 
   try {
@@ -316,12 +318,14 @@ async function explainHighlightWithLlm(desc, cweList) {
           parts: [
             {
               text:
-                '너는 CVE(보안 취약점) 설명을 한국 독자에게 풀어 설명하는 보안 분석가야. 아래 4가지를 채워:\n' +
-                '1) summaryKo: 영문 설명을 자연스러운 한국어로 번역\n' +
-                '2) interpretation: 보안 지식이 없는 사람도 이해할 수 있게 쉽게 풀어 쓴 해석 1~2문장\n' +
-                '3) cause: 이런 취약점이 보통 왜 생기는지 1~2문장. 아래 CWE 분류 정보가 주어지면 그 근거를 우선 사용하고, ' +
+                '너는 CVE(보안 취약점) 설명을 한국 독자에게 풀어 설명하는 보안 분석가야. 아래 5가지를 채워:\n' +
+                '1) title: 이 CVE가 무엇에 관한 것인지 한눈에 알 수 있는 한국어 제목 1개(15~30자 내외, 명사형으로 끝맺기). ' +
+                '영향받는 제품·유형·핵심 위험을 담되 과장하거나 지어내지 말 것(예: "OO 플러그인 인증 우회로 관리자 권한 탈취 가능")\n' +
+                '2) summaryKo: 영문 설명을 자연스러운 한국어로 번역\n' +
+                '3) interpretation: 보안 지식이 없는 사람도 이해할 수 있게 쉽게 풀어 쓴 해석 1~2문장\n' +
+                '4) cause: 이런 취약점이 보통 왜 생기는지 1~2문장. 아래 CWE 분류 정보가 주어지면 그 근거를 우선 사용하고, ' +
                 '없거나 설명 문구로 확인할 수 없으면 지어내지 말고 빈 문자열("")로 남겨\n' +
-                '4) mitigation: 방지·완화 방법 1~2문장(패치 적용, 설정 점검 등 일반적 대응). 근거가 부족하면 빈 문자열로 남겨\n' +
+                '5) mitigation: 방지·완화 방법 1~2문장(패치 적용, 설정 점검 등 일반적 대응). 근거가 부족하면 빈 문자열로 남겨\n' +
                 '모든 필드는 한국어로 작성하고, 확신이 없는 내용은 빈 문자열로 남겨(지어내지 마).' +
                 (cweContext
                   ? `\n\n이 CVE의 공식 CWE(취약점 유형) 분류:\n${cweContext}`
@@ -407,6 +411,7 @@ async function main() {
   // NVD_REQUEST_INTERVAL_MS만큼 쉬어 항상 이 제한 안에 머문다(fetchAllForSeverity 내부에서 적용).
   const severity = {};
   const rawHighlights = [];
+  const secondaryHighlights = []; // CWE 분류가 없는 CVE — AI 해설 없이 목록으로만 아래에 따로 보여줌
   const usedHighlightIds = new Set();
   const usedHighlightCategories = new Set();
   const categoryCounts = {};
@@ -443,16 +448,18 @@ async function main() {
         productExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
-      levelCandidates.push({ cve, desc, categoryKey });
+      levelCandidates.push({ cve, desc, categoryKey, cwe: extractCwe(cve) });
     }
 
-    // 대표 CVE 3건 선정: 심각도가 항상 먼저다 — 유형을 맞추려고 더 낮은 심각도로 넘어가지 않는다.
+    // 대표 CVE 선정: 심각도가 항상 먼저다 — 유형을 맞추려고 더 낮은 심각도로 넘어가지 않는다.
+    // NVD 공식 CWE 분류가 있는 CVE만 대표(=AI 해설 대상)로 올린다 — "발생 원인"을 근거 있게 grounding하기 위함.
     // 1차: 이 심각도 안에서 아직 안 나온 유형을 우선 채움. 2차: 그래도 자리가 남으면(이 심각도 안에서만)
     // 유형이 겹쳐도 채운다. 두 패스 모두 이 심각도의 후보를 다 써도 부족해야 다음(더 낮은) 심각도로 넘어감.
     const pickFromLevel = (allowDuplicateCategory) => {
-      for (const { cve, desc, categoryKey } of levelCandidates) {
+      for (const { cve, desc, categoryKey, cwe } of levelCandidates) {
         if (rawHighlights.length >= MAX_HIGHLIGHTS) break;
         if (usedHighlightIds.has(cve.id)) continue;
+        if (cwe.length === 0) continue; // CWE 없는 CVE는 대표로 안 올림 — 아래 secondary 선정에서 따로 처리
         if (!allowDuplicateCategory && usedHighlightCategories.has(categoryKey)) continue;
 
         usedHighlightIds.add(cve.id);
@@ -465,7 +472,7 @@ async function main() {
           severity: level,
           fullEn: desc,
           categoryKey,
-          cwe: extractCwe(cve),
+          cwe,
           url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
           cvssScore: cvss?.cvssData?.baseScore ?? null,
           cvssVector: cvss?.cvssData?.vectorString ?? null,
@@ -474,6 +481,25 @@ async function main() {
     };
     pickFromLevel(false);
     pickFromLevel(true);
+
+    // CWE가 없어 대표로 못 올린 CVE 중 심각도 상위부터 목록에만 채움 — LLM 호출은 안 함(비용 절감 + 애초에 grounding할 CWE가 없어서 해설을 붙일 근거가 없음).
+    for (const { cve, categoryKey, cwe } of levelCandidates) {
+      if (secondaryHighlights.length >= MAX_SECONDARY_HIGHLIGHTS) break;
+      if (usedHighlightIds.has(cve.id)) continue;
+      if (cwe.length > 0) continue; // CWE 있는 건 대표 후보 몫 — 자리가 없어 못 들어갔어도 이 목록 취지와 다르므로 제외
+
+      usedHighlightIds.add(cve.id);
+      const metrics = cve.metrics || {};
+      const cvss = (metrics.cvssMetricV31 || metrics.cvssMetricV30 || metrics.cvssMetricV2 || [])[0];
+      secondaryHighlights.push({
+        id: cve.id,
+        severity: level,
+        categoryKey,
+        url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
+        cvssScore: cvss?.cvssData?.baseScore ?? null,
+        cvssVector: cvss?.cvssData?.vectorString ?? null,
+      });
+    }
   }
   const rated = severity.critical + severity.high + severity.medium + severity.low;
   severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
@@ -493,7 +519,7 @@ async function main() {
       if (newExamples.length < CATEGORY_EXAMPLES_LIMIT) newExamples.push(moved);
     }
 
-    const highlight = rawHighlights.find((h) => h.id === id);
+    const highlight = rawHighlights.find((h) => h.id === id) || secondaryHighlights.find((h) => h.id === id);
     if (highlight) highlight.categoryKey = newKey;
   }
 
@@ -522,6 +548,7 @@ async function main() {
     highlights.push({
       id: h.id,
       severity: h.severity,
+      title: llm?.title || null,
       summaryEn: h.fullEn,
       summaryKo: llm?.summaryKo || null,
       interpretation: llm?.interpretation || null,
@@ -536,6 +563,17 @@ async function main() {
     });
   }
 
+  // CWE가 없어 AI 해설을 못 붙인 CVE — 번역·해설 없이 목록으로만 저장(위조 금지: 근거 없는 해설을 억지로 채우지 않음)
+  const secondaryHighlightsOutput = secondaryHighlights.map((s) => ({
+    id: s.id,
+    severity: s.severity,
+    url: s.url,
+    cvssScore: s.cvssScore,
+    cvssVector: s.cvssVector,
+    cvssPlain: decodeCvssVector(s.cvssVector),
+    category: categoryLabels[s.categoryKey],
+  }));
+
   const entry = {
     date: kstDate,
     count: total,
@@ -545,6 +583,7 @@ async function main() {
     queriedAtUtc: now.toISOString(),
     severity,
     highlights,
+    secondaryHighlights: secondaryHighlightsOutput,
     categoryBreakdown,
     categorySampleSize,
     productBreakdown,
@@ -557,7 +596,7 @@ async function main() {
   console.log(
     `[saved] ${kstDate} -> ${entry.count}건`,
     severity,
-    `highlights: ${highlights.length}`,
+    `highlights: ${highlights.length} (CWE 없음 목록: ${secondaryHighlightsOutput.length})`,
     `categories(rated 전체 ${categorySampleSize}건):`,
     categoryBreakdown.map((c) => `${c.label}:${c.count}`).join(', '),
     `products:`,

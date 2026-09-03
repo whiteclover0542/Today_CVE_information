@@ -133,6 +133,8 @@ const els = {
   highlightsPrev: document.getElementById('highlights-prev'),
   highlightsNext: document.getElementById('highlights-next'),
   highlightsPageInfo: document.getElementById('highlights-page-info'),
+  highlightsSecondary: document.getElementById('highlights-secondary'),
+  highlightsSecondaryList: document.getElementById('highlights-secondary-list'),
   trendStats: document.getElementById('trend-stats'),
   trendStatsNote: document.getElementById('trend-stats-note'),
   statAvg: document.getElementById('stat-avg'),
@@ -575,18 +577,6 @@ function escapeHtml(str) {
   ));
 }
 
-const HIGHLIGHT_PREVIEW_CHARS = 140;
-
-// 서버 쪽 truncate()와 같은 규칙: 단어 중간이 아니라 공백에서 잘라 미리보기를 만든다
-function truncatePreview(text, max) {
-  if (!text) return '';
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max);
-  const lastSpace = cut.lastIndexOf(' ');
-  const safe = lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut;
-  return `${safe.trimEnd()}…`;
-}
-
 function renderHighlightItems(list) {
   return list
     .map((h) => {
@@ -594,7 +584,8 @@ function renderHighlightItems(list) {
       const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
       const fullKo = h.summaryKo || '';
       const fullEn = h.summaryEn || '';
-      const preview = truncatePreview(fullKo || fullEn, HIGHLIGHT_PREVIEW_CHARS);
+      // LLM 제목 생성에 실패했을 때는 없는 제목을 지어내지 않고 중립적인 라벨로 대체한다(위조 금지 원칙).
+      const title = h.title || '상세 내용 보기';
       const cvss = h.cvssScore != null
         ? `<span class="hl-cvss" title="${escapeHtml(h.cvssVector || 'CVSS 벡터 없음')}">CVSS ${h.cvssScore.toFixed(1)}</span>`
         : '';
@@ -621,10 +612,10 @@ function renderHighlightItems(list) {
         .filter(Boolean)
         .join('');
       const aiBlock = aiFields
-        ? `<details class="hl-details hl-ai-details">
-            <summary>🤖 AI 해설 보기 (해석 · 발생 원인 · 방지법)</summary>
-            <div class="hl-full hl-ai-full">${aiFields}</div>
-          </details>`
+        ? `<div class="hl-full hl-ai-full">
+            <span class="hl-ai-heading">🤖 AI 해설</span>
+            ${aiFields}
+          </div>`
         : '';
       return `<li>
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
@@ -632,16 +623,15 @@ function renderHighlightItems(list) {
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
         ${categoryTag}
         ${cweTag}
-        <span class="hl-summary">${escapeHtml(preview)}</span>
         ${cvssPlain}
-        <details class="hl-details">
-          <summary>원문·번역 보기</summary>
+        <details class="hl-details hl-title-details">
+          <summary class="hl-title">${escapeHtml(title)}</summary>
           <div class="hl-full">
             ${fullKoBlock}
             ${originalBlock}
           </div>
+          ${aiBlock}
         </details>
-        ${aiBlock}
       </li>`;
     })
     .join('');
@@ -652,13 +642,51 @@ let highlightsExpanded = false;
 let highlightsPage = 1;
 let highlightsLastDate = null;
 
+// CWE 분류가 없어 대표(AI 해설 대상)로 못 올라간 CVE — 번역·해설 없이 한 줄 목록으로만 보여준다.
+function renderSecondaryHighlightItems(list) {
+  return list
+    .map((s) => {
+      const color = SEVERITY_COLOR[s.severity] || '#5a5a62';
+      const label = SEVERITY_LABEL_KO[s.severity] || s.severity;
+      const cvss = s.cvssScore != null
+        ? `<span class="hl-cvss" title="${escapeHtml(s.cvssVector || 'CVSS 벡터 없음')}">CVSS ${s.cvssScore.toFixed(1)}</span>`
+        : '';
+      const categoryTag = s.category
+        ? `<span class="hl-category hl-category-static">${escapeHtml(s.category)}</span>`
+        : '';
+      return `<li>
+        <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
+        ${cvss}
+        <a class="hl-id" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.id)}</a>
+        ${categoryTag}
+      </li>`;
+    })
+    .join('');
+}
+
 function renderHighlights(entry) {
-  const list = entry.highlights;
-  if (!list || list.length === 0) {
+  const list = entry.highlights || [];
+  const secondaryList = entry.secondaryHighlights || [];
+  const hasPrimary = list.length > 0;
+  const hasSecondary = secondaryList.length > 0;
+
+  if (!hasPrimary && !hasSecondary) {
     els.highlightsCard.hidden = true;
     return;
   }
   els.highlightsCard.hidden = false;
+
+  els.highlightsSecondary.hidden = !hasSecondary;
+  if (hasSecondary) {
+    els.highlightsSecondaryList.innerHTML = renderSecondaryHighlightItems(secondaryList);
+  }
+
+  if (!hasPrimary) {
+    els.highlightsList.innerHTML = '';
+    els.highlightsMoreWrap.hidden = true;
+    els.highlightsPagination.hidden = true;
+    return;
+  }
 
   // 날짜(=오늘 기록)가 바뀌면 새로 1건부터 보여주고, 같은 날 다시 그리는 것뿐이면 펼침 상태를 유지한다.
   if (highlightsLastDate !== entry.date) {
