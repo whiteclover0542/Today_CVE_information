@@ -915,5 +915,401 @@
         ]
       }
     ]
+  },
+  {
+    "date": "2026-09-03",
+    "count": 174,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-02T15%3A00%3A00.000Z&pubEndDate=2026-09-03T11%3A35%3A29.398Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-03T11:35:29.398Z",
+    "severity": {
+      "critical": 1,
+      "high": 6,
+      "medium": 17,
+      "low": 0,
+      "unrated": 150
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-66786",
+        "severity": "CRITICAL",
+        "summaryEn": "A flaw was found in submariner. In cert-auth mode, the connection configuration is built using free-form strings from the Custom Resource Definition (CRD) without proper validation. A malicious cluster can exploit this by publishing a CableName that includes newlines and ipsec.conf directives. This allows an attacker to inject arbitrary configuration parameters or execute commands through leftupdown hooks, leading to remote code execution as root on the gateway node.",
+        "summaryKo": "Submariner에서 인증서 인증 모드 사용 시, 사용자 입력값이 적절한 검증 없이 연결 설정에 사용되는 취약점이 발견되었습니다. 공격자는 이를 악용해 임의의 설정 명령어를 주입함으로써 게이트웨이 노드에서 루트 권한으로 원격 코드를 실행할 수 있습니다.",
+        "interpretation": "시스템이 사용자가 입력한 값을 제대로 검증하지 않고 그대로 믿고 사용했기 때문에, 해커가 악성 명령어를 숨겨 보내어 시스템을 완전히 장악할 수 있게 되는 문제입니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하여 입력값 검증 로직을 보완하고 최신 버전으로 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-94",
+            "label": "코드 인젝션"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66786",
+        "cvssScore": 9.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-18058",
+        "severity": "HIGH",
+        "summaryEn": "The mobile Smart Connect dashboard UI was subject to manipulation\nby 3rd party apps. When paired with a phishing attack, this manipulation could\nresult in escalated privileges of an attacker within the system.",
+        "summaryKo": "모바일 스마트 커넥트 대시보드 UI가 제3자 앱에 의해 조작될 수 있는 취약점이 있습니다. 피싱 공격과 결합될 경우, 이 조작으로 인해 시스템 내 공격자의 권한이 상승할 수 있습니다.",
+        "interpretation": "스마트폰의 특정 화면을 다른 외부 앱이 마음대로 조작할 수 있어서, 피싱 공격과 함께 쓰이면 해커가 시스템에서 더 높은 권한을 얻어 기기를 장악할 수 있게 됩니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 업데이트를 적용하여 취약점을 패치해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-862",
+            "label": "권한 검사 누락"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18058",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-78408",
+        "severity": "HIGH",
+        "summaryEn": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+        "summaryKo": "nsenter 도구의 --join-cgroup 옵션이 대상 cgroup.procs 파일을 root 권한으로 연 후 파일 descriptor를 닫지 않아, 공격자가 제어하는 대상 내에서 실행된 프로그램이 호스트 프로세스를 cgroup 간에 이동시키는 root의 권한을 상속받을 수 있는 취약점입니다.",
+        "interpretation": "특정 명령어 도구의 관리 소홀로 인해, 공격자가 시스템 관리자의 권한을 악용하여 관련 없는 중요 시스템 프로세스를 마음대로 이동시키거나 강제로 종료할 수 있게 되는 보안 취약점입니다.",
+        "cause": "파일을 연 시점의 권한과 이후 실제 작업을 수행하는 시점의 권한 검증 방식 간의 불일치로 인해 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하여 nsenter 도구의 cgroup 파일 처리 방식을 수정해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-775",
+            "label": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+        "cvssScore": 7.9,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-78409",
+        "severity": "HIGH",
+        "summaryEn": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+        "summaryKo": "Linux 6.15 이상 버전의 X-mount.subdir 옵션은 open_tree() 호출 시 AT_SYMLINK_NOFOLLOW 플래그를 사용하지만, 이는 중간 심볼릭 링크의 탐색을 막거나 새로운 마운트 파일시스템 내부로 경로가 해결되도록 제한하지 못합니다. 이로 인해 권한이 없는 로컬 사용자가 fstab에 설정된 항목을 악용하여 호스트의 임의 경로를 마운트 지점에 연결할 수 있습니다.",
+        "interpretation": "파일 시스템을 연결하는 과정에서 보안 검사가 미흡하여, 공격자가 시스템 내부의 다른 중요한 파일이나 폴더에 접근할 수 있는 위험이 있습니다.",
+        "cause": "파일이나 디렉터리 경로를 처리할 때 심볼릭 링크로 인한 우회 경로를 완벽하게 차단하지 못하여 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하여 관련 커널 버전을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-59",
+            "label": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+        "cvssScore": 7,
+        "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      },
+      {
+        "id": "CVE-2026-78410",
+        "severity": "HIGH",
+        "summaryEn": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+        "summaryKo": "util-linux에서 취약점이 발견되었습니다. 제한된 바인드 마운트는 fstab에서 소스 경로를 가져오지만 권한 있는 마운트가 수행되기 전에 해당 소스를 고정하지 않습니다. 권한이 없는 로컬 사용자가 승인된 소스나 쓰기 가능한 상위 디렉터리를 교체하여 SUID mount(8)가 다른 호스트 디렉터리를 바인드하도록 유도할 수 있습니다. fstab 항목에 소유권이나 권한 설정이 포함된 경우, 루트 권한으로 리디렉션된 파일의 소유권이나 권한이 변경될 수 있습니다.",
+        "interpretation": "컴퓨터의 특정 폴더를 연결하는 과정에서 순서상의 허점을 악용해, 공격자가 원래 연결하려던 폴더 대신 몰래 다른 중요한 폴더를 연결되도록 바꿔치기할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 확인한 시점과 실제 사용하는 시점 사이에 상태가 바뀔 수 있어서 발생합니다.",
+        "mitigation": "제공되는 최신 보안 패치를 적용하여 util-linux를 업데이트하고 시스템 설정을 점검해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-367",
+            "label": "경쟁 조건(TOCTOU)"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+        "cvssScore": 7.8,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-84841",
+        "severity": "HIGH",
+        "summaryEn": "A security flaw has been discovered in tsi-coop tsi-dpdp-cms up to 0.5.0. This vulnerability affects unknown code. The manipulation results in client-side enforcement of server-side security. The attack can be launched remotely. The exploit has been released to the public and may be used for attacks. Upgrading to version 0.5.1 is able to resolve this issue. It is recommended to upgrade the affected component.",
+        "summaryKo": "tsi-coop tsi-dpdp-cms 0.5.0 이하 버전에서 보안 취약점이 발견되었습니다. 이 취약점은 원격으로 악용될 수 있으며, 서버 측에서 처리해야 할 보안 검증을 클라이언트 측에 강제하는 문제가 발생합니다.",
+        "interpretation": "보안 확인 절차를 서버가 아닌 사용자 컴퓨터(브라우저 등)에서 처리하도록 잘못 만들어져, 공격자가 이를 조작해 보안을 쉽게 우회할 수 있는 취약점입니다.",
+        "cause": null,
+        "mitigation": "영향을 받는 컴포넌트를 버전 0.5.1 이상으로 업그레이드하십시오.",
+        "cwe": [
+          {
+            "id": "CWE-602",
+            "label": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84841",
+        "cvssScore": 7.3,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-82524",
+        "severity": "HIGH",
+        "summaryEn": "UnoPim before 2.1.5 contains an authenticated file upload vulnerability that allows authenticated administrators to upload arbitrary PHP files through the TinyMCE image upload endpoint due to missing file extension and MIME type validation. Attackers can upload a PHP web shell to the public storage disk and execute arbitrary operating system commands on the server by accessing the uploaded file at the URL returned in the server response.",
+        "summaryKo": "2.1.5 버전 미만의 UnoPim에는 인증된 관리자가 TinyMCE 이미지 업로드 엔드포인트를 통해 임의의 PHP 파일을 업로드할 수 있는 취약점이 존재합니다. 파일 확장자와 MIME 타입 검증이 누락되어 있어, 공격자는 퍼블릭 스토리지에 PHP 웹 셸을 업로드하고 해당 파일에 접근하여 서버에서 임의의 운영체제 명령을 실행할 수 있습니다.",
+        "interpretation": "관리자 권한을 가진 공격자가 시스템에 악성 프로그램을 몰래 올려서 서버를 완전히 장악할 수 있는 위험한 보안 취약점입니다.",
+        "cause": "일반적으로 업로드되는 파일의 종류와 내용을 제한하지 않아서 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하여 최신 버전으로 업그레이드하고, 파일 업로드 시 확장자와 MIME 타입 검증 로직을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-434",
+            "label": "위험한 파일 업로드"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82524",
+        "cvssScore": 7.2,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
+        "category": "위험한 파일 업로드"
+      },
+      {
+        "id": "CVE-2026-84839",
+        "severity": "MEDIUM",
+        "summaryEn": "A vulnerability was determined in tsi-coop tsi-dpdp-cms up to 0.5.0. Affected by this issue is some unknown functionality of the file web.xml of the component Admin Console/DPO Compliance Console. Executing a manipulation can lead to missing authentication. It is possible to launch the attack remotely. The exploit has been publicly disclosed and may be utilized. Upgrading to version 0.5.1 can resolve this issue. It is suggested to upgrade the affected component.",
+        "summaryKo": "tsi-coop의 tsi-dpdp-cms 0.5.0 버전 이하에서 관리자 콘솔의 web.xml 파일을 대상으로 하는 취약점이 발견되었습니다. 이 취약점은 인증 누락을 초래할 수 있으며 원격으로 공격을 수행할 수 있습니다.",
+        "interpretation": "비밀번호나 로그인 과정 없이도 관리자 화면에 접근할 수 있어 해커가 시스템을 마음대로 조작할 수 있는 보안 구멍이 존재합니다.",
+        "cause": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생했습니다.",
+        "mitigation": "제조사가 제공하는 최신 버전인 0.5.1 이상으로 업그레이드하여 문제를 해결해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-287",
+            "label": "부적절한 인증"
+          },
+          {
+            "id": "CWE-306",
+            "label": "인증 누락"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84839",
+        "cvssScore": 5.3,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-75134",
+        "severity": "MEDIUM",
+        "summaryEn": "SEOWriting plugin for WordPress through 1.12.5 contains a stored cross-site scripting vulnerability that allows authenticated contributors to inject malicious JavaScript by exploiting an overly permissive KSES allowlist that explicitly permits the onload event handler on iframe elements. Attackers can store crafted JavaScript payloads in post content that execute when the affected post is viewed or previewed by higher-privileged users, potentially leading to privilege escalation or account compromise.",
+        "summaryKo": "워드프레스용 SEOWriting 플러그인 1.12.5 버전 이내는 권한이 있는 기고자가 iframe 요소의 onload 이벤트 핸들러를 허용하는 과도하게 허술한 KSES 허용 목록을 악용하여 악성 자바스크립트를 주입할 수 있는 저장형 크로스사이트 스크립팅(XSS) 취약점을 포함하고 있습니다.",
+        "interpretation": "공격자가 게시물에 악성 코드를 숨겨두어, 관리자 같은 높은 권한을 가진 사용자가 해당 게시물을 볼 때 그 악성 코드가 실행되면서 계정을 빼앗기거나 권한이 높아질 수 있는 위험이 있습니다.",
+        "cause": "사용자 입력값을 적절하게 검증하거나 이스케이프 처리하지 않고 웹페이지에 그대로 출력하거나 허용하여 발생합니다.",
+        "mitigation": "최신 버전의 플러그인으로 업데이트를 적용하고, 신뢰할 수 없는 사용자의 입력값에 대한 필터링 설정을 점검해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-79",
+            "label": "크로스사이트 스크립팅(XSS)"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134",
+        "cvssScore": 6.4,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-84852",
+        "severity": "MEDIUM",
+        "summaryEn": "A security vulnerability has been detected in Reader Tools PDF Reader App 98.8 on Android. The affected element is the function ActSplashNew.handleDeeplink of the component File Handler. The manipulation of the argument _display_name leads to path traversal. An attack has to be approached locally. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
+        "summaryKo": "안드로이드용 Reader Tools PDF Reader App 98.8 버전의 File Handler 컴포넌트 내 ActSplashNew.handleDeeplink 함수에서 보안 취약점이 발견되었습니다. _display_name 인자를 조작하면 경로 순회 공격으로 이어질 수 있습니다.",
+        "interpretation": "해커가 기기 내에서 악의적인 경로를 입력하여 원래 접근할 수 없는 중요한 파일이나 시스템 영역에 접근할 수 있게 되는 위험한 취약점입니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "mitigation": "제조사가 제공하는 보안 패치를 적용하거나 최신 버전으로 앱을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-22",
+            "label": "경로 순회"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852",
+        "cvssScore": 4.4,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      }
+    ],
+    "categoryBreakdown": [
+      {
+        "key": "dos",
+        "label": "서비스 거부(DoS)",
+        "count": 8,
+        "examples": [
+          {
+            "id": "CVE-2026-84856",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84856"
+          },
+          {
+            "id": "CVE-2026-84885",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84885"
+          },
+          {
+            "id": "CVE-2026-84887",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84887"
+          }
+        ]
+      },
+      {
+        "key": "rce",
+        "label": "원격 코드 실행",
+        "count": 3,
+        "examples": [
+          {
+            "id": "CVE-2026-66786",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66786"
+          }
+        ]
+      },
+      {
+        "key": "auth-bypass",
+        "label": "인증 우회",
+        "count": 3,
+        "examples": [
+          {
+            "id": "CVE-2026-84839",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84839"
+          },
+          {
+            "id": "CVE-2026-84840",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84840"
+          }
+        ]
+      },
+      {
+        "key": "priv-esc",
+        "label": "권한 상승",
+        "count": 3,
+        "examples": [
+          {
+            "id": "CVE-2026-75134",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134"
+          },
+          {
+            "id": "CVE-2026-18058",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18058"
+          },
+          {
+            "id": "CVE-2026-78408",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408"
+          }
+        ]
+      },
+      {
+        "key": "path-traversal",
+        "label": "경로 순회",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-84852",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852"
+          },
+          {
+            "id": "CVE-2026-78409",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409"
+          }
+        ]
+      },
+      {
+        "key": "access-control",
+        "label": "접근 통제 오류",
+        "count": 2,
+        "examples": []
+      },
+      {
+        "key": "info-disclosure",
+        "label": "정보 노출",
+        "count": 2,
+        "examples": []
+      },
+      {
+        "key": "file-upload",
+        "label": "위험한 파일 업로드",
+        "count": 1,
+        "examples": []
+      },
+      {
+        "key": "other",
+        "label": "기타",
+        "count": 0,
+        "examples": []
+      }
+    ],
+    "categorySampleSize": 24,
+    "productBreakdown": [
+      {
+        "key": "microsoft",
+        "label": "Microsoft/Windows",
+        "count": 3,
+        "examples": [
+          {
+            "id": "CVE-2026-75135",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75135"
+          },
+          {
+            "id": "CVE-2026-75136",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75136"
+          },
+          {
+            "id": "CVE-2026-75137",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75137"
+          }
+        ]
+      },
+      {
+        "key": "linux",
+        "label": "Linux/커널",
+        "count": 2,
+        "examples": [
+          {
+            "id": "CVE-2026-78409",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409"
+          },
+          {
+            "id": "CVE-2026-78410",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410"
+          }
+        ]
+      },
+      {
+        "key": "php",
+        "label": "PHP",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-82524",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82524"
+          }
+        ]
+      },
+      {
+        "key": "wordpress",
+        "label": "WordPress",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-75134",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134"
+          }
+        ]
+      },
+      {
+        "key": "google-android",
+        "label": "Google/Android",
+        "count": 1,
+        "examples": [
+          {
+            "id": "CVE-2026-84852",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852"
+          }
+        ]
+      }
+    ]
   }
 ]
