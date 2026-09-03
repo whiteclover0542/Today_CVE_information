@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=38" />
+<link rel="stylesheet" href="assets/style.css?v=39" />
 </head>
 <body>
 <main class="dashboard">
@@ -29,6 +29,19 @@
             "네트워크에서 접근 가능"·"공격 난이도"·"권한 필요 여부"·"사용자 개입 필요 여부" 같은 공격 조건도 이 점수를 매기는 기준이에요
             — 조건이 쉬울수록(멀리서·권한 없이·클릭 없이 공격 가능) 점수가 높아져요.
             유형 키워드(🏷)는 AI 없이 설명 문구를 규칙 매칭한 것으로, 각 태그를 누르면 바로 아래에 뜻이 나와요.
+          </p>
+        </div>
+      </details>
+      <details class="about-details">
+        <summary>CWE가 뭔가요?</summary>
+        <div class="glossary">
+          <p>
+            <b>CWE</b>(Common Weakness Enumeration)는 "SQL 인젝션", "크로스사이트 스크립팅(XSS)"처럼
+            소프트웨어에서 반복적으로 나타나는 <b>결함의 종류</b>에 국제표준화기구 MITRE가 붙인 공식 분류예요.
+            CVE가 "이번에 발견된 이 사건 하나"를 가리키는 사건번호라면, CWE는 그 사건이 <b>어떤 유형의 범죄인지</b>를 가리키는 죄목이라고 보면 비슷해요.
+            이 정보판에서 CWE는 NVD가 각 CVE에 공식적으로 매긴 값을 그대로 가져와 두 곳에 씁니다 —
+            대표 CVE 카드의 CWE 태그(누르면 설명이 펼쳐져요)와, "오늘 등록분 CWE 유형" 집계 차트예요.
+            AI 해설(해석·발생 원인·방지법)도 이 공식 CWE 값을 근거로 삼아 지어내지 않도록 하고 있어요.
           </p>
         </div>
       </details>
@@ -95,7 +108,7 @@
   </section>
 
   <section class="category-card" id="category-card" hidden>
-    <h2>🏷️ 오늘 등록분 유형</h2>
+    <h2>🏷️ 오늘 등록분 CWE 유형</h2>
     <ul class="category-bars" id="category-bars"></ul>
     <div class="bar-pagination" id="category-pagination" hidden>
       <button type="button" id="category-prev">← 이전 10개</button>
@@ -118,7 +131,7 @@
 
   <section class="category-card" id="monthly-category-card" hidden>
     <div class="category-card-header">
-      <h2>📅 월별 유형 비교</h2>
+      <h2>📅 월별 CWE 유형 비교</h2>
       <select id="month-select" class="month-select" aria-label="기준 월 선택"></select>
     </div>
     <p class="monthly-total" id="monthly-category-total"></p>
@@ -195,6 +208,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=38"></script>
+<script src="assets/app.js?v=39"></script>
 </body>
 </html>

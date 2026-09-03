@@ -661,14 +661,35 @@ header h1 {
 }
 
 .hl-cwe {
+  font: inherit;
   flex-shrink: 0;
   align-self: center;
   font-size: 0.72rem;
+  font-weight: 700;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
   border: 1px dashed var(--border);
+  background: var(--card-bg-2);
   color: var(--muted);
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.hl-cwe:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.hl-cwe-desc {
+  flex-basis: 100%;
+  margin: 0.3rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .hl-ai-full {

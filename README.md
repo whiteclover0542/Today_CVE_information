@@ -11,7 +11,7 @@
 ```
 GitHub Actions(매일 09:00 KST)
     → NVD에서 오늘 등록된 CVE 조회
-    → 심각도·유형·제품 집계, "기타"만 AI로 보조 재분류
+    → 심각도·CWE 유형·제품 집계, 대표 CVE는 AI가 번역·해설 생성
     → data/history.json 에 기록 추가·커밋
     → GitHub Pages가 그 파일을 읽어 대시보드에 렌더링
 ```
@@ -30,11 +30,11 @@ GitHub Actions(매일 09:00 KST)
 
 ![대표 CVE 카드](docs/screenshots/highlights.png)
 
-### 3. 오늘 등록분 유형 분류
+### 3. 오늘 등록분 CWE 유형 분류
 
-심각도가 평가된 CVE 전체의 설명을 키워드 규칙(원격 코드 실행·인증 우회·SQL 인젝션 등)으로 분류해 막대 그래프로 보여줍니다. 규칙에 안 걸려 "기타"로 남는 설명만 **Gemini API 무료 티어로 한 번 더** 재분류합니다(같은 유형 목록 안에서만 고르도록 강제). 번역 API는 이 분류 과정에 쓰지 않습니다.
+심각도가 평가된 CVE 전체를 NVD가 공식적으로 매긴 CWE(취약점 유형, Common Weakness Enumeration) 분류로 집계해 막대 그래프로 보여줍니다. CVE 하나에 CWE가 여러 개면 그중 대표(주 분류) 하나만 세고, NVD가 아직 CWE를 안 매긴 CVE는 "CWE 미분류"로 묶입니다 — 규칙 매칭이나 AI 추측 없이 공식 값만 그대로 집계합니다. 라벨을 누르면 그 CWE가 무엇인지 설명이 펼쳐집니다.
 
-![오늘 등록분 유형 막대 그래프](docs/screenshots/category.png)
+![오늘 등록분 CWE 유형 막대 그래프](docs/screenshots/category.png)
 
 ### 4. 오늘 등록분 제품·벤더
 
@@ -42,9 +42,9 @@ GitHub Actions(매일 09:00 KST)
 
 ![제품·벤더 막대 그래프](docs/screenshots/product.png)
 
-### 5. 월별 유형·제품 비교
+### 5. 월별 CWE 유형·제품 비교
 
-월 선택 드롭다운으로 과거 달까지 거슬러 올라가, 그 달에 쌓인 기록을 유형별·제품별로 합산해 비교할 수 있습니다.
+월 선택 드롭다운으로 과거 달까지 거슬러 올라가, 그 달에 쌓인 기록을 CWE 유형별·제품별로 합산해 비교할 수 있습니다.
 
 ![월별 유형 비교](docs/screenshots/monthly-comparison.png)
 
@@ -69,18 +69,18 @@ timeout · 인증 실패 · 호출 제한 · 오프라인 · 응답 형식 변�
 [GitHub Actions: 매일 00:00 UTC(=09:00 KST) 실행, workflow_dispatch로 수동 실행도 가능]
         │  scripts/fetch-daily-count.mjs 실행
         │  1) NVD CVE API 2.0 호출 (키 없이, 오늘 KST 00:00~실행 시각 범위)
-        │  2) 심각도별 CVSS·설명을 모아 규칙 기반으로 유형·제품/벤더 집계
-        │  3) 규칙에 안 걸린 "기타" 설명만 Gemini API(시크릿 GEMINI_API_KEY)로 재분류
+        │  2) 심각도별 CVSS·CWE·설명을 모아 CWE 유형(공식 분류)·제품/벤더(규칙 기반) 집계
+        │  3) 대표 CVE 카드의 🏷 유형 태그 중 규칙에 안 걸린 "기타"만 Gemini API(시크릿 GEMINI_API_KEY)로 보정
         │  4) 심각도 상위 대표 CVE마다 Gemini로 번역+해석+발생 원인(CWE 근거)+방지법을 한 번에 생성(실패 시 원문만 노출)
         ▼
-  data/history.json 에 건수·심각도 분포·유형/제품 집계·대표 CVE(CVSS 포함) 추가
+  data/history.json 에 건수·심각도 분포·CWE 유형/제품 집계·대표 CVE(CVSS 포함) 추가
   (같은 날짜 기록이 이미 있으면 건너뜀 → 하루 1건, 중복 방지)
         │  git commit & push
         ▼
 [GitHub Pages: index.html + assets/app.js]
         │  같은 저장소의 data/history.json을 fetch (동일 출처, 서버 불필요)
         ▼
-  브라우저에서 값·출처·심각도·위험도·CVSS·유형/제품 분포·월별 비교·추이·비교를 렌더링
+  브라우저에서 값·출처·심각도·위험도·CVSS·CWE 유형/제품 분포·월별 비교·추이·비교를 렌더링
 ```
 
 서버리스 프록시 없이 **정적 사이트 + 하루 1회 배치**로만 구성되어 있습니다. NVD API는 키 없이도 30초당 5회까지 호출할 수 있어(하루 1회 호출이면 충분), 브라우저에서 필요한 값에는 비밀값을 아예 만들지 않는 쪽을 택했습니다. Gemini 키는 배치 실행 환경(GitHub Actions)에만 존재합니다.
@@ -91,7 +91,7 @@ timeout · 인증 실패 · 호출 제한 · 오프라인 · 응답 형식 변�
 - 배치: Node.js 20, GitHub Actions (`schedule` cron + `workflow_dispatch`)
 - 데이터 출처: [NVD CVE API 2.0](https://nvd.nist.gov/developers/vulnerabilities) (무키)
 - 번역·해설: Gemini API 무료 티어 (대표 CVE 번역+해석+발생 원인+방지법 생성, 실패해도 원문으로 대체)
-- 보조 분류: Gemini API 무료 티어 (규칙에 안 걸린 "기타" 유형만, 배치 환경 시크릿으로만 호출)
+- 보조 분류: Gemini API 무료 티어 (대표 CVE 카드의 🏷 유형 태그 중 규칙에 안 걸린 "기타"만 보정, 배치 환경 시크릿으로만 호출 — "오늘 등록분 CWE 유형" 집계는 NVD 공식 값을 그대로 써서 재분류 대상이 아님)
 - 배포: GitHub Pages
 
 ## 프로젝트 구조

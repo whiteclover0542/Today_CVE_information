@@ -19,6 +19,9 @@
 | 8 | LLM 기반 "오늘의 브리핑" 요약 카드 | ⬜ | 아직 없음 — 필요성·형태부터 검토 |
 | 9 | 대표 CVE 카드에 LLM 생성 제목 추가 + 클릭해야 내용 노출 | ✅ | 내용을 바로 나열하지 않고, Gemini가 생성한 한 줄 제목을 먼저 보여주고 클릭(`<details>`)해야 번역·원문·AI 해설이 펼쳐지도록 변경 |
 | 10 | 대표 CVE를 "CWE 있음"만으로 제한 + CWE 없는 CVE는 별도 목록 | ✅ | 대표(AI 해설) 후보를 CWE 있는 CVE로만 한정, CWE 없는 CVE는 `secondaryHighlights`에 담아 카드 하단에 번역·해설 없이 목록으로만 노출 |
+| 11 | 대표 CVE 카드: CWE·유형 태그 순서 변경 + CWE 클릭 시 설명 노출 | ✅ | CWE 태그를 유형 태그보다 앞에 배치, CWE 태그도 유형 태그처럼 클릭하면 `CWE_INFO`의 hint가 펼쳐지도록 변경 |
+| 12 | "오늘 등록분 유형"/"월별 유형 비교"를 CWE 기반 집계로 전환 | ✅ | 정규식+Gemini 보정 방식(`categoryBreakdown`)을 폐지하고 NVD 공식 CWE를 그대로 집계하는 `cweBreakdown`으로 교체. CVE당 대표 CWE 1개만 집계, CWE 없으면 "CWE 미분류" |
+| 13 | 헤더에 "CWE가 뭔가요?" 설명 추가 | ✅ | CVE·CVSS 글로서리 옆에 CWE 개념(공식 표준 유형 분류, CVE=사건번호·CWE=죄목 비유) 설명 추가 |
 
 ## 지금 서비스에 이미 있는 것 (과제 단계에서 완성, 유지)
 
@@ -43,16 +46,21 @@
 - 2026-09-03: 대표 CVE 카드가 번역·원문·AI 해설을 바로 나열해 보여주던 것을, LLM이 생성한 한 줄 제목(`title`)을 먼저 보여주고 그 제목을 클릭해야만 내용이 펼쳐지는 구조로 변경. `explainHighlightWithLlm`(`scripts/fetch-daily-count.mjs`) 응답 스키마에 `title` 필드를 추가(다른 필드와 동일하게 한 번의 Gemini 호출로 같이 생성, 지어내지 않는 원칙 유지). 프론트(`assets/app.js`)는 기존에 분리돼 있던 "원문·번역 보기"/"AI 해설 보기" 두 개의 `<details>`를 제목 하나짜리 `<details>`로 합치고, 미리보기 텍스트(`hl-summary`, `truncatePreview`)는 제거. `title`이 없을 때(LLM 실패)는 없는 제목을 지어내지 않고 "상세 내용 보기"로 대체. Playwright로 로컬 스크래치 사이트(제목 있음/없음 두 케이스)를 띄워 클릭 전엔 내용이 숨겨지고 클릭 후에만 펼쳐지는지 스크린샷으로 확인.
 - 2026-09-03: `workflow_dispatch`로 실제 배치를 1회 수동 실행(Actions run #16, 3분 26초, Success)해 검증 완료. `data/history.json`에 오늘(09-03) 대표 CVE 10건 전부 `summaryKo`/`interpretation`/`cause`/`mitigation`/`cwe`가 채워졌고(1건만 매핑에 없는 CWE라 `cause`가 정상적으로 빈 값), 배포된 GitHub Pages에도 즉시 반영됨을 fetch로 직접 확인. Gemini 호출 11회가 한도 문제 없이 끝나 다음에할일 1·2번을 완료 처리.
 - 2026-09-03: 대표 CVE 선정 기준을 "CWE 분류가 있는 CVE만"으로 좁힘 — CWE가 없는 CVE에 억지로 `cause`/`mitigation`을 채우거나 아예 노출에서 빼는 대신, 별도의 `secondaryHighlights` 목록(카드 하단, 심각도·CVSS·유형만 표시, LLM 호출 없음)으로 분리해서 보여주기로 함. 기존 `pickFromLevel` 선정 로직에 `cwe.length === 0`이면 건너뛰는 조건을 추가하고, 그렇게 제외된 CVE 중 심각도 상위 `MAX_SECONDARY_HIGHLIGHTS`(20)건을 별도로 수집. LLM 호출을 안 하는 이유는 비용 절감뿐 아니라 애초에 grounding할 CWE가 없어 해설을 붙일 근거가 없기 때문(§3 원칙).
+- 2026-09-03: 카드 위에 규칙 기반 🏷 유형 태그와 공식 CWE 태그가 나란히 있는 게 중복스럽다는 지적을 받아 CWE를 1차 정보로 정리. (1) 카드에서 CWE 태그를 유형 태그보다 앞에 배치하고 클릭하면 설명이 펼쳐지도록 변경(`extractCwe`가 CWE_INFO의 `hint`도 함께 반환하도록 확장). (2) "오늘 등록분 유형"/"월별 유형 비교" 집계 자체를 규칙 기반(`categoryBreakdown`)에서 NVD 공식 CWE 기반(`cweBreakdown`)으로 전환 — 이 집계는 이제 규칙 매칭이나 Gemini 재분류를 전혀 안 씀. 카드의 🏷 유형 태그(개별 CVE용)는 기존 규칙 시스템을 그대로 유지 — 이번 변경은 "집계 차트"에만 적용되고 "카드의 유형 태그" 존재 자체는 안 건드림. (3) 헤더에 "CWE가 뭔가요?" 설명 추가.
+- 2026-09-03: `renderCategoryBarList`/`createBarListPager`에서 `useGlossary` 플래그 + 프론트 `CATEGORY_GLOSSARY` 조회 방식을 제거하고, 각 breakdown 항목이 백엔드에서 만든 `desc` 필드를 직접 들고 오도록 바꿈 — 서버·클라 설명이 어긋날 일이 없어짐(제품 목록은 원래도 설명이 없어서 그대로 영향 없음).
 
 ## 다음에 할 일
 
-1. 지금까지의 변경(제목 기능 + CWE 필터링/secondary 목록)을 커밋·push하고, 다시 `workflow_dispatch`로 한 번 더 실행해 `title`과 `secondaryHighlights`가 실제 배치에서도 정상 채워지는지 확인
+1. 지금까지의 변경(제목 기능 + CWE 필터링/secondary 목록 + CWE 기반 유형 집계)을 커밋·push하고, 다시 `workflow_dispatch`로 한 번 더 실행해 `title`·`secondaryHighlights`·`cweBreakdown`이 실제 배치에서도 정상 채워지는지 확인
 2. CWE 필터링 적용 후 실제로 대표 CVE가 매일 몇 건씩 나오는지(=CWE 있는 CVE 비율) 며칠 지켜보고, 너무 적게 나오는 날이 있으면 기준을 다시 검토
 3. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
 4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
 
-## 구현 메모 (CVE별 해설 기능)
+## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 
-- 관련 코드: `scripts/fetch-daily-count.mjs`의 `CWE_INFO`·`extractCwe`·`explainHighlightWithLlm`(백엔드), `assets/app.js`의 `renderHighlightItems`·`renderHighlights`·`renderSecondaryHighlightItems`(프론트).
-- 데이터 스키마: `highlights[]`(CWE 있는 CVE만, AI 해설 포함) — `interpretation`(해석)·`cause`(발생 원인)·`mitigation`(방지·완화 방법)·`cwe`(`[{id, label}]`)·`title`(제목, 클릭해야 보이는 상세 내용의 진입점)·`summaryKo`(Gemini 번역). `secondaryHighlights[]`(CWE 없는 CVE) — `id`·`severity`·`url`·`cvssScore`·`cvssVector`·`cvssPlain`·`category`만, 번역·AI 해설 없음.
-- 검증 상태: 번역+해설(title 이전 버전)은 실제 배치(#16)로 확인 완료. `title`과 CWE 필터링/`secondaryHighlights`는 로컬 스크래치 데이터로 화면 렌더링만 확인했고, 아직 실제 배치로는 못 돌려봄 — 커밋·push 후 한 번 더 확인 필요.
+- 관련 코드: `scripts/fetch-daily-count.mjs`의 `CWE_INFO`·`extractCwe`·`explainHighlightWithLlm`(백엔드), `assets/app.js`의 `renderHighlightItems`·`renderHighlights`·`renderSecondaryHighlightItems`·`renderCategory`·`renderCategoryBarList`(프론트).
+- 데이터 스키마:
+  - `highlights[]`(CWE 있는 CVE만, AI 해설 포함) — `interpretation`(해석)·`cause`(발생 원인)·`mitigation`(방지·완화 방법)·`cwe`(`[{id, label, hint}]`)·`title`(제목, 클릭해야 보이는 상세 내용의 진입점)·`summaryKo`(Gemini 번역).
+  - `secondaryHighlights[]`(CWE 없는 CVE) — `id`·`severity`·`url`·`cvssScore`·`cvssVector`·`cvssPlain`·`category`만, 번역·AI 해설 없음.
+  - `cweBreakdown[]`(그날 심각도 평가된 CVE 전체를 CWE로 집계) — `key`(CWE id 또는 `'none'`)·`label`·`count`·`desc`(hint)·`examples`. 기존 `categoryBreakdown` 필드는 더 이상 저장하지 않음(과거 날짜 기록에는 남아있지만 새 프론트는 안 읽음 — 그런 날은 "오늘 등록분 CWE 유형" 카드가 자연히 빈 상태로 표시됨).
+- 검증 상태: 번역+해설(title 이전 버전)은 실제 배치(#16)로 확인 완료. `title`·CWE 필터링/`secondaryHighlights`·CWE 기반 `cweBreakdown`·카드 태그 순서/클릭은 로컬 스크래치 데이터로 화면 렌더링만 확인했고, 아직 실제 배치로는 못 돌려봄 — 커밋·push 후 한 번 더 확인 필요.

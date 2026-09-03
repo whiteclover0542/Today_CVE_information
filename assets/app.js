@@ -334,16 +334,16 @@ const CATEGORY_GLOSSARY = {
 const BAR_LIST_PAGE_SIZE = 10;
 
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
-// useGlossary=false면 설명 문구 없이 예시 링크만 보여줌 — 제품·벤더는 "기타"가 유형 쪽 글로서리와 라벨이 겹쳐서
-// CATEGORY_GLOSSARY를 그대로 쓰면 엉뚱한(공격 유형용) 설명이 섞여 나오기 때문.
+// 설명 문구는 각 항목이 스스로 들고 있는 desc를 그대로 씀(백엔드가 CWE_INFO에서 채워 보냄) — 프론트에
+// 별도 글로서리 사전을 두지 않아 서버·클라 설명이 어긋날 일이 없다. desc가 없으면 그냥 설명 없이 예시 링크만 보여줌.
 // maxCountOverride를 주면 breakdown 자체의 최댓값 대신 그 값을 100% 기준으로 씀 — 페이지네이션에서
 // 지금 보이는 조각이 아니라 전체 목록 기준으로 막대 비율을 고정할 때 씀(createBarListPager 참고).
-function renderCategoryBarList(breakdown, useGlossary = true, maxCountOverride = null) {
+function renderCategoryBarList(breakdown, maxCountOverride = null) {
   const maxCount = maxCountOverride ?? Math.max(...breakdown.map((c) => c.count));
   return breakdown
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
-      const desc = useGlossary ? (CATEGORY_GLOSSARY[c.label] || '') : '';
+      const desc = c.desc || '';
       const examples = c.examples || [];
       const examplesHtml = examples.length
         ? `<ul class="category-bar-examples">${examples
@@ -372,7 +372,6 @@ function renderCategoryBarList(breakdown, useGlossary = true, maxCountOverride =
 // 2페이지처럼 작은 값들만 모인 페이지에서 그중 최댓값이 100% 막대로 보여 착시가 생기기 때문.
 function createBarListPager(elsSet) {
   let breakdown = [];
-  let useGlossary = true;
   let page = 1;
 
   function render() {
@@ -380,7 +379,7 @@ function createBarListPager(elsSet) {
     page = Math.min(Math.max(page, 1), totalPages);
     const start = (page - 1) * BAR_LIST_PAGE_SIZE;
     const fullListMax = breakdown.length ? Math.max(...breakdown.map((c) => c.count)) : null;
-    elsSet.bars.innerHTML = renderCategoryBarList(breakdown.slice(start, start + BAR_LIST_PAGE_SIZE), useGlossary, fullListMax);
+    elsSet.bars.innerHTML = renderCategoryBarList(breakdown.slice(start, start + BAR_LIST_PAGE_SIZE), fullListMax);
     elsSet.pagination.hidden = breakdown.length <= BAR_LIST_PAGE_SIZE;
     elsSet.pageInfo.textContent = `${page} / ${totalPages}`;
     elsSet.prevBtn.disabled = page <= 1;
@@ -398,9 +397,8 @@ function createBarListPager(elsSet) {
   });
 
   return {
-    setData(newBreakdown, { useGlossary: glossaryFlag = true, resetPage = false } = {}) {
+    setData(newBreakdown, { resetPage = false } = {}) {
       breakdown = newBreakdown;
-      useGlossary = glossaryFlag;
       if (resetPage) page = 1;
       render();
     },
@@ -422,9 +420,9 @@ const productPager = createBarListPager({
   pageInfo: els.productPageInfo,
 });
 
-// LLM 없이 규칙(키워드) 기반으로 분류한 유형 분포 — data/history.json의 categoryBreakdown을 그대로 시각화
+// NVD 공식 CWE(취약점 유형) 분류를 집계한 결과 — data/history.json의 cweBreakdown을 그대로 시각화
 function renderCategory(entry) {
-  const breakdown = entry.categoryBreakdown;
+  const breakdown = entry.cweBreakdown;
   if (!breakdown || breakdown.length === 0 || !entry.categorySampleSize) {
     els.categoryCard.hidden = true;
     return;
@@ -433,7 +431,7 @@ function renderCategory(entry) {
   categoryPager.setData(breakdown);
 
   els.categoryNote.textContent =
-    `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 전체를 키워드로 분류한 결과예요(번역은 안 함). 규칙에 안 걸리는 설명은 AI가 한 번 더 보고 같은 유형 목록 중에서 골라주며, 그래도 안 맞으면 "기타"로 남아요. 아직 심각도가 안 매겨진 CVE는 포함되지 않아 전체(${entry.count}건) 비율과는 다를 수 있어요.`;
+    `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건을 NVD 공식 CWE(취약점 유형) 분류로 집계한 결과예요. CVE 하나에 CWE가 여러 개 매겨져 있으면 그중 첫 번째(주 분류)만 반영하고, NVD가 아직 CWE를 안 매긴 CVE는 "CWE 미분류"로 묶여요. 아직 심각도가 안 매겨진 CVE는 포함되지 않아 전체(${entry.count}건) 비율과는 다를 수 있어요.`;
 }
 
 // 공격 유형과 같은 CVE 집합(심각도 평가된 전체)을 제품·벤더 이름 목록으로 한 번 더 분류한 결과 — 미리 정해둔 목록에 없으면 "기타"
@@ -444,7 +442,7 @@ function renderProduct(entry) {
     return;
   }
   els.productCard.hidden = false;
-  productPager.setData(breakdown, { useGlossary: false });
+  productPager.setData(breakdown);
 
   els.productNote.textContent =
     `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
@@ -472,7 +470,7 @@ function aggregateMonthlyBreakdown(data, month, field) {
           if (!prev.examples.some((e) => e.id === ex.id)) prev.examples.push(ex);
         }
       } else {
-        totals.set(c.key, { label: c.label, count: c.count, examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
+        totals.set(c.key, { label: c.label, count: c.count, desc: c.desc || '', examples: (c.examples || []).slice(0, MONTHLY_EXAMPLES_LIMIT) });
       }
     }
   }
@@ -483,8 +481,7 @@ function aggregateMonthlyBreakdown(data, month, field) {
 // 월별 유형/제품 카드 두 개가 구조는 같고 대상 필드·DOM만 다르므로 설정 객체로 공유
 const MONTHLY_WIDGETS = [
   {
-    field: 'categoryBreakdown',
-    useGlossary: true,
+    field: 'cweBreakdown',
     card: () => els.monthlyCategoryCard,
     select: () => els.monthSelect,
     pager: createBarListPager({
@@ -496,13 +493,12 @@ const MONTHLY_WIDGETS = [
     }),
     note: () => els.monthlyCategoryNote,
     total: () => els.monthlyCategoryTotal,
-    emptyNote: '이 달은 유형 분류 데이터가 없어요.',
+    emptyNote: '이 달은 CWE 분류 데이터가 없어요.',
     noteText: (month, dayCount) =>
-      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 유형 분류를 모두 더한 결과예요(번역은 안 함, 규칙에 안 걸린 설명은 AI가 보조 분류). 각 날짜도 심각도가 평가된 CVE만 대상이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
+      `${month} 한 달(기록 ${dayCount}일) 동안의 일별 NVD 공식 CWE 분류를 모두 더한 결과예요. CVE 하나당 CWE 하나(주 분류)만 반영하고, CWE가 없는 CVE는 "CWE 미분류"로 묶여요. 각 날짜도 심각도가 평가된 CVE만 대상이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
   },
   {
     field: 'productBreakdown',
-    useGlossary: false,
     card: () => els.monthlyProductCard,
     select: () => els.monthProductSelect,
     pager: createBarListPager({
@@ -528,7 +524,7 @@ function renderMonthlyBreakdownBars(data, month, widget, resetPage = false) {
     .reduce((sum, e) => sum + (e.count || 0), 0);
   widget.total().textContent = `이 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록 (${month})`;
 
-  widget.pager.setData(breakdown, { useGlossary: widget.useGlossary, resetPage });
+  widget.pager.setData(breakdown, { resetPage });
   widget.note().textContent = breakdown.length === 0 ? widget.emptyNote : widget.noteText(month, dayCount);
 }
 
@@ -597,8 +593,13 @@ function renderHighlightItems(list) {
         ? `<button type="button" class="hl-category">${escapeHtml(h.category)}</button>
            ${categoryDesc ? `<span class="hl-category-desc" hidden>${escapeHtml(categoryDesc)}</span>` : ''}`
         : '';
+      // CWE 설명(hint)은 백엔드 CWE_INFO에서 그대로 내려받은 값 — 매핑에 없는 CWE는 지어내지 않고 안내 문구로 대체.
       const cweTag = (h.cwe || [])
-        .map((c) => `<span class="hl-cwe">${escapeHtml(c.id)}${c.label ? ` · ${escapeHtml(c.label)}` : ''}</span>`)
+        .map((c) => {
+          const desc = c.hint || '이 CWE 유형에 대한 설명은 아직 준비되지 않았어요.';
+          return `<button type="button" class="hl-cwe">${escapeHtml(c.id)}${c.label ? ` · ${escapeHtml(c.label)}` : ''}</button>
+                  <span class="hl-cwe-desc" hidden>${escapeHtml(desc)}</span>`;
+        })
         .join('');
       const fullKoBlock = fullKo ? `<p class="hl-full-ko">${escapeHtml(fullKo)}</p>` : '';
       const originalBlock = fullEn
@@ -621,8 +622,8 @@ function renderHighlightItems(list) {
         <span class="hl-badge" style="color:${color};border-color:${color}">${escapeHtml(label)}</span>
         ${cvss}
         <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
-        ${categoryTag}
         ${cweTag}
+        ${categoryTag}
         ${cvssPlain}
         <details class="hl-details hl-title-details">
           <summary class="hl-title">${escapeHtml(title)}</summary>
@@ -870,12 +871,14 @@ async function load(simulateKind) {
   }
 }
 
-// 유형 태그·라벨을 누르면 그 자리 바로 아래에 설명을 펼침/접음 (매번 다시 그려지는 목록이라 컨테이너에 위임)
+// 유형·CWE 태그를 누르면 그 자리 바로 아래에 설명을 펼침/접음 (매번 다시 그려지는 목록이라 컨테이너에 위임)
 els.highlightsList.addEventListener('click', (e) => {
-  const btn = e.target.closest('.hl-category');
+  const btn = e.target.closest('.hl-category, .hl-cwe');
   if (!btn) return;
   const desc = btn.nextElementSibling;
-  if (desc && desc.classList.contains('hl-category-desc')) desc.hidden = !desc.hidden;
+  if (desc && (desc.classList.contains('hl-category-desc') || desc.classList.contains('hl-cwe-desc'))) {
+    desc.hidden = !desc.hidden;
+  }
 });
 
 function toggleCategoryBarDesc(e) {

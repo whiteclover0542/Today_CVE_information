@@ -269,14 +269,19 @@ const CWE_INFO = {
   'CWE-732': { label: '잘못된 권한 설정', hint: '파일·자원의 접근 권한을 필요한 범위보다 넓게 설정해서 발생' },
 };
 
+// NVD가 "Primary"로 표시한 CWE를 먼저 오게 정렬한다 — 집계(cweCounts)에서 CVE 하나당 CWE 하나만 셀 때
+// 이 배열의 첫 번째 값(cwe[0])을 그 CVE의 대표 CWE로 쓰기 위함(카드 표시는 배열 전체를 다 보여줌).
 function extractCwe(cve) {
-  const ids = new Set();
+  const primaryIds = [];
+  const secondaryIds = [];
   for (const w of cve.weaknesses || []) {
+    const bucket = w.type === 'Primary' ? primaryIds : secondaryIds;
     for (const d of w.description || []) {
-      if (d.lang === 'en' && /^CWE-\d+$/.test(d.value)) ids.add(d.value);
+      if (d.lang === 'en' && /^CWE-\d+$/.test(d.value)) bucket.push(d.value);
     }
   }
-  return [...ids].map((id) => ({ id, label: CWE_INFO[id]?.label || null }));
+  const ids = [...new Set([...primaryIds, ...secondaryIds])];
+  return ids.map((id) => ({ id, label: CWE_INFO[id]?.label || null, hint: CWE_INFO[id]?.hint || null }));
 }
 
 // 대표 CVE 한 건을 번역+해석+발생 원인+방지법까지 한 번의 LLM 호출로 생성한다(번역 전용 API를 따로 안 씀 — 이번 개선 목표).
@@ -414,11 +419,11 @@ async function main() {
   const secondaryHighlights = []; // CWE 분류가 없는 CVE — AI 해설 없이 목록으로만 아래에 따로 보여줌
   const usedHighlightIds = new Set();
   const usedHighlightCategories = new Set();
-  const categoryCounts = {};
-  const categoryExamples = {}; // 유형별 원본 링크 몇 건 — 번역은 안 함(추가 API 호출 없음)
   const productCounts = {};
   const productExamples = {}; // 벤더·제품별 원본 CVE 링크 몇 건 — 유형과 동일한 방식
-  const otherCandidates = []; // 규칙 매칭에서 '기타'로 빠진 CVE — 나중에 LLM으로 한 번에 재분류
+  const otherCandidates = []; // 규칙 매칭에서 '기타'로 빠진 CVE — 나중에 LLM으로 한 번에 재분류(대표 CVE 카드의 🏷 유형 태그용)
+  const cweCounts = {}; // "오늘 등록분 CWE 유형" 집계 — CVE 하나당 대표 CWE 하나(cwe[0])만 셈, 없으면 'none'
+  const cweExamples = {};
   let categorySampleSize = 0; // 심각도가 평가된(rated) CVE 전체 건수 — 전량 수집이라 rated 총합과 같아짐(unrated는 애초에 이 호출 대상이 아니라 여전히 빠짐)
   for (const level of SEVERITIES) {
     const { total: levelTotal, vulnerabilities } = await fetchAllForSeverity(baseUrl, level);
@@ -430,15 +435,10 @@ async function main() {
       const desc = (cve.descriptions || []).find((d) => d.lang === 'en')?.value || '';
 
       categorySampleSize += 1;
+      // 카드의 🏷 유형 태그(규칙 기반)용 — 아래 CWE 집계와는 별개 용도라 그대로 유지
       const categoryKey = categorize(desc);
-      categoryCounts[categoryKey] = (categoryCounts[categoryKey] || 0) + 1;
       if (categoryKey === 'other') {
         otherCandidates.push({ id: cve.id, desc });
-      }
-
-      const examples = (categoryExamples[categoryKey] ||= []);
-      if (examples.length < CATEGORY_EXAMPLES_LIMIT) {
-        examples.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
       const productKey = categorizeProduct(desc);
@@ -448,7 +448,15 @@ async function main() {
         productExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
       }
 
-      levelCandidates.push({ cve, desc, categoryKey, cwe: extractCwe(cve) });
+      const cwe = extractCwe(cve);
+      const cweKey = cwe[0]?.id || 'none'; // 여러 개면 대표(Primary 우선) 하나만 집계 — CVE 하나=한 칸 원칙 유지
+      cweCounts[cweKey] = (cweCounts[cweKey] || 0) + 1;
+      const cweExampleList = (cweExamples[cweKey] ||= []);
+      if (cweExampleList.length < CATEGORY_EXAMPLES_LIMIT) {
+        cweExampleList.push({ id: cve.id, url: `https://nvd.nist.gov/vuln/detail/${cve.id}` });
+      }
+
+      levelCandidates.push({ cve, desc, categoryKey, cwe });
     }
 
     // 대표 CVE 선정: 심각도가 항상 먼저다 — 유형을 맞추려고 더 낮은 심각도로 넘어가지 않는다.
@@ -504,20 +512,10 @@ async function main() {
   const rated = severity.critical + severity.high + severity.medium + severity.low;
   severity.unrated = Math.max(0, total - rated); // CVSSv3 점수가 아직 없는(평가 대기) 건수
 
+  // 카드의 🏷 유형 태그(규칙 기반)만 보정 대상 — "오늘 등록분 CWE 유형" 집계는 NVD 공식 값을 그대로 쓰므로 재분류 대상이 아님
   const reclassified = await classifyOthersWithLlm(otherCandidates);
   for (const [id, newKey] of Object.entries(reclassified)) {
     if (newKey === 'other' || !CATEGORY_KEYS.includes(newKey)) continue;
-
-    categoryCounts.other -= 1;
-    categoryCounts[newKey] = (categoryCounts[newKey] || 0) + 1;
-
-    const otherExamples = categoryExamples.other || [];
-    const idx = otherExamples.findIndex((e) => e.id === id);
-    if (idx !== -1) {
-      const [moved] = otherExamples.splice(idx, 1);
-      const newExamples = (categoryExamples[newKey] ||= []);
-      if (newExamples.length < CATEGORY_EXAMPLES_LIMIT) newExamples.push(moved);
-    }
 
     const highlight = rawHighlights.find((h) => h.id === id) || secondaryHighlights.find((h) => h.id === id);
     if (highlight) highlight.categoryKey = newKey;
@@ -525,10 +523,23 @@ async function main() {
 
   const categoryLabels = Object.fromEntries(CATEGORY_RULES.map((r) => [r.key, r.label]));
   categoryLabels.other = '기타';
-  // 잘라내지 않고 전부 저장 — 화면(오늘 카드)에서는 상위 6개만 보여주지만,
-  // 월별 합산 그래프는 이 전체 목록을 더해야 작은 유형도 누락 없이 집계됨
-  const categoryBreakdown = Object.entries(categoryCounts)
-    .map(([key, count]) => ({ key, label: categoryLabels[key], count, examples: categoryExamples[key] || [] }))
+
+  // "오늘 등록분 CWE 유형" 집계 — NVD 공식 분류를 그대로 세어 위조 없이 보여준다(LLM 재분류 없음).
+  // 잘라내지 않고 전부 저장 — 화면(오늘 카드)에서는 상위 10개만 보여주지만, 월별 합산 그래프는
+  // 이 전체 목록을 더해야 작은 유형도 누락 없이 집계됨.
+  const cweBreakdown = Object.entries(cweCounts)
+    .map(([key, count]) => {
+      const info = CWE_INFO[key];
+      return {
+        key,
+        label: key === 'none' ? 'CWE 미분류' : (info?.label || key),
+        count,
+        desc: key === 'none'
+          ? '이 CVE들은 NVD가 아직 CWE(취약점 유형) 분류를 매기지 않았어요.'
+          : (info?.hint || ''),
+        examples: cweExamples[key] || [],
+      };
+    })
     .sort((a, b) => b.count - a.count);
 
   // "기타"는 화면에 안 보여줄 거라 애초에 제외 — 목록에 확실히 있는 벤더만 건수·원본 CVE 링크와 함께 남김.
@@ -584,7 +595,7 @@ async function main() {
     severity,
     highlights,
     secondaryHighlights: secondaryHighlightsOutput,
-    categoryBreakdown,
+    cweBreakdown,
     categorySampleSize,
     productBreakdown,
   };
@@ -597,8 +608,8 @@ async function main() {
     `[saved] ${kstDate} -> ${entry.count}건`,
     severity,
     `highlights: ${highlights.length} (CWE 없음 목록: ${secondaryHighlightsOutput.length})`,
-    `categories(rated 전체 ${categorySampleSize}건):`,
-    categoryBreakdown.map((c) => `${c.label}:${c.count}`).join(', '),
+    `CWE 유형(rated 전체 ${categorySampleSize}건):`,
+    cweBreakdown.map((c) => `${c.label}:${c.count}`).join(', '),
     `products:`,
     productBreakdown.map((p) => `${p.label}:${p.count}`).join(', '),
   );
