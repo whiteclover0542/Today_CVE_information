@@ -658,6 +658,19 @@ header h1 {
   margin: 0;
 }
 
+/* 막대 설명 안에 들어가는 대표 CVE 카드 — 이미 카드 안(--card-bg-2)이라 배경을 한 겹 더 쌓지 않고
+   테두리로만 구분한다(태그·상세 블록이 --card-hi라 그 위에서 또렷하게 읽힘) */
+.category-bar-cards {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border);
+}
+
+.category-bar-cards .hl-card {
+  background: transparent;
+  padding: 0.9rem 1rem;
+}
+
 .category-bar-examples {
   list-style: none;
   margin: 0.55rem 0 0;

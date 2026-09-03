@@ -364,6 +364,20 @@ const CATEGORY_GLOSSARY = {
 
 const BAR_LIST_PAGE_SIZE = 10;
 
+// 차트의 예시 CVE에 대표 카드를 붙이기 위한 id → highlight 색인. 월별 차트는 여러 날짜의 예시를
+// 섞어 보여주므로 그날치만이 아니라 불러온 기록 전체에서 모은다.
+let highlightIndex = new Map();
+
+function buildHighlightIndex(data) {
+  const index = new Map();
+  for (const entry of data) {
+    for (const h of entry.highlights || []) {
+      if (!index.has(h.id)) index.set(h.id, h);
+    }
+  }
+  return index;
+}
+
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
 // 설명 문구는 각 항목이 스스로 들고 있는 desc를 그대로 씀(백엔드가 CWE_INFO에서 채워 보냄) — 프론트에
 // 별도 글로서리 사전을 두지 않아 서버·클라 설명이 어긋날 일이 없다. desc가 없으면 그냥 설명 없이 예시 링크만 보여줌.
@@ -375,15 +389,23 @@ function renderCategoryBarList(breakdown, maxCountOverride = null) {
     .map((c) => {
       const pct = Math.round((c.count / maxCount) * 100);
       const desc = c.desc || '';
+      // 예시 CVE는 링크만 던지지 않고, 그 CVE의 대표 카드(제목·AI 해석·상세)를 그대로 끌어와 보여준다.
+      // 대표로 뽑히지 않아 해설 자체가 없는 CVE는 지어낼 근거가 없으므로 예전처럼 링크만 남긴다.
       const examples = c.examples || [];
-      const examplesHtml = examples.length
-        ? `<ul class="category-bar-examples">${examples
+      const explained = examples.map((ex) => highlightIndex.get(ex.id)).filter(Boolean);
+      const linkOnly = examples.filter((ex) => !highlightIndex.has(ex.id));
+      const cardsHtml = explained.length
+        ? `<ul class="highlights-list category-bar-cards">${renderHighlightItems(explained)}</ul>`
+        : '';
+      const examplesHtml = linkOnly.length
+        ? `<ul class="category-bar-examples">${linkOnly
             .map((ex) => `<li><a href="${escapeHtml(ex.url)}" target="_blank" rel="noopener">${escapeHtml(ex.id)}</a></li>`)
             .join('')}</ul>`
         : '';
-      const detailBlock = desc || examplesHtml
+      const detailBlock = desc || cardsHtml || examplesHtml
         ? `<div class="category-bar-desc" hidden>
             ${desc ? `<p>${escapeHtml(desc)}</p>` : ''}
+            ${cardsHtml}
             ${examplesHtml}
           </div>`
         : '';
@@ -872,6 +894,7 @@ function renderTrend(data) {
 
 function renderNormal(data) {
   lastGood = { data, queriedAtIso: new Date().toISOString() };
+  highlightIndex = buildHighlightIndex(data); // 차트 예시 CVE 카드가 이 색인을 쓰므로 렌더링 전에 먼저 만든다
   els.statusBanner.hidden = true;
   els.statusBanner.textContent = '';
   els.statusBanner.className = 'status-banner';
@@ -962,14 +985,16 @@ async function load(simulateKind) {
 }
 
 // 유형·CWE 태그를 누르면 그 자리 바로 아래에 설명을 펼침/접음 (매번 다시 그려지는 목록이라 컨테이너에 위임)
-els.highlightsList.addEventListener('click', (e) => {
+function toggleTagDesc(e) {
   const btn = e.target.closest('.hl-category, .hl-cwe');
   if (!btn) return;
   const desc = btn.nextElementSibling;
   if (desc && (desc.classList.contains('hl-category-desc') || desc.classList.contains('hl-cwe-desc'))) {
     desc.hidden = !desc.hidden;
   }
-});
+}
+
+els.highlightsList.addEventListener('click', toggleTagDesc);
 
 function toggleCategoryBarDesc(e) {
   const btn = e.target.closest('.category-bar-label');
@@ -978,8 +1003,10 @@ function toggleCategoryBarDesc(e) {
   if (desc) desc.hidden = !desc.hidden;
 }
 
+// 막대 목록 안에도 대표 카드가 들어가므로 카드의 태그 토글 동작을 여기에도 걸어준다
 [els.categoryBars, els.productBars, els.monthlyCategoryBars, els.monthlyProductBars].forEach((container) => {
   container.addEventListener('click', toggleCategoryBarDesc);
+  container.addEventListener('click', toggleTagDesc);
 });
 
 MONTHLY_WIDGETS.forEach((widget) => {
