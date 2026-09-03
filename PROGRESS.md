@@ -20,7 +20,7 @@
 | 9 | 대표 CVE 카드에 LLM 생성 제목 추가 + 클릭해야 내용 노출 | ✅ | 내용을 바로 나열하지 않고, Gemini가 생성한 한 줄 제목을 먼저 보여주고 클릭(`<details>`)해야 번역·원문·AI 해설이 펼쳐지도록 변경 |
 | 10 | 대표 CVE를 "CWE 있음"만으로 제한 + CWE 없는 CVE는 별도 목록 | ✅ | 대표(AI 해설) 후보를 CWE 있는 CVE로만 한정, CWE 없는 CVE는 `secondaryHighlights`에 담아 카드 하단에 번역·해설 없이 목록으로만 노출 |
 | 11 | 대표 CVE 카드: CWE·유형 태그 순서 변경 + CWE 클릭 시 설명 노출 | ✅ | CWE 태그를 유형 태그보다 앞에 배치, CWE 태그도 유형 태그처럼 클릭하면 `CWE_INFO`의 hint가 펼쳐지도록 변경 |
-| 12 | "오늘 등록분 유형"/"월별 유형 비교"를 CWE 기반 집계로 전환 | ✅ | 정규식+Gemini 보정 방식(`categoryBreakdown`)을 폐지하고 NVD 공식 CWE를 그대로 집계하는 `cweBreakdown`으로 교체. CVE당 대표 CWE 1개만 집계, CWE 없으면 "CWE 미분류" |
+| 12 | "오늘 등록분 유형"/"월별 유형 비교"를 CWE 기반 집계로 전환 | ✅ | 정규식+Gemini 보정 방식(`categoryBreakdown`)을 폐지하고 NVD 공식 CWE를 그대로 집계하는 `cweBreakdown`으로 교체. CVE당 대표 CWE 1개만 집계, CWE 없으면 "CWE 미분류". 실제 배치(#18)로 합계 정확성까지 검증 완료 |
 | 13 | 헤더에 "CWE가 뭔가요?" 설명 추가 | ✅ | CVE·CVSS 글로서리 옆에 CWE 개념(공식 표준 유형 분류, CVE=사건번호·CWE=죄목 비유) 설명 추가 |
 
 ## 지금 서비스에 이미 있는 것 (과제 단계에서 완성, 유지)
@@ -48,13 +48,14 @@
 - 2026-09-03: 대표 CVE 선정 기준을 "CWE 분류가 있는 CVE만"으로 좁힘 — CWE가 없는 CVE에 억지로 `cause`/`mitigation`을 채우거나 아예 노출에서 빼는 대신, 별도의 `secondaryHighlights` 목록(카드 하단, 심각도·CVSS·유형만 표시, LLM 호출 없음)으로 분리해서 보여주기로 함. 기존 `pickFromLevel` 선정 로직에 `cwe.length === 0`이면 건너뛰는 조건을 추가하고, 그렇게 제외된 CVE 중 심각도 상위 `MAX_SECONDARY_HIGHLIGHTS`(20)건을 별도로 수집. LLM 호출을 안 하는 이유는 비용 절감뿐 아니라 애초에 grounding할 CWE가 없어 해설을 붙일 근거가 없기 때문(§3 원칙).
 - 2026-09-03: 카드 위에 규칙 기반 🏷 유형 태그와 공식 CWE 태그가 나란히 있는 게 중복스럽다는 지적을 받아 CWE를 1차 정보로 정리. (1) 카드에서 CWE 태그를 유형 태그보다 앞에 배치하고 클릭하면 설명이 펼쳐지도록 변경(`extractCwe`가 CWE_INFO의 `hint`도 함께 반환하도록 확장). (2) "오늘 등록분 유형"/"월별 유형 비교" 집계 자체를 규칙 기반(`categoryBreakdown`)에서 NVD 공식 CWE 기반(`cweBreakdown`)으로 전환 — 이 집계는 이제 규칙 매칭이나 Gemini 재분류를 전혀 안 씀. 카드의 🏷 유형 태그(개별 CVE용)는 기존 규칙 시스템을 그대로 유지 — 이번 변경은 "집계 차트"에만 적용되고 "카드의 유형 태그" 존재 자체는 안 건드림. (3) 헤더에 "CWE가 뭔가요?" 설명 추가.
 - 2026-09-03: `renderCategoryBarList`/`createBarListPager`에서 `useGlossary` 플래그 + 프론트 `CATEGORY_GLOSSARY` 조회 방식을 제거하고, 각 breakdown 항목이 백엔드에서 만든 `desc` 필드를 직접 들고 오도록 바꿈 — 서버·클라 설명이 어긋날 일이 없어짐(제품 목록은 원래도 설명이 없어서 그대로 영향 없음).
+- 2026-09-03: `workflow_dispatch`로 실제 배치를 재실행(Actions run #18, 3분 32초, Success)해 CWE 기반 유형 집계까지 최종 검증 완료. `cweBreakdown` 16개 항목이 정상 생성되고(합계 24건 = `categorySampleSize`와 정확히 일치, 이중 집계·누락 없음), 매핑 안 된 CWE(예: CWE-404, CWE-693)는 라벨을 원래 ID 그대로 보여주고 `desc`는 빈 값으로 남아 지어내지 않음을 확인. `highlights[].cwe[].hint`도 정상 포함. 오늘은 심각도 상위 10건 전부 CWE가 있어 `secondaryHighlights`는 0건. 실제 배포된 GitHub Pages를 Playwright로 직접 열어 카드 태그 순서·CWE 클릭 설명·CWE 유형 차트·페이지네이션까지 스크린샷으로 확인, 콘솔 에러 없음 — 이번 단계의 구현·검증을 모두 마침.
 
 ## 다음에 할 일
 
-1. 지금까지의 변경(제목 기능 + CWE 필터링/secondary 목록 + CWE 기반 유형 집계)을 커밋·push하고, 다시 `workflow_dispatch`로 한 번 더 실행해 `title`·`secondaryHighlights`·`cweBreakdown`이 실제 배치에서도 정상 채워지는지 확인
-2. CWE 필터링 적용 후 실제로 대표 CVE가 매일 몇 건씩 나오는지(=CWE 있는 CVE 비율) 며칠 지켜보고, 너무 적게 나오는 날이 있으면 기준을 다시 검토
-3. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
-4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
+1. CWE 필터링 적용 후 실제로 대표 CVE가 매일 몇 건씩 나오는지(=CWE 있는 CVE 비율) 며칠 지켜보고, 너무 적게 나오는 날이 있으면 기준을 다시 검토
+2. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
+3. "오늘의 브리핑" 요약 카드 필요성·형태 검토
+4. CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등 실제로 자주 보이는 것들)를 발견되는 대로 매핑에 추가해 설명 커버리지를 넓히기
 
 ## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 
@@ -63,4 +64,4 @@
   - `highlights[]`(CWE 있는 CVE만, AI 해설 포함) — `interpretation`(해석)·`cause`(발생 원인)·`mitigation`(방지·완화 방법)·`cwe`(`[{id, label, hint}]`)·`title`(제목, 클릭해야 보이는 상세 내용의 진입점)·`summaryKo`(Gemini 번역).
   - `secondaryHighlights[]`(CWE 없는 CVE) — `id`·`severity`·`url`·`cvssScore`·`cvssVector`·`cvssPlain`·`category`만, 번역·AI 해설 없음.
   - `cweBreakdown[]`(그날 심각도 평가된 CVE 전체를 CWE로 집계) — `key`(CWE id 또는 `'none'`)·`label`·`count`·`desc`(hint)·`examples`. 기존 `categoryBreakdown` 필드는 더 이상 저장하지 않음(과거 날짜 기록에는 남아있지만 새 프론트는 안 읽음 — 그런 날은 "오늘 등록분 CWE 유형" 카드가 자연히 빈 상태로 표시됨).
-- 검증 상태: 번역+해설(title 이전 버전)은 실제 배치(#16)로 확인 완료. `title`·CWE 필터링/`secondaryHighlights`·CWE 기반 `cweBreakdown`·카드 태그 순서/클릭은 로컬 스크래치 데이터로 화면 렌더링만 확인했고, 아직 실제 배치로는 못 돌려봄 — 커밋·push 후 한 번 더 확인 필요.
+- 검증 상태: 전부 실제 배치로 확인 완료. 번역+해설(title 이전 버전) — #16, title+CWE 필터링/`secondaryHighlights` — #17, CWE 기반 `cweBreakdown`+카드 태그 순서/클릭 — #18. 배포된 GitHub Pages도 Playwright로 직접 열어 최종 확인함. 남은 건 §"다음에 할 일"의 관찰·튜닝 항목뿐.
