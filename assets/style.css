@@ -12,6 +12,20 @@
   --empty-text: #ff6b6b;
   --up: #ff6b6b;
   --down: #63e6a5;
+
+  /* 데이터 종류별 고정 색상 — CWE=파랑, 제품·벤더=주황, 추이=청록(스킬 팔레트 slot 1/2/3, 고정 순서) */
+  --seq-blue: #3987e5;
+  --seq-blue-soft: rgba(57, 135, 229, 0.16);
+  --seq-orange: #d95926;
+  --seq-orange-soft: rgba(217, 89, 38, 0.16);
+  --seq-aqua: #199e70;
+  --seq-aqua-soft: rgba(25, 158, 112, 0.16);
+
+  /* 상태(심각도) 전용 색상 — 시리즈 색상과 절대 겹치지 않게 별도로 고정 */
+  --status-critical: #d03b3b;
+  --status-serious: #ec835a;
+  --status-warning: #fab219;
+  --status-good: #0ca30c;
 }
 
 * { box-sizing: border-box; }
@@ -62,25 +76,57 @@ header h1 {
   font-size: 0.95rem;
 }
 
+.about-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 .about-details {
-  display: block;
-  margin-left: 0;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.about-details[open] {
+  flex-basis: 100%;
 }
 
 .about-details summary {
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   cursor: pointer;
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  color: var(--muted);
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
   list-style: none;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.about-details summary::before {
+  content: "ⓘ";
+  font-size: 0.85em;
+  opacity: 0.8;
 }
 
 .about-details summary::-webkit-details-marker { display: none; }
 
-.about-details[open] summary { display: block; margin-bottom: 0.35rem; }
+.about-details summary:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.about-details[open] summary {
+  color: var(--text);
+  border-color: var(--accent);
+  margin-bottom: 0.5rem;
+}
 
 .glossary {
   max-width: 760px;
@@ -134,6 +180,21 @@ header h1 {
   padding: 1.4rem;
   margin-bottom: 1.4rem;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+/* 카드마다 데이터 종류를 색으로 구분 — CWE=파랑, 제품·벤더=주황, 추이=청록. 훑어볼 때 같은 계열 카드가 한눈에 묶여 보임. */
+#category-card,
+#monthly-category-card {
+  border-left-color: var(--seq-blue);
+}
+
+#product-card,
+#monthly-product-card {
+  border-left-color: var(--seq-orange);
+}
+
+.trend-card {
+  border-left-color: var(--seq-aqua);
 }
 
 .value-main {
@@ -215,22 +276,21 @@ header h1 {
 
 .compare-arrow { font-size: 0.8rem; }
 
-.compare-window-note {
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--card-bg-2);
-  border-radius: 8px;
+.compare-window-note p {
+  margin: 0;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   line-height: 1.5;
 }
 
-.compare-window-note p { margin: 0; }
-
 .compare-window-times {
   list-style: none;
-  margin: 0.4rem 0 0;
-  padding: 0;
+  margin: 0.5rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: var(--card-bg-2);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.76rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -436,11 +496,21 @@ header h1 {
 
 .category-bar-track {
   flex: 1;
-  height: 10px;
+  height: 12px;
   border-radius: 999px;
   background: var(--card-bg-2);
   border: 1px solid var(--border);
   overflow: hidden;
+}
+
+#category-bars .category-bar-track,
+#monthly-category-bars .category-bar-track {
+  background: var(--seq-blue-soft);
+}
+
+#product-bars .category-bar-track,
+#monthly-product-bars .category-bar-track {
+  background: var(--seq-orange-soft);
 }
 
 .category-bar-fill {
@@ -448,6 +518,17 @@ header h1 {
   height: 100%;
   background: var(--accent);
   border-radius: 999px;
+}
+
+/* 막대 색도 카드 색과 맞춤(파랑=CWE, 주황=제품·벤더) — 길이(=수치)만으로 충분히 비교되니 막대별로 색을 더 쪼개지 않음 */
+#category-bars .category-bar-fill,
+#monthly-category-bars .category-bar-fill {
+  background: var(--seq-blue);
+}
+
+#product-bars .category-bar-fill,
+#monthly-product-bars .category-bar-fill {
+  background: var(--seq-orange);
 }
 
 .category-bar-count {
@@ -461,9 +542,35 @@ header h1 {
 .category-note {
   color: var(--muted);
   font-size: 0.78rem;
-  margin: 1rem 0 0;
+  margin: 0;
   line-height: 1.5;
 }
+
+/* 차트/카드마다 붙던 방법론 설명 문단을 기본으로 접어둠 — 항상 펴놓으면 글자가 너무 많아 가독성이 떨어짐 */
+.note-details {
+  margin-top: 0.9rem;
+}
+
+.note-details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.76rem;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.note-details summary::before {
+  content: "ℹ️";
+  font-size: 0.85em;
+}
+
+.note-details summary::-webkit-details-marker { display: none; }
+
+.note-details summary:hover { color: var(--text); }
+
+.note-details[open] summary { color: var(--text); margin-bottom: 0.6rem; }
 
 .monthly-total {
   margin: 0 0 1rem;
@@ -719,7 +826,12 @@ header h1 {
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.5;
-  margin: -0.2rem 0 1rem;
+  margin: 0;
+}
+
+.highlights-card > .note-details {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .highlights-more {
@@ -740,8 +852,9 @@ header h1 {
   color: var(--muted);
 }
 
-.highlights-secondary .highlights-note {
-  margin: 0 0 0.9rem;
+.highlights-secondary .note-details {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
 }
 
 .highlights-secondary-list {

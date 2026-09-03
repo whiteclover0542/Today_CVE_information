@@ -205,10 +205,10 @@ function renderCompare(data) {
 }
 
 const SEVERITY_LEVELS = [
-  ['critical', '심각', '#ff4d4f'],
-  ['high', '높음', '#ff9f43'],
-  ['medium', '중간', '#ffd166'],
-  ['low', '낮음', '#4dabf7'],
+  ['critical', '심각', '#d03b3b'],
+  ['high', '높음', '#ec835a'],
+  ['medium', '중간', '#fab219'],
+  ['low', '낮음', '#0ca30c'],
   ['unrated', '평가 대기', '#5a5a62'],
 ];
 
@@ -259,9 +259,9 @@ function renderSeverity(entry) {
 }
 
 const RISK_STEPS = [
-  { key: 'low', label: '보통', color: '#63e6a5' },
-  { key: 'mid', label: '주의', color: '#ff9f43' },
-  { key: 'high', label: '위험', color: '#ff4d4f' },
+  { key: 'low', label: '보통', color: '#0ca30c' },
+  { key: 'mid', label: '주의', color: '#fab219' },
+  { key: 'high', label: '위험', color: '#d03b3b' },
 ];
 
 // 판단 기준을 코드·화면 양쪽에 그대로 노출 — 규칙을 숨긴 채 "위험/주의/보통"만 던지지 않기 위함
@@ -554,10 +554,10 @@ function renderMonthlyBreakdown(data, widget) {
 }
 
 const SEVERITY_COLOR = {
-  CRITICAL: '#ff4d4f',
-  HIGH: '#ff9f43',
-  MEDIUM: '#ffd166',
-  LOW: '#4dabf7',
+  CRITICAL: '#d03b3b',
+  HIGH: '#ec835a',
+  MEDIUM: '#fab219',
+  LOW: '#0ca30c',
 };
 
 const SEVERITY_LABEL_KO = {
@@ -769,7 +769,7 @@ function renderTrend(data) {
       const h = Math.max(6, ratio * plotH);
       const y = padTop + (plotH - h);
       const isLast = i === n - 1;
-      const fill = isLast ? '#ffffff' : 'rgba(255,255,255,0.35)';
+      const fill = isLast ? '#3dd9a0' : 'rgba(25,158,112,0.45)';
       const shortDate = entry.date.slice(5); // MM-DD
       return `
         <g>

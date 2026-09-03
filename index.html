@@ -5,20 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=39" />
+<link rel="stylesheet" href="assets/style.css?v=40" />
 </head>
 <body>
 <main class="dashboard">
   <header>
     <h1>🛡️ 오늘의 신규 취약점(CVE) 정보판</h1>
-    <p class="purpose">
-      오늘(KST) 새로 등록된 CVE 건수를 자동으로 확인합니다.
+    <p class="purpose">오늘(KST) 새로 등록된 CVE 건수를 자동으로 확인합니다.</p>
+    <div class="about-list">
       <details class="about-details">
         <summary>CVE가 뭔가요?</summary>
-        소프트웨어에 생긴 "보안 허점"에 매기는 접수번호예요. 나쁜 사람이 악용할 수 있는 구멍이 발견되면
-        전 세계가 같은 걸 가리키도록 <code>CVE-연도-번호</code>를 붙여 등록해요(경찰 사건번호와 비슷해요).
-        미국 정부기관 NVD가 매일 새로 등록되는 CVE를 공개하고, 이 정보판은 그중 오늘(KST) 등록된 개수를 보여줘요.
-        색깔(빨강→파랑)은 그 허점이 얼마나 위험한지 등급이에요.
+        <div class="glossary">
+          <p>
+            소프트웨어에 생긴 "보안 허점"에 매기는 접수번호예요. 나쁜 사람이 악용할 수 있는 구멍이 발견되면
+            전 세계가 같은 걸 가리키도록 <code>CVE-연도-번호</code>를 붙여 등록해요(경찰 사건번호와 비슷해요).
+            미국 정부기관 NVD가 매일 새로 등록되는 CVE를 공개하고, 이 정보판은 그중 오늘(KST) 등록된 개수를 보여줘요.
+            색깔(빨강→녹색)은 그 허점이 얼마나 위험한지 등급이에요.
+          </p>
+        </div>
       </details>
       <details class="about-details">
         <summary>CVSS가 뭔가요?</summary>
@@ -45,7 +49,7 @@
           </p>
         </div>
       </details>
-    </p>
+    </div>
   </header>
 
   <section id="status-banner" class="status-banner" hidden></section>
@@ -60,10 +64,11 @@
         <span class="compare-arrow" id="compare-arrow"></span>
         <span id="compare-text">-</span>
       </div>
-      <div class="compare-window-note" id="compare-window-note" hidden>
+      <details class="note-details compare-window-note" id="compare-window-note" hidden>
+        <summary>측정 구간이 다를 수 있어요</summary>
         <p id="compare-window-caveat"></p>
         <ul class="compare-window-times" id="compare-window-times"></ul>
-      </div>
+      </details>
       <dl class="meta">
         <div><dt>출처</dt><dd><a id="source-link" href="#" target="_blank" rel="noopener">NVD CVE API 2.0 (원자료 열기)</a></dd></div>
         <div><dt>조회 시각</dt><dd id="queried-at">-</dd></div>
@@ -89,7 +94,10 @@
 
   <section class="highlights-card" id="highlights-card" hidden>
     <h2>🎯 오늘의 대표 CVE</h2>
-    <p class="highlights-note">심각도 상위 CVE 중 NVD 공식 CWE 분류가 있는 것만 대표로 보여줘요(해설의 근거가 있어야 해서요). 번역·CVSS 등은 원자료 그대로, "AI 해설"은 그 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
+    <details class="note-details">
+      <summary>어떻게 골랐나요?</summary>
+      <p class="highlights-note">심각·높음·중간 등급 중 NVD 공식 CWE 분류가 있는 CVE는 전부 보여줘요(해설의 근거가 있어야 해서요). 번역·CVSS 등은 원자료 그대로, "AI 해설"은 그 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
+    </details>
     <ul class="highlights-list" id="highlights-list"></ul>
     <div class="highlights-more" id="highlights-more-wrap" hidden>
       <button type="button" id="highlights-more">더보기</button>
@@ -102,7 +110,10 @@
 
     <div class="highlights-secondary" id="highlights-secondary" hidden>
       <h3>CWE 분류 정보가 없는 CVE</h3>
-      <p class="highlights-note">공식 CWE 분류가 없어 AI 해설을 붙이지 않고 목록만 보여줘요(지어내지 않기 위함). 심각도·CVSS·유형은 원자료·규칙 매칭 그대로예요.</p>
+      <details class="note-details">
+        <summary>왜 따로 있나요?</summary>
+        <p class="highlights-note">공식 CWE 분류가 없어 AI 해설을 붙이지 않고 목록만 보여줘요(지어내지 않기 위함). 심각도·CVSS·유형은 원자료·규칙 매칭 그대로예요.</p>
+      </details>
       <ul class="highlights-secondary-list" id="highlights-secondary-list"></ul>
     </div>
   </section>
@@ -115,7 +126,10 @@
       <span id="category-page-info" class="bar-page-info"></span>
       <button type="button" id="category-next">다음 10개 →</button>
     </div>
-    <p class="category-note" id="category-note"></p>
+    <details class="note-details">
+      <summary>어떻게 집계했나요?</summary>
+      <p class="category-note" id="category-note"></p>
+    </details>
   </section>
 
   <section class="category-card" id="product-card" hidden>
@@ -126,7 +140,10 @@
       <span id="product-page-info" class="bar-page-info"></span>
       <button type="button" id="product-next">다음 10개 →</button>
     </div>
-    <p class="category-note" id="product-note"></p>
+    <details class="note-details">
+      <summary>어떻게 집계했나요?</summary>
+      <p class="category-note" id="product-note"></p>
+    </details>
   </section>
 
   <section class="category-card" id="monthly-category-card" hidden>
@@ -141,7 +158,10 @@
       <span id="monthly-category-page-info" class="bar-page-info"></span>
       <button type="button" id="monthly-category-next">다음 10개 →</button>
     </div>
-    <p class="category-note" id="monthly-category-note"></p>
+    <details class="note-details">
+      <summary>어떻게 집계했나요?</summary>
+      <p class="category-note" id="monthly-category-note"></p>
+    </details>
   </section>
 
   <section class="category-card" id="monthly-product-card" hidden>
@@ -156,7 +176,10 @@
       <span id="monthly-product-page-info" class="bar-page-info"></span>
       <button type="button" id="monthly-product-next">다음 10개 →</button>
     </div>
-    <p class="category-note" id="monthly-product-note"></p>
+    <details class="note-details">
+      <summary>어떻게 집계했나요?</summary>
+      <p class="category-note" id="monthly-product-note"></p>
+    </details>
   </section>
 
   <div class="grid-2">
@@ -208,6 +231,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=39"></script>
+<script src="assets/app.js?v=40"></script>
 </body>
 </html>
