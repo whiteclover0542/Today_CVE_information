@@ -615,7 +615,8 @@ header h1 {
   gap: 0.55rem;
 }
 
-.category-bars li {
+/* 직계 자식만 — 막대 설명 안에 들어가는 대표 CVE 카드(<li>)까지 가로 배치되면 안 됨 */
+.category-bars > li {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
