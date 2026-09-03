@@ -102,9 +102,18 @@ header {
 }
 
 header h1 {
-  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 2.1rem;
+  font-weight: 800;
   margin: 0 0 0.3rem;
   letter-spacing: -0.02em;
+}
+
+.brand-icon {
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
 .tagline {
@@ -170,12 +179,6 @@ header h1 {
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.about-details summary::before {
-  content: "ⓘ";
-  font-size: 0.85em;
-  opacity: 0.8;
-}
-
 .about-details summary::-webkit-details-marker { display: none; }
 
 .about-details summary:hover {
@@ -211,9 +214,10 @@ header h1 {
 
 .term-card h3 {
   margin: 0 0 0.5rem;
-  font-size: 0.85rem;
-  color: var(--accent);
-  letter-spacing: 0.03em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
 }
 
 .glossary p {
@@ -396,8 +400,10 @@ header h1 {
 .history-card h2,
 .debug-panel h2 {
   margin-top: 0;
-  margin-bottom: 0.9rem;
-  font-size: 1.02rem;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .category-card-header {
@@ -631,11 +637,9 @@ header h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-}
-
-.note-details summary::before {
-  content: "ℹ️";
-  font-size: 0.85em;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
 }
 
 .note-details summary::-webkit-details-marker { display: none; }
@@ -731,10 +735,6 @@ header h1 {
   border-color: var(--accent);
 }
 
-.hl-category::before {
-  content: "🏷 ";
-}
-
 .hl-category-static {
   cursor: default;
 }
@@ -764,7 +764,7 @@ header h1 {
 }
 
 .hl-cvss-plain::before {
-  content: "⚙ ";
+  content: "· ";
 }
 
 .hl-details {
@@ -922,8 +922,9 @@ header h1 {
 
 .highlights-secondary h3 {
   margin: 0 0 0.4rem;
-  font-size: 0.88rem;
-  color: var(--muted);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .highlights-secondary .note-details {

@@ -632,7 +632,7 @@ function renderHighlightItems(list) {
         .join('');
       const aiBlock = aiFields
         ? `<div class="hl-full hl-ai-full">
-            <span class="hl-ai-heading">🤖 AI 해설</span>
+            <span class="hl-ai-heading">AI 해설</span>
             ${aiFields}
           </div>`
         : '';

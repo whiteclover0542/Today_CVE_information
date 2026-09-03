@@ -4,15 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=44" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='5' fill='%23050506'/><path d='M12 3 5 5.7v5.4c0 4.7 3 8.9 7 10 4-1.1 7-5.3 7-10V5.7L12 3Z' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linejoin='round'/><path d='m9 12 2 2 4-4.3' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+<link rel="stylesheet" href="assets/style.css?v=45" />
 </head>
 <body>
 <main class="dashboard">
   <header>
     <div class="brand-row">
       <div class="brand">
-        <h1>🛡️ TODAY CVE</h1>
+        <h1><svg class="brand-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" aria-hidden="true"><path d="M12 2 4 5v6c0 5.2 3.4 9.9 8 11 4.6-1.1 8-5.8 8-11V5l-8-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>TODAY CVE</h1>
         <p class="tagline">오늘의 보안 취약점 정보판 · NVD 기반 자동 수집</p>
       </div>
       <div class="live-status">
@@ -48,7 +48,7 @@
             CVE가 "이번에 발견된 이 사건 하나"를 가리키는 사건번호라면, CWE는 그 사건이 <b>어떤 유형의 범죄인지</b>를 가리키는 죄목이라고 보면 비슷해요.
             이 정보판에서 CWE는 NVD가 각 CVE에 공식적으로 매긴 값을 그대로 가져와, 대표 CVE 카드의 CWE 태그(누르면 설명이 펼쳐져요)와
             "오늘 등록분 CWE 유형" 집계 차트에 씁니다. AI 해설(해석·발생 원인·방지법)도 이 공식 CWE 값을 근거로 삼아 지어내지 않도록 하고 있어요.
-            유형 키워드(🏷)는 AI 없이 설명 문구를 규칙 매칭한 것으로, 각 태그를 누르면 바로 아래에 뜻이 나와요.
+            유형 태그는 AI 없이 설명 문구를 규칙 매칭한 것으로, 각 태그를 누르면 바로 아래에 뜻이 나와요.
           </p>
         </div>
       </div>
@@ -90,7 +90,7 @@
     </section>
 
     <section class="severity-card" id="severity-card" hidden>
-      <h2>📊 오늘 등록분 심각도</h2>
+      <h2>오늘 등록분 심각도</h2>
       <div class="risk-meter" id="risk-meter" hidden>
         <div class="risk-meter-track" id="risk-meter-track"></div>
         <p class="risk-meter-caption" id="risk-meter-caption"></p>
@@ -104,7 +104,7 @@
   </div>
 
   <section class="highlights-card" id="highlights-card" hidden>
-    <h2>🎯 오늘의 대표 CVE</h2>
+    <h2>오늘의 대표 CVE</h2>
     <details class="note-details">
       <summary>어떻게 골랐나요?</summary>
       <p class="highlights-note">심각·높음·중간 등급 중 NVD 공식 CWE 분류가 있는 CVE는 전부 보여줘요(해설의 근거가 있어야 해서요). 번역·CVSS 등은 원자료 그대로, "AI 해설"은 그 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
@@ -130,7 +130,7 @@
   </section>
 
   <section class="category-card" id="category-card" hidden>
-    <h2>🏷️ 오늘 등록분 CWE 유형</h2>
+    <h2>오늘 등록분 CWE 유형</h2>
     <ul class="category-bars" id="category-bars"></ul>
     <div class="bar-pagination" id="category-pagination" hidden>
       <button type="button" id="category-prev">← 이전 10개</button>
@@ -144,7 +144,7 @@
   </section>
 
   <section class="category-card" id="product-card" hidden>
-    <h2>🏭 오늘 등록분 제품·벤더</h2>
+    <h2>오늘 등록분 제품·벤더</h2>
     <ul class="category-bars" id="product-bars"></ul>
     <div class="bar-pagination" id="product-pagination" hidden>
       <button type="button" id="product-prev">← 이전 10개</button>
@@ -161,7 +161,7 @@
   <div class="tab-panel" data-tab-panel="monthly" role="tabpanel" hidden>
   <section class="category-card" id="monthly-category-card" hidden>
     <div class="category-card-header">
-      <h2>📅 월별 CWE 유형 비교</h2>
+      <h2>월별 CWE 유형 비교</h2>
       <select id="month-select" class="month-select" aria-label="기준 월 선택"></select>
     </div>
     <p class="monthly-total" id="monthly-category-total"></p>
@@ -179,7 +179,7 @@
 
   <section class="category-card" id="monthly-product-card" hidden>
     <div class="category-card-header">
-      <h2>📅 월별 제품·벤더 비교</h2>
+      <h2>월별 제품·벤더 비교</h2>
       <select id="month-product-select" class="month-select" aria-label="기준 월 선택"></select>
     </div>
     <p class="monthly-total" id="monthly-product-total"></p>
@@ -199,7 +199,7 @@
   <div class="tab-panel" data-tab-panel="trend" role="tabpanel" hidden>
   <div class="grid-2">
     <section class="trend-card">
-      <h2>📈 최근 추이</h2>
+      <h2>최근 추이</h2>
       <div class="trend-stats" id="trend-stats" hidden>
         <div class="stat"><span class="stat-label">일평균</span><span class="stat-value" id="stat-avg">-</span></div>
         <div class="stat"><span class="stat-label">최고</span><span class="stat-value" id="stat-max">-</span></div>
@@ -216,7 +216,7 @@
     </section>
 
     <section class="history-card">
-      <h2>🗓️ 날짜별 기록 <span class="tz-note">(KST)</span></h2>
+      <h2>날짜별 기록 <span class="tz-note">(KST)</span></h2>
       <table id="history-table">
         <thead><tr><th>날짜</th><th>건수</th><th>조회 시각(UTC)</th></tr></thead>
         <tbody id="history-body"></tbody>
@@ -231,7 +231,7 @@
   </div>
 
   <section id="debug-panel" class="debug-panel" hidden>
-    <h2>🧪 장애 시연 (?debug=1)</h2>
+    <h2>장애 시연 (?debug=1)</h2>
     <p>버튼으로 실패 5종을 재현합니다. 값 유지·복구를 확인하세요.</p>
     <div class="debug-buttons">
       <button data-simulate="timeout">timeout 재현</button>
@@ -247,6 +247,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=44"></script>
+<script src="assets/app.js?v=45"></script>
 </body>
 </html>
