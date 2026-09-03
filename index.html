@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='5' fill='%23050506'/><path d='M12 3 5 5.7v5.4c0 4.7 3 8.9 7 10 4-1.1 7-5.3 7-10V5.7L12 3Z' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linejoin='round'/><path d='m9 12 2 2 4-4.3' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=45" />
+<link rel="stylesheet" href="assets/style.css?v=46" />
 </head>
 <body>
 <main class="dashboard">
@@ -94,6 +94,10 @@
       <div class="risk-meter" id="risk-meter" hidden>
         <div class="risk-meter-track" id="risk-meter-track"></div>
         <p class="risk-meter-caption" id="risk-meter-caption"></p>
+        <details class="note-details">
+          <summary>판단 기준</summary>
+          <p class="risk-meter-rule">심각 1건 이상이면 위험, 심각은 없고 높음이 1건 이상이면 주의, 둘 다 0건이면 보통이에요.</p>
+        </details>
       </div>
       <div class="severity-visual">
         <div id="severity-donut" class="severity-donut"></div>
@@ -247,6 +251,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=45"></script>
+<script src="assets/app.js?v=46"></script>
 </body>
 </html>

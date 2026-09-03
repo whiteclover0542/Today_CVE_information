@@ -287,12 +287,12 @@ function computeRisk(severity) {
   const critical = severity.critical || 0;
   const high = severity.high || 0;
   if (critical > 0) {
-    return { key: 'high', reason: `심각(CRITICAL) ${critical}건 → 위험` };
+    return { key: 'high', reason: `심각 ${critical}건 → 위험` };
   }
   if (high > 0) {
-    return { key: 'mid', reason: `심각 0건, 높음(HIGH) ${high}건 → 주의` };
+    return { key: 'mid', reason: `높음 ${high}건 → 주의` };
   }
-  return { key: 'low', reason: '심각·높음 등급 CVE 없음 → 보통' };
+  return { key: 'low', reason: '심각·높음 없음 → 보통' };
 }
 
 function renderRisk(entry) {
@@ -311,8 +311,7 @@ function renderRisk(entry) {
     })
     .join('');
 
-  els.riskMeterCaption.textContent =
-    `${risk.reason} · 기준: 심각 1건 이상=위험 · 없고 높음 1건 이상=주의 · 둘 다 0건=보통`;
+  els.riskMeterCaption.textContent = risk.reason;
 }
 
 // scripts/fetch-daily-count.mjs의 CATEGORY_RULES 라벨과 그대로 맞춰야 함 — 각 🏷 태그·유형 라벨을 누르면 이 설명이 바로 아래에 펼쳐짐
