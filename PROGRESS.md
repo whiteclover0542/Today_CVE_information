@@ -77,7 +77,7 @@
 3. 배포 재설정 방식 결정 (GitHub Pages 유지 여부 재검토)
 4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
 5. ~~CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등)를 매핑에 추가~~ ✅ 7종 추가 완료 + 과거 기록 백필까지 반영 — 앞으로도 ID만 뜨는 CWE가 보이면 `scripts/cwe-info.mjs`에 추가하고 `node scripts/backfill-cwe-labels.mjs`를 돌리면 됨
-6. `docs/screenshots/*.png`가 개편 전(검정+흰색 테마, 탭 분리 전) 화면이라 README와 실제 화면이 어긋남 — 배포 반영 후 새로 캡처해 교체
+6. ~~`docs/screenshots/*.png`가 개편 전 화면이라 README와 어긋남~~ ✅ 전부 재촬영해 교체하고, 개편 전 스크린샷 7장은 `assignment/screenshots/`로 옮겨 보존
 
 ## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 

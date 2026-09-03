@@ -72,7 +72,7 @@ scripts/
 └── backfill-cwe-labels.mjs      # 매핑 추가 시 과거 기록에 소급 적용
 .github/workflows/               # 매일 09:00 KST 배치
 docs/screenshots/                # 이 README의 스크린샷
-assignment/                      # 과제 단계 자료 (동결)
+assignment/                      # 과제 단계 자료·개편 전 스크린샷 (동결)
 ```
 
 ## 문서
