@@ -8,7 +8,7 @@
   --accent: #6ea8ff;
   --accent-soft: rgba(110, 168, 255, 0.16);
   --accent-dim: rgba(110, 168, 255, 0.45);
-  --border: #202936;
+  --border: #283244;
   --stale-bg: #2c2408;
   --stale-text: #f6c945;
   --empty-bg: #2b1414;
@@ -191,16 +191,34 @@ header h1 {
 }
 
 .glossary {
-  max-width: 760px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 720px) {
+  .glossary {
+    grid-template-columns: 1fr;
+  }
+}
+
+.term-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1rem 1.15rem;
-  margin-top: 0.5rem;
+}
+
+.term-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.03em;
 }
 
 .glossary p {
-  margin: 0 0 0.75rem;
+  margin: 0;
   color: var(--muted);
   font-size: 0.85rem;
   line-height: 1.6;
@@ -699,9 +717,9 @@ header h1 {
   font-weight: 800;
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent);
+  border: 1px solid var(--muted);
+  background: var(--card-bg-2);
+  color: var(--muted);
   flex-shrink: 0;
   align-self: center;
   white-space: nowrap;
@@ -881,7 +899,8 @@ header h1 {
 
 .hl-ai-full {
   margin-top: 0.55rem;
-  border-color: rgba(77, 212, 168, 0.27);
+  background: rgba(77, 212, 168, 0.06);
+  border-color: rgba(77, 212, 168, 0.3);
 }
 
 .hl-ai-heading {

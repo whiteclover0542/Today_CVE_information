@@ -601,7 +601,7 @@ function renderHighlightItems(list) {
       // LLM 제목 생성에 실패했을 때는 없는 제목을 지어내지 않고 중립적인 라벨로 대체한다(위조 금지 원칙).
       const title = h.title || '상세 내용 보기';
       const cvss = h.cvssScore != null
-        ? `<span class="hl-cvss" title="${escapeHtml(h.cvssVector || 'CVSS 벡터 없음')}">CVSS ${h.cvssScore.toFixed(1)}</span>`
+        ? `<span class="hl-cvss" style="color:${color};border-color:${color}" title="${escapeHtml(h.cvssVector || 'CVSS 벡터 없음')}">CVSS ${h.cvssScore.toFixed(1)}</span>`
         : '';
       const cvssPlain = h.cvssPlain
         ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
