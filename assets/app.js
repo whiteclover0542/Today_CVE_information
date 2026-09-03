@@ -74,9 +74,11 @@ async function fetchHistory(simulateKind) {
 }
 
 const els = {
+  headerDate: document.getElementById('header-date'),
   statusBanner: document.getElementById('status-banner'),
   valueNumber: document.getElementById('value-number'),
   valueUnit: document.getElementById('value-unit'),
+  valueSeverityRow: document.getElementById('value-severity-row'),
   sourceLink: document.getElementById('source-link'),
   queriedAt: document.getElementById('queried-at'),
   recordDate: document.getElementById('record-date'),
@@ -205,11 +207,11 @@ function renderCompare(data) {
 }
 
 const SEVERITY_LEVELS = [
-  ['critical', '심각', '#d03b3b'],
-  ['high', '높음', '#ec835a'],
-  ['medium', '중간', '#fab219'],
-  ['low', '낮음', '#0ca30c'],
-  ['unrated', '평가 대기', '#5a5a62'],
+  ['critical', '심각', '#ff4d5a'],
+  ['high', '높음', '#ff9f43'],
+  ['medium', '중간', '#f6c945'],
+  ['low', '낮음', '#4dd4a8'],
+  ['unrated', '평가 대기', '#5a6472'],
 ];
 
 function renderSeverity(entry) {
@@ -244,10 +246,10 @@ function renderSeverity(entry) {
 
   els.severityDonut.innerHTML = `
     <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="오늘 등록분 심각도 분포">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#232327" stroke-width="${strokeWidth}"></circle>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a2230" stroke-width="${strokeWidth}"></circle>
       ${rings}
-      <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#ffffff">${total}</text>
-      <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="12" fill="#a8a8b0">${entry.unit}</text>
+      <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="30" font-weight="800" fill="#f1f5f9">${total}</text>
+      <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="12" fill="#8b98a8">${entry.unit}</text>
     </svg>`;
 
   els.severityLegend.innerHTML = SEVERITY_LEVELS
@@ -258,10 +260,26 @@ function renderSeverity(entry) {
     .join('');
 }
 
+// KPI 카드(오늘 건수) 안에서 바로 심각·높음·중간·낮음 건수를 보여줌 — 옆 카드의 도넛까지 안 봐도 한눈에 위험도가 잡히게
+function renderValueSeverityRow(entry) {
+  if (!entry.severity) {
+    els.valueSeverityRow.hidden = true;
+    return;
+  }
+  els.valueSeverityRow.hidden = false;
+  els.valueSeverityRow.innerHTML = SEVERITY_LEVELS
+    .filter(([key]) => key !== 'unrated')
+    .map(([key, label, color]) => {
+      const v = entry.severity[key] || 0;
+      return `<li><span class="dot" style="background:${color}"></span>${label} <b>${v}</b></li>`;
+    })
+    .join('');
+}
+
 const RISK_STEPS = [
-  { key: 'low', label: '보통', color: '#0ca30c' },
-  { key: 'mid', label: '주의', color: '#fab219' },
-  { key: 'high', label: '위험', color: '#d03b3b' },
+  { key: 'low', label: '보통', color: '#4dd4a8' },
+  { key: 'mid', label: '주의', color: '#f6c945' },
+  { key: 'high', label: '위험', color: '#ff4d5a' },
 ];
 
 // 판단 기준을 코드·화면 양쪽에 그대로 노출 — 규칙을 숨긴 채 "위험/주의/보통"만 던지지 않기 위함
@@ -554,10 +572,10 @@ function renderMonthlyBreakdown(data, widget) {
 }
 
 const SEVERITY_COLOR = {
-  CRITICAL: '#d03b3b',
-  HIGH: '#ec835a',
-  MEDIUM: '#fab219',
-  LOW: '#0ca30c',
+  CRITICAL: '#ff4d5a',
+  HIGH: '#ff9f43',
+  MEDIUM: '#f6c945',
+  LOW: '#4dd4a8',
 };
 
 const SEVERITY_LABEL_KO = {
@@ -576,7 +594,7 @@ function escapeHtml(str) {
 function renderHighlightItems(list) {
   return list
     .map((h) => {
-      const color = SEVERITY_COLOR[h.severity] || '#5a5a62';
+      const color = SEVERITY_COLOR[h.severity] || '#5a6472';
       const label = SEVERITY_LABEL_KO[h.severity] || h.severity;
       const fullKo = h.summaryKo || '';
       const fullEn = h.summaryEn || '';
@@ -647,7 +665,7 @@ let highlightsLastDate = null;
 function renderSecondaryHighlightItems(list) {
   return list
     .map((s) => {
-      const color = SEVERITY_COLOR[s.severity] || '#5a5a62';
+      const color = SEVERITY_COLOR[s.severity] || '#5a6472';
       const label = SEVERITY_LABEL_KO[s.severity] || s.severity;
       const cvss = s.cvssScore != null
         ? `<span class="hl-cvss" title="${escapeHtml(s.cvssVector || 'CVSS 벡터 없음')}">CVSS ${s.cvssScore.toFixed(1)}</span>`
@@ -769,14 +787,14 @@ function renderTrend(data) {
       const h = Math.max(6, ratio * plotH);
       const y = padTop + (plotH - h);
       const isLast = i === n - 1;
-      const fill = isLast ? '#9085e9' : 'rgba(144,133,233,0.45)';
+      const fill = isLast ? '#6ea8ff' : 'rgba(110,168,255,0.4)';
       const shortDate = entry.date.slice(5); // MM-DD
       return `
         <g>
           <title>${entry.date}: ${entry.count}${entry.unit}</title>
           <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${fill}"></rect>
-          <text x="${x + barW / 2}" y="${y - 8}" text-anchor="middle" font-size="11" fill="#ffffff">${entry.count}</text>
-          <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#9a9aa2">${shortDate}</text>
+          <text x="${x + barW / 2}" y="${y - 8}" text-anchor="middle" font-size="11" fill="#f1f5f9">${entry.count}</text>
+          <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#8b98a8">${shortDate}</text>
         </g>`;
     })
     .join('');
@@ -795,6 +813,7 @@ function renderNormal(data) {
   if (!latest) {
     els.valueNumber.textContent = '기록 없음';
     els.valueUnit.textContent = '';
+    els.valueSeverityRow.hidden = true;
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
@@ -817,8 +836,10 @@ function renderNormal(data) {
   els.sourceLink.href = latest.sourceApiUrl;
   els.queriedAt.textContent = formatKst(latest.queriedAtUtc);
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
+  els.headerDate.textContent = `KST ${latest.date}`;
 
   renderSeverity(latest);
+  renderValueSeverityRow(latest);
   renderRisk(latest);
   renderCategory(latest);
   renderProduct(latest);
@@ -851,6 +872,7 @@ function renderError(err) {
     els.statusBanner.textContent = `${label} — 아직 정상 데이터를 가져오지 못했습니다`;
     els.valueNumber.textContent = '—';
     els.valueUnit.textContent = '';
+    els.valueSeverityRow.hidden = true;
     els.compareCard.hidden = true;
     els.severityCard.hidden = true;
     els.riskMeter.hidden = true;
