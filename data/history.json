@@ -21,7 +21,8 @@
         "summaryKo": "WordPress용 WS Form LITE – Drag & Drop Contact Form Builder 플러그인은 최대 및 최대 모든 버전의 PHP 개체 주입에 취약합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4703",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-23"
       },
       {
         "id": "CVE-2026-78050",
@@ -30,7 +31,8 @@
         "summaryKo": "Comfast CF-N1-S 2.6.0.1에서 취약점이 발견되었습니다. 영향을 받는 요소는/cgi-bin/mbox-config? metho 파일의 sub_41AD7C 함수입니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78050",
         "cvssScore": 9.9,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "date": "2026-08-23"
       },
       {
         "id": "CVE-2026-62384",
@@ -39,7 +41,8 @@
         "summaryKo": "3.10.2 이전 NLTK 버전에는 FramenetCorpusReader에 심볼릭 링크 기반 샌드박스 바이패스가 포함되어 있어 공격자가 임의 XML 파일을 읽을 수 있습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62384",
         "cvssScore": 7.5,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "date": "2026-08-23"
       }
     ]
   },
@@ -65,7 +68,8 @@
         "summaryKo": "TENDA CH22 1.0.0.1에서 취약점이 발견되었습니다. 이것은/goform/exeCommand 파일의 formexeCommand 함수에 영향을 미칩니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78141",
         "cvssScore": 7.4,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L",
+        "date": "2026-08-24"
       },
       {
         "id": "CVE-2026-78143",
@@ -74,7 +78,8 @@
         "summaryKo": "코드 프로젝트 Barangay Resident Profiling Management System 1.0에서 취약점이 확인되었습니다. 영향을 받는 것은 fi의 알려지지 않은 기능입니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78143",
         "cvssScore": 7.3,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "date": "2026-08-24"
       },
       {
         "id": "CVE-2026-78147",
@@ -83,7 +88,8 @@
         "summaryKo": "Ggml-org llama.cpp bec4772f6에서 취약점이 발견되었습니다. 영향을 받는 요소는 ggml/src/ggml 파일의 deserialize_tensor 함수입니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78147",
         "cvssScore": 7.3,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "date": "2026-08-24"
       }
     ]
   },
@@ -109,7 +115,8 @@
         "summaryKo": "V3.0.0.3327을 통한 Netis NC63 펌웨어에는 인증되지 않은 원격 공격자가…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76071",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-25"
       },
       {
         "id": "CVE-2026-77915",
@@ -118,7 +125,8 @@
         "summaryKo": "rConfig 8.0.0 8.2.13 이전 버전에는 인증되지 않은 공격자가 계정을 스스로 등록할 수 있는 인증 무시 취약점이 있습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77915",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-25"
       },
       {
         "id": "CVE-2026-71921",
@@ -127,7 +135,8 @@
         "summaryKo": "여러 DrayTek VigorSwitch 모델은 setget.cgi 인터페이스에 사전 인증 명령 주입 취약점이 있습니다. 취약점…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71921",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-25"
       }
     ]
   },
@@ -153,7 +162,8 @@
         "summaryKo": "TRtek 기술 제품 컴퓨터 소프트웨어 하드웨어 산업 및 무역의 위험한 유형 취약점이 있는 파일의 무제한 업로드…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16286",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-26"
       },
       {
         "id": "CVE-2022-51000",
@@ -162,7 +172,8 @@
         "summaryKo": "1.13.2 이전의 Nokogiri (CRuby, 패키지 라이브러리 사용 시) 는 공급업체 libxml2 2.9.12 및 libxslt 1.1.34를 배송하며, 이는 2개 이상의 영향을 받습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-51000",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-26"
       },
       {
         "id": "CVE-2024-58378",
@@ -171,7 +182,8 @@
         "summaryKo": "1.15.6 이전의 Nokogiri 및 1.16.2 이전의 1.16.x (패키지된 libxml2를 사용할 때 CRuby) 는 li의 use-after-free 취약성의 영향을 받습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-58378",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-26"
       }
     ]
   },
@@ -197,7 +209,8 @@
         "summaryKo": "일리아스는 인증되지 않은 발신자에 대해 저장된 세션 데이터를 역직렬화합니다. 구성 요소/ILIAS/AuthShibbolet의 Shibboleth 백 채널 엔드포인트…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80428",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-27"
       },
       {
         "id": "CVE-2026-81031",
@@ -206,7 +219,8 @@
         "summaryKo": "IDURAR ERP CRM은 요청하는 계정이 아닌 요청 이름 중 어느 계정의 암호를 변경합니다. b의 업데이트 처리기…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81031",
         "cvssScore": 7.2,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-27"
       },
       {
         "id": "CVE-2026-81036",
@@ -215,7 +229,8 @@
         "summaryKo": "Stalwart Mail Server는 OAuth 리디렉션 대상을 기본 구성의 등록된 대상과 비교하지 않습니다. 유효성 검사…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81036",
         "cvssScore": 8.1,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+        "date": "2026-08-27"
       }
     ]
   },
@@ -241,7 +256,8 @@
         "summaryKo": "1.4.9 이전의 openssl_encrypt는 identity.json에서 ID를 로드할 때 지문을 다시 파생하고 유효성을 검사하지 못하므로 공격자가…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81702",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-28"
       },
       {
         "id": "CVE-2026-81707",
@@ -250,7 +266,8 @@
         "summaryKo": "1.4.9 이전의 openssl_encrypt는 가져온 ID 문서의 이메일 필드를 검사하지 못하므로 공격자는 ANSI 이스케이프 시퀀스를 주입할 수 있습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81707",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-28"
       },
       {
         "id": "CVE-2026-81735",
@@ -259,7 +276,8 @@
         "summaryKo": "uI-TARS-desktop의 mcp-http-server 패키지에 있는 startServer.ts는 호스트가 주어지지 않았을 때 수신 주소가 '::' 로 기본 설정되었으므로 startSseAnd…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-81735",
         "cvssScore": 10,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "date": "2026-08-28"
       }
     ]
   },
@@ -285,7 +303,8 @@
         "summaryKo": "26.2.2를 통한 Redpanda는 admin_api_require_auth가 false로 기본 설정되고 인증되지 않은 요청이 처리되는 Admin API를 0.0.0.0: 9644로 바인딩합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82266",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-29"
       },
       {
         "id": "CVE-2026-82277",
@@ -294,7 +313,8 @@
         "summaryKo": "1.10.0을 통한 Argo 롤아웃 대시보드는 모든 인터페이스에 바인딩되며 인증, 권한 부여 없이 돌연변이 롤아웃 작업을 노출합니다…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82277",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-29"
       },
       {
         "id": "CVE-2026-18527",
@@ -303,7 +323,8 @@
         "summaryKo": "IBM Administration Runtime Expert for i 1R1M0 IBM Application Runtime Expert (ARE) for i는 원격 공격자가 더 높은 비공개 권한을 얻도록 허용할 수 있습니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18527",
         "cvssScore": 9.9,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "date": "2026-08-29"
       }
     ]
   },
@@ -329,7 +350,8 @@
         "summaryKo": "19.20.2 이전의 Cloud Commander에는 REST 파일 작동 및 감점 엔드포인트에 디렉토리 트래버설 취약성이 있으며 이는 prop에 실패합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82460",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-30"
       },
       {
         "id": "CVE-2026-15369",
@@ -338,7 +360,8 @@
         "summaryKo": "WordPress용 WooCommerce 플러그인의 사용자 지정 사용자 등록 필드는 다음 버전까지의 권한 상승에 취약합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15369",
         "cvssScore": 9.8,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "date": "2026-08-30"
       },
       {
         "id": "CVE-2026-82461",
@@ -347,7 +370,8 @@
         "summaryKo": "keycloak 영역 및 클라이언트 롤을 추출할 때 6.5.6 이전의 pac4j-oidc가 액세스 토큰 서명, 발행자, 대상 또는 만료 여부를 확인하지 못함…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82461",
         "cvssScore": 8.1,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+        "date": "2026-08-30"
       }
     ]
   },
@@ -373,7 +397,8 @@
         "summaryKo": "D-Link DIR-825M 1.1.8에서 취약점이 탐지되었습니다. 이것은 compon의 file/boafrm/formDiskFormat의 sub_46725C 함수에 영향을 미칩니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82592",
         "cvssScore": 9.9,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "date": "2026-08-31"
       },
       {
         "id": "CVE-2026-82593",
@@ -382,7 +407,8 @@
         "summaryKo": "D-Link DIR-825M 1.1.8에서 결함이 발견되었습니다. 이것은 co의 file/boafrm/formLtefotaUpgradeFibocom의 sub_41802C 함수에 영향을 미칩니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82593",
         "cvssScore": 9.9,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "date": "2026-08-31"
       },
       {
         "id": "CVE-2026-82644",
@@ -391,7 +417,8 @@
         "summaryKo": "WWBN AVideo (현재 e01e41ecc 및 이전 버전) 에는 enforceRateLimit () 에 무차별 대입 제한 바이패스가 포함되어 있어 login.json.php를 보호합니다.…",
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82644",
         "cvssScore": 7.5,
-        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "date": "2026-08-31"
       }
     ]
   },
@@ -419,7 +446,8 @@
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "경로 순회"
+        "category": "경로 순회",
+        "date": "2026-09-01"
       },
       {
         "id": "CVE-2026-82971",
@@ -430,7 +458,8 @@
         "cvssScore": 10,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-01"
       },
       {
         "id": "CVE-2026-83524",
@@ -441,7 +470,8 @@
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-01"
       }
     ],
     "categoryBreakdown": [
@@ -663,7 +693,8 @@
             "id": "CVE-2026-82914",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82914"
           }
-        ]
+        ],
+        "desc": "웹사이트 서버 쪽 로직을 짜는 스크립트 언어예요. 워드프레스 등 수많은 웹사이트의 기반이라 영향 범위가 넓어요."
       },
       {
         "key": "wordpress",
@@ -674,7 +705,8 @@
             "id": "CVE-2026-66047",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66047"
           }
-        ]
+        ],
+        "desc": "전 세계 웹사이트 상당수가 쓰는 콘텐츠 관리 시스템(CMS). 본체뿐 아니라 플러그인·테마 취약점도 여기 묶여요."
       },
       {
         "key": "google-android",
@@ -685,7 +717,8 @@
             "id": "CVE-2026-82810",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82810"
           }
-        ]
+        ],
+        "desc": "Android 운영체제와 Chrome 브라우저 등 구글 제품군. 스마트폰 이용자 다수가 영향권이에요."
       }
     ]
   },
@@ -713,7 +746,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-02"
       },
       {
         "id": "CVE-2026-84479",
@@ -724,7 +758,8 @@
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "기타"
+        "category": "기타",
+        "date": "2026-09-02"
       },
       {
         "id": "CVE-2026-84480",
@@ -735,7 +770,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "기타"
+        "category": "기타",
+        "date": "2026-09-02"
       }
     ],
     "categoryBreakdown": [
@@ -879,7 +915,8 @@
             "id": "CVE-2026-84208",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84208"
           }
-        ]
+        ],
+        "desc": "웹사이트 서버 쪽 로직을 짜는 스크립트 언어예요. 워드프레스 등 수많은 웹사이트의 기반이라 영향 범위가 넓어요."
       },
       {
         "key": "microsoft",
@@ -890,7 +927,8 @@
             "id": "CVE-2026-45221",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45221"
           }
-        ]
+        ],
+        "desc": "Windows 운영체제와 Office 등 마이크로소프트 제품군. 기업·개인 PC에 광범위하게 깔려 있어요."
       },
       {
         "key": "gitlab-github",
@@ -901,7 +939,8 @@
             "id": "CVE-2026-84423",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84423"
           }
-        ]
+        ],
+        "desc": "코드 저장소·협업 플랫폼(GitLab, GitHub)이에요. 개발 조직의 소스코드·CI/CD 파이프라인이 걸려 있어요."
       },
       {
         "key": "docker-k8s",
@@ -912,7 +951,8 @@
             "id": "CVE-2026-84694",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84694"
           }
-        ]
+        ],
+        "desc": "컨테이너 실행(Docker)·오케스트레이션(Kubernetes) 도구예요. 클라우드 인프라 운영의 핵심이에요."
       }
     ]
   },
@@ -951,7 +991,8 @@
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-18058",
@@ -973,7 +1014,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 필요",
-        "category": "권한 상승"
+        "category": "권한 상승",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-78408",
@@ -995,7 +1037,8 @@
         "cvssScore": 7.9,
         "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 필요",
-        "category": "권한 상승"
+        "category": "권한 상승",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-78409",
@@ -1017,7 +1060,8 @@
         "cvssScore": 7,
         "cvssVector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "경로 순회"
+        "category": "경로 순회",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-78410",
@@ -1039,7 +1083,8 @@
         "cvssScore": 7.8,
         "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "경로 순회"
+        "category": "경로 순회",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-84841",
@@ -1061,7 +1106,8 @@
         "cvssScore": 7.3,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-82524",
@@ -1083,7 +1129,8 @@
         "cvssScore": 7.2,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
-        "category": "위험한 파일 업로드"
+        "category": "위험한 파일 업로드",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-84839",
@@ -1110,7 +1157,8 @@
         "cvssScore": 5.3,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-75134",
@@ -1132,7 +1180,8 @@
         "cvssScore": 6.4,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "권한 상승"
+        "category": "권한 상승",
+        "date": "2026-09-03"
       },
       {
         "id": "CVE-2026-84852",
@@ -1154,7 +1203,8 @@
         "cvssScore": 4.4,
         "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "경로 순회"
+        "category": "경로 순회",
+        "date": "2026-09-03"
       }
     ],
     "secondaryHighlights": [],
@@ -1399,7 +1449,8 @@
             "id": "CVE-2026-75137",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75137"
           }
-        ]
+        ],
+        "desc": "Windows 운영체제와 Office 등 마이크로소프트 제품군. 기업·개인 PC에 광범위하게 깔려 있어요."
       },
       {
         "key": "linux",
@@ -1414,7 +1465,8 @@
             "id": "CVE-2026-78410",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410"
           }
-        ]
+        ],
+        "desc": "리눅스 커널 및 관련 시스템 소프트웨어. 서버부터 임베디드 기기까지 광범위하게 쓰여 영향 범위가 커요."
       },
       {
         "key": "php",
@@ -1425,7 +1477,8 @@
             "id": "CVE-2026-82524",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82524"
           }
-        ]
+        ],
+        "desc": "웹사이트 서버 쪽 로직을 짜는 스크립트 언어예요. 워드프레스 등 수많은 웹사이트의 기반이라 영향 범위가 넓어요."
       },
       {
         "key": "wordpress",
@@ -1436,7 +1489,8 @@
             "id": "CVE-2026-75134",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75134"
           }
-        ]
+        ],
+        "desc": "전 세계 웹사이트 상당수가 쓰는 콘텐츠 관리 시스템(CMS). 본체뿐 아니라 플러그인·테마 취약점도 여기 묶여요."
       },
       {
         "key": "google-android",
@@ -1447,7 +1501,8 @@
             "id": "CVE-2026-84852",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84852"
           }
-        ]
+        ],
+        "desc": "Android 운영체제와 Chrome 브라우저 등 구글 제품군. 스마트폰 이용자 다수가 영향권이에요."
       }
     ]
   },
@@ -1486,7 +1541,8 @@
         "cvssScore": 10,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-83711",
@@ -1508,7 +1564,8 @@
         "cvssScore": 10,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85223",
@@ -1535,7 +1592,8 @@
         "cvssScore": 9.9,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85424",
@@ -1557,7 +1615,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85425",
@@ -1579,7 +1638,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85426",
@@ -1601,7 +1661,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85428",
@@ -1623,7 +1684,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85433",
@@ -1645,7 +1707,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85437",
@@ -1667,7 +1730,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85438",
@@ -1689,7 +1753,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "버퍼 오버플로우"
+        "category": "버퍼 오버플로우",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85440",
@@ -1711,7 +1776,8 @@
         "cvssScore": 9.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "버퍼 오버플로우"
+        "category": "버퍼 오버플로우",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85183",
@@ -1725,15 +1791,16 @@
         "cwe": [
           {
             "id": "CWE-1385",
-            "label": null,
-            "hint": null
+            "label": "WebSocket Origin 검증 누락",
+            "hint": "웹소켓 연결을 수락할 때 요청 출처(Origin)를 확인하지 않아서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85183",
         "cvssScore": 9.3,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
-        "category": "CSRF"
+        "category": "CSRF",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-80098",
@@ -1747,15 +1814,16 @@
         "cwe": [
           {
             "id": "CWE-347",
-            "label": null,
-            "hint": null
+            "label": "전자서명 검증 미흡",
+            "hint": "데이터에 첨부된 전자서명을 제대로 검증하지 않아서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80098",
         "cvssScore": 9.3,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "권한 상승"
+        "category": "권한 상승",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85394",
@@ -1769,15 +1837,16 @@
         "cwe": [
           {
             "id": "CWE-347",
-            "label": null,
-            "hint": null
+            "label": "전자서명 검증 미흡",
+            "hint": "데이터에 첨부된 전자서명을 제대로 검증하지 않아서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85394",
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85222",
@@ -1804,7 +1873,8 @@
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85224",
@@ -1831,7 +1901,8 @@
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-62916",
@@ -1845,15 +1916,16 @@
         "cwe": [
           {
             "id": "CWE-288",
-            "label": null,
-            "hint": null
+            "label": "우회 경로를 통한 인증 우회",
+            "hint": "정식 인증 절차를 거치지 않아도 되는 다른 경로·채널이 남아 있어서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62916",
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85430",
@@ -1867,15 +1939,16 @@
         "cwe": [
           {
             "id": "CWE-345",
-            "label": null,
-            "hint": null
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85430",
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85434",
@@ -1889,15 +1962,16 @@
         "cwe": [
           {
             "id": "CWE-345",
-            "label": null,
-            "hint": null
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85434",
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85435",
@@ -1911,15 +1985,16 @@
         "cwe": [
           {
             "id": "CWE-345",
-            "label": null,
-            "hint": null
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85435",
         "cvssScore": 9.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-71963",
@@ -1941,7 +2016,8 @@
         "cvssScore": 8.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85452",
@@ -1963,7 +2039,8 @@
         "cvssScore": 8.8,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
-        "category": "버퍼 오버플로우"
+        "category": "버퍼 오버플로우",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85179",
@@ -1985,7 +2062,8 @@
         "cvssScore": 8.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "SSRF"
+        "category": "SSRF",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-65818",
@@ -2007,7 +2085,8 @@
         "cvssScore": 8.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "SSRF"
+        "category": "SSRF",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-69857",
@@ -2029,7 +2108,8 @@
         "cvssScore": 8.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-70178",
@@ -2051,7 +2131,8 @@
         "cvssScore": 8.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85432",
@@ -2065,15 +2146,16 @@
         "cwe": [
           {
             "id": "CWE-290",
-            "label": null,
-            "hint": null
+            "label": "위장을 통한 인증 우회",
+            "hint": "IP·호스트명처럼 위조 가능한 값만으로 신원을 판단해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85432",
         "cvssScore": 8.2,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:L",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85455",
@@ -2095,7 +2177,8 @@
         "cvssScore": 8.2,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "역직렬화 취약점"
+        "category": "역직렬화 취약점",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85214",
@@ -2117,7 +2200,8 @@
         "cvssScore": 8.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "서비스 거부(DoS)"
+        "category": "서비스 거부(DoS)",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85427",
@@ -2131,15 +2215,16 @@
         "cwe": [
           {
             "id": "CWE-494",
-            "label": null,
-            "hint": null
+            "label": "무결성 검증 없는 코드 다운로드",
+            "hint": "외부에서 받아온 코드가 변조되지 않았는지 확인하지 않고 그대로 실행해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85427",
         "cvssScore": 8.1,
         "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-83959",
@@ -2153,15 +2238,16 @@
         "cwe": [
           {
             "id": "CWE-122",
-            "label": null,
-            "hint": null
+            "label": "힙 버퍼 오버플로우",
+            "hint": "힙에 할당된 메모리 범위를 넘어서까지 쓸 수 있어서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-83959",
         "cvssScore": 7.8,
         "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85439",
@@ -2183,7 +2269,8 @@
         "cvssScore": 7.8,
         "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
-        "category": "원격 코드 실행"
+        "category": "원격 코드 실행",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85178",
@@ -2205,7 +2292,8 @@
         "cvssScore": 7.7,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85211",
@@ -2227,7 +2315,8 @@
         "cvssScore": 7.7,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85213",
@@ -2249,7 +2338,8 @@
         "cvssScore": 7.6,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "접근 통제 오류"
+        "category": "접근 통제 오류",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85180",
@@ -2271,7 +2361,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85182",
@@ -2293,7 +2384,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 낮은 권한 필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85396",
@@ -2315,7 +2407,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "경로 순회"
+        "category": "경로 순회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-82527",
@@ -2337,7 +2430,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-82520",
@@ -2351,15 +2445,16 @@
         "cwe": [
           {
             "id": "CWE-409",
-            "label": null,
-            "hint": null
+            "label": "압축 해제 폭탄",
+            "hint": "압축을 풀었을 때 크기가 얼마나 커질지 제한하지 않아서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82520",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "서비스 거부(DoS)"
+        "category": "서비스 거부(DoS)",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-8862",
@@ -2381,7 +2476,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "하드코딩된 자격증명"
+        "category": "하드코딩된 자격증명",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85429",
@@ -2395,15 +2491,16 @@
         "cwe": [
           {
             "id": "CWE-345",
-            "label": null,
-            "hint": null
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85429",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85431",
@@ -2417,15 +2514,16 @@
         "cwe": [
           {
             "id": "CWE-345",
-            "label": null,
-            "hint": null
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85431",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "입력값 검증 미흡"
+        "category": "입력값 검증 미흡",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85436",
@@ -2439,15 +2537,16 @@
         "cwe": [
           {
             "id": "CWE-191",
-            "label": null,
-            "hint": null
+            "label": "정수 언더플로우",
+            "hint": "계산 결과가 변수가 담을 수 있는 최솟값 아래로 내려가는지 확인하지 않아서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85436",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "버퍼 오버플로우"
+        "category": "버퍼 오버플로우",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85441",
@@ -2461,15 +2560,16 @@
         "cwe": [
           {
             "id": "CWE-195",
-            "label": null,
-            "hint": null
+            "label": "부호 있는·없는 정수 변환 오류",
+            "hint": "부호 있는 정수를 부호 없는 정수로 바꾸는 과정에서 값이 의도와 다르게 해석돼서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85441",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85442",
@@ -2483,15 +2583,16 @@
         "cwe": [
           {
             "id": "CWE-789",
-            "label": null,
-            "hint": null
+            "label": "과도한 크기의 메모리 할당",
+            "hint": "할당할 메모리 크기를 검증 없이 사용자 입력값 그대로 써서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85442",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "인증 우회"
+        "category": "인증 우회",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85443",
@@ -2513,7 +2614,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "서비스 거부(DoS)"
+        "category": "서비스 거부(DoS)",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85444",
@@ -2535,7 +2637,8 @@
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "버퍼 오버플로우"
+        "category": "버퍼 오버플로우",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85445",
@@ -2549,15 +2652,16 @@
         "cwe": [
           {
             "id": "CWE-789",
-            "label": null,
-            "hint": null
+            "label": "과도한 크기의 메모리 할당",
+            "hint": "할당할 메모리 크기를 검증 없이 사용자 입력값 그대로 써서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85445",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "서비스 거부(DoS)"
+        "category": "서비스 거부(DoS)",
+        "date": "2026-09-04"
       },
       {
         "id": "CVE-2026-85446",
@@ -2571,15 +2675,16 @@
         "cwe": [
           {
             "id": "CWE-407",
-            "label": null,
-            "hint": null
+            "label": "비효율적 알고리즘 복잡도",
+            "hint": "입력 크기에 따라 처리 시간이 과도하게 늘어나는 알고리즘이라 적은 입력으로도 서비스가 마비될 수 있어서 발생"
           }
         ],
         "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85446",
         "cvssScore": 7.5,
         "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
         "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
-        "category": "서비스 거부(DoS)"
+        "category": "서비스 거부(DoS)",
+        "date": "2026-09-04"
       }
     ],
     "secondaryHighlights": [],
@@ -2626,9 +2731,9 @@
       },
       {
         "key": "CWE-345",
-        "label": "CWE-345",
+        "label": "데이터 진위 검증 미흡",
         "count": 5,
-        "desc": "",
+        "desc": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생",
         "examples": [
           {
             "id": "CVE-2026-85430",
@@ -2646,9 +2751,9 @@
       },
       {
         "key": "CWE-74",
-        "label": "CWE-74",
+        "label": "인젝션(상위 분류)",
         "count": 5,
-        "desc": "",
+        "desc": "입력값에 섞인 특수 문자·명령을 제거하지 않고 다음 처리 단계로 그대로 넘겨서 발생 — 하위에 SQL·OS 명령 등 구체적인 인젝션 유형이 있음",
         "examples": [
           {
             "id": "CVE-2026-85137",
@@ -2686,9 +2791,9 @@
       },
       {
         "key": "CWE-770",
-        "label": "CWE-770",
+        "label": "자원 할당량 제한 없음",
         "count": 4,
-        "desc": "",
+        "desc": "메모리·연결·스레드 같은 자원을 요청하는 만큼 제한 없이 내줘서 과도한 요청에 시스템이 마비될 수 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-85447",
@@ -2726,9 +2831,9 @@
       },
       {
         "key": "CWE-347",
-        "label": "CWE-347",
+        "label": "전자서명 검증 미흡",
         "count": 3,
-        "desc": "",
+        "desc": "데이터에 첨부된 전자서명을 제대로 검증하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-85394",
@@ -2866,9 +2971,9 @@
       },
       {
         "key": "CWE-789",
-        "label": "CWE-789",
+        "label": "과도한 크기의 메모리 할당",
         "count": 2,
-        "desc": "",
+        "desc": "할당할 메모리 크기를 검증 없이 사용자 입력값 그대로 써서 발생",
         "examples": [
           {
             "id": "CVE-2026-85442",
@@ -2898,9 +3003,9 @@
       },
       {
         "key": "CWE-1385",
-        "label": "CWE-1385",
+        "label": "WebSocket Origin 검증 누락",
         "count": 1,
-        "desc": "",
+        "desc": "웹소켓 연결을 수락할 때 요청 출처(Origin)를 확인하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-85183",
@@ -2910,9 +3015,9 @@
       },
       {
         "key": "CWE-288",
-        "label": "CWE-288",
+        "label": "우회 경로를 통한 인증 우회",
         "count": 1,
-        "desc": "",
+        "desc": "정식 인증 절차를 거치지 않아도 되는 다른 경로·채널이 남아 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-62916",
@@ -2934,9 +3039,9 @@
       },
       {
         "key": "CWE-122",
-        "label": "CWE-122",
+        "label": "힙 버퍼 오버플로우",
         "count": 1,
-        "desc": "",
+        "desc": "힙에 할당된 메모리 범위를 넘어서까지 쓸 수 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-83959",
@@ -2958,9 +3063,9 @@
       },
       {
         "key": "CWE-409",
-        "label": "CWE-409",
+        "label": "압축 해제 폭탄",
         "count": 1,
-        "desc": "",
+        "desc": "압축을 풀었을 때 크기가 얼마나 커질지 제한하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-82520",
@@ -2982,9 +3087,9 @@
       },
       {
         "key": "CWE-943",
-        "label": "CWE-943",
+        "label": "데이터 조회 로직 인젝션",
         "count": 1,
-        "desc": "",
+        "desc": "사용자 입력을 조회 조건(쿼리)에 그대로 반영해 조회 로직이 조작될 수 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-62906",
@@ -2994,9 +3099,9 @@
       },
       {
         "key": "CWE-285",
-        "label": "CWE-285",
+        "label": "부적절한 인가",
         "count": 1,
-        "desc": "",
+        "desc": "사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-85378",
@@ -3006,9 +3111,9 @@
       },
       {
         "key": "CWE-494",
-        "label": "CWE-494",
+        "label": "무결성 검증 없는 코드 다운로드",
         "count": 1,
-        "desc": "",
+        "desc": "외부에서 받아온 코드가 변조되지 않았는지 확인하지 않고 그대로 실행해서 발생",
         "examples": [
           {
             "id": "CVE-2026-85427",
@@ -3018,9 +3123,9 @@
       },
       {
         "key": "CWE-290",
-        "label": "CWE-290",
+        "label": "위장을 통한 인증 우회",
         "count": 1,
-        "desc": "",
+        "desc": "IP·호스트명처럼 위조 가능한 값만으로 신원을 판단해서 발생",
         "examples": [
           {
             "id": "CVE-2026-85432",
@@ -3030,9 +3135,9 @@
       },
       {
         "key": "CWE-191",
-        "label": "CWE-191",
+        "label": "정수 언더플로우",
         "count": 1,
-        "desc": "",
+        "desc": "계산 결과가 변수가 담을 수 있는 최솟값 아래로 내려가는지 확인하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-85436",
@@ -3042,9 +3147,9 @@
       },
       {
         "key": "CWE-195",
-        "label": "CWE-195",
+        "label": "부호 있는·없는 정수 변환 오류",
         "count": 1,
-        "desc": "",
+        "desc": "부호 있는 정수를 부호 없는 정수로 바꾸는 과정에서 값이 의도와 다르게 해석돼서 발생",
         "examples": [
           {
             "id": "CVE-2026-85441",
@@ -3066,9 +3171,9 @@
       },
       {
         "key": "CWE-407",
-        "label": "CWE-407",
+        "label": "비효율적 알고리즘 복잡도",
         "count": 1,
-        "desc": "",
+        "desc": "입력 크기에 따라 처리 시간이 과도하게 늘어나는 알고리즘이라 적은 입력으로도 서비스가 마비될 수 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-85446",
@@ -3138,9 +3243,9 @@
       },
       {
         "key": "CWE-117",
-        "label": "CWE-117",
+        "label": "로그 인젝션",
         "count": 1,
-        "desc": "",
+        "desc": "사용자 입력을 그대로 로그에 남겨 로그를 위조하거나 조작된 내용을 끼워 넣을 수 있어서 발생",
         "examples": [
           {
             "id": "CVE-2026-9736",
@@ -3150,9 +3255,9 @@
       },
       {
         "key": "CWE-297",
-        "label": "CWE-297",
+        "label": "인증서-호스트 불일치 검증 미흡",
         "count": 1,
-        "desc": "",
+        "desc": "인증서에 명시된 대상과 실제 접속 대상이 일치하는지 확인하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-9744",
@@ -3162,9 +3267,9 @@
       },
       {
         "key": "CWE-283",
-        "label": "CWE-283",
+        "label": "소유권 미검증",
         "count": 1,
-        "desc": "",
+        "desc": "자원에 접근을 허용하기 전에 요청자가 실제 소유자인지 확인하지 않아서 발생",
         "examples": [
           {
             "id": "CVE-2026-9745",
@@ -3174,9 +3279,9 @@
       },
       {
         "key": "CWE-266",
-        "label": "CWE-266",
+        "label": "잘못된 권한 부여",
         "count": 1,
-        "desc": "",
+        "desc": "사용자·프로세스에 실제 필요한 것보다 높은 권한을 부여해서 발생",
         "examples": [
           {
             "id": "CVE-2026-85241",
@@ -3186,9 +3291,9 @@
       },
       {
         "key": "CWE-193",
-        "label": "CWE-193",
+        "label": "Off-by-one 오류",
         "count": 1,
-        "desc": "",
+        "desc": "반복·경계 계산에서 인덱스를 하나 많거나 적게 세어서 발생",
         "examples": [
           {
             "id": "CVE-2026-85454",
@@ -3216,7 +3321,8 @@
             "id": "CVE-2026-85187",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85187"
           }
-        ]
+        ],
+        "desc": "웹사이트 서버 쪽 로직을 짜는 스크립트 언어예요. 워드프레스 등 수많은 웹사이트의 기반이라 영향 범위가 넓어요."
       },
       {
         "key": "microsoft",
@@ -3235,7 +3341,8 @@
             "id": "CVE-2026-85390",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85390"
           }
-        ]
+        ],
+        "desc": "Windows 운영체제와 Office 등 마이크로소프트 제품군. 기업·개인 PC에 광범위하게 깔려 있어요."
       },
       {
         "key": "ibm",
@@ -3254,7 +3361,8 @@
             "id": "CVE-2026-9036",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9036"
           }
-        ]
+        ],
+        "desc": "기업용 서버·소프트웨어·클라우드 솔루션을 만드는 회사예요. 제품군이 넓어 다양한 유형의 취약점이 섞여 있어요."
       },
       {
         "key": "d-link",
@@ -3273,7 +3381,8 @@
             "id": "CVE-2026-85224",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85224"
           }
-        ]
+        ],
+        "desc": "가정·소규모 사무실용 공유기 등을 만드는 네트워크 장비 제조사예요. 오래된 기기는 패치가 늦거나 끊긴 경우가 많아요."
       },
       {
         "key": "wordpress",
@@ -3284,7 +3393,8 @@
             "id": "CVE-2026-82023",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82023"
           }
-        ]
+        ],
+        "desc": "전 세계 웹사이트 상당수가 쓰는 콘텐츠 관리 시스템(CMS). 본체뿐 아니라 플러그인·테마 취약점도 여기 묶여요."
       }
     ]
   }

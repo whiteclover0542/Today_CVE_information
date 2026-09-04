@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>오늘의 CVE 정보판</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='5' fill='%23050506'/><path d='M12 3 5 5.7v5.4c0 4.7 3 8.9 7 10 4-1.1 7-5.3 7-10V5.7L12 3Z' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linejoin='round'/><path d='m9 12 2 2 4-4.3' fill='none' stroke='%236ea8ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
-<link rel="stylesheet" href="assets/style.css?v=47" />
+<link rel="stylesheet" href="assets/style.css?v=48" />
 </head>
 <body>
 <main class="dashboard">
@@ -61,9 +61,15 @@
     <button type="button" class="tab-btn" role="tab" data-tab="today">오늘</button>
     <button type="button" class="tab-btn" role="tab" data-tab="monthly">월별 비교</button>
     <button type="button" class="tab-btn" role="tab" data-tab="trend">추이·기록</button>
+    <button type="button" class="tab-btn" role="tab" data-tab="search">검색</button>
   </nav>
 
   <div class="tab-panel" data-tab-panel="today" role="tabpanel">
+  <section class="briefing-card" id="briefing-card" hidden>
+    <h2>오늘의 브리핑</h2>
+    <p class="briefing-text" id="briefing-text"></p>
+    <p class="briefing-disclaimer">AI가 오늘 집계된 수치만 보고 생성한 요약이에요. 참고용으로만 봐 주세요.</p>
+  </section>
   <div class="grid-2">
     <section class="value-card">
       <div class="value-eyebrow">
@@ -103,7 +109,7 @@
         <p class="risk-meter-caption" id="risk-meter-caption"></p>
         <details class="note-details">
           <summary>판단 기준</summary>
-          <p class="risk-meter-rule">심각 1건 이상이면 위험, 심각은 없고 높음이 1건 이상이면 주의, 둘 다 0건이면 보통이에요.</p>
+          <p class="risk-meter-rule">심각 5건 이상이면 위험, 1~4건이면 주의, 0건이면 보통이에요. (최근 기록 심각 건수가 대부분 1~4건이고 5건 이상은 드물게 나타나는 걸 참고해 잡은 기준이라, 데이터가 더 쌓이면 다시 조정할 수 있어요.)</p>
         </details>
       </div>
       <div class="severity-visual">
@@ -116,7 +122,6 @@
 
   <section class="highlights-card" id="highlights-card" hidden>
     <h2>오늘 가장 위험한 CVE</h2>
-    <p class="card-lead" id="highlights-lead" hidden></p>
     <details class="note-details">
       <summary>어떻게 골랐나요?</summary>
       <p class="highlights-note">심각·높음·중간 등급 중 NVD 공식 CWE 분류가 있는 CVE는 전부 보여줘요(해설의 근거가 있어야 해서요). 번역·CVSS 등은 원자료 그대로, "AI 해설"은 그 CWE 분류를 참고해 AI가 생성한 해석·원인·방지법이라 참고용으로만 봐 주세요.</p>
@@ -143,7 +148,6 @@
 
   <section class="category-card" id="category-card" hidden>
     <h2>오늘 가장 많이 발견된 취약점 유형</h2>
-    <p class="card-lead" id="category-lead" hidden></p>
     <ul class="category-bars" id="category-bars"></ul>
     <div class="bar-pagination" id="category-pagination" hidden>
       <button type="button" id="category-prev">← 이전 10개</button>
@@ -158,7 +162,6 @@
 
   <section class="category-card" id="product-card" hidden>
     <h2>오늘 가장 많이 지목된 제품·벤더</h2>
-    <p class="card-lead" id="product-lead" hidden></p>
     <ul class="category-bars" id="product-bars"></ul>
     <div class="bar-pagination" id="product-pagination" hidden>
       <button type="button" id="product-prev">← 이전 10개</button>
@@ -178,7 +181,6 @@
       <h2>월별 CWE 유형 비교</h2>
       <select id="month-select" class="month-select" aria-label="기준 월 선택"></select>
     </div>
-    <p class="monthly-total" id="monthly-category-total"></p>
     <ul class="category-bars" id="monthly-category-bars"></ul>
     <div class="bar-pagination" id="monthly-category-pagination" hidden>
       <button type="button" id="monthly-category-prev">← 이전 10개</button>
@@ -196,7 +198,6 @@
       <h2>월별 제품·벤더 비교</h2>
       <select id="month-product-select" class="month-select" aria-label="기준 월 선택"></select>
     </div>
-    <p class="monthly-total" id="monthly-product-total"></p>
     <ul class="category-bars" id="monthly-product-bars"></ul>
     <div class="bar-pagination" id="monthly-product-pagination" hidden>
       <button type="button" id="monthly-product-prev">← 이전 10개</button>
@@ -214,7 +215,6 @@
   <div class="grid-2">
     <section class="trend-card">
       <h2>최근 추이</h2>
-      <p class="card-lead" id="trend-lead" hidden></p>
       <div class="trend-stats" id="trend-stats" hidden>
         <div class="stat"><span class="stat-label">일평균</span><span class="stat-value" id="stat-avg">-</span></div>
         <div class="stat"><span class="stat-label">최고</span><span class="stat-value" id="stat-max">-</span></div>
@@ -245,6 +245,26 @@
   </div>
   </div>
 
+  <div class="tab-panel" data-tab-panel="search" role="tabpanel" hidden>
+  <section class="search-card">
+    <h2>CVE 검색</h2>
+    <input type="search" id="search-input" class="search-input"
+           placeholder="CVE 번호, 제품명, CWE, 키워드로 검색 (예: CVE-2026-1234, WordPress, CWE-79)"
+           aria-label="CVE 검색" />
+    <details class="note-details">
+      <summary>검색 범위 안내</summary>
+      <p class="search-note">이 검색은 지금까지 불러온 기록 중 "대표 CVE", "CWE 분류 없는 CVE" 목록, 그리고 유형·제품 차트에 예시로 뜬 CVE(유형·제품당 최대 3건)를 대상으로 해요(전체 NVD 데이터베이스가 아니에요). 위 어디에도 등장하지 않은 CVE는 검색되지 않을 수 있어요.</p>
+    </details>
+    <p class="search-status" id="search-status" hidden></p>
+    <ul class="highlights-list" id="search-results"></ul>
+    <div class="bar-pagination" id="search-pagination" hidden>
+      <button type="button" id="search-prev">← 이전 5개</button>
+      <span id="search-page-info" class="bar-page-info"></span>
+      <button type="button" id="search-next">다음 5개 →</button>
+    </div>
+  </section>
+  </div>
+
   <section id="debug-panel" class="debug-panel" hidden>
     <h2>장애 시연 (?debug=1)</h2>
     <p>버튼으로 실패 5종을 재현합니다. 값 유지·복구를 확인하세요.</p>
@@ -262,6 +282,6 @@
     <p><a href="https://github.com/whiteclover0542/Today_CVE_information" target="_blank" rel="noopener">GitHub 저장소</a></p>
   </footer>
 </main>
-<script src="assets/app.js?v=47"></script>
+<script src="assets/app.js?v=48"></script>
 </body>
 </html>

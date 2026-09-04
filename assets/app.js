@@ -76,6 +76,8 @@ async function fetchHistory(simulateKind) {
 const els = {
   headerDate: document.getElementById('header-date'),
   statusBanner: document.getElementById('status-banner'),
+  briefingCard: document.getElementById('briefing-card'),
+  briefingText: document.getElementById('briefing-text'),
   valueNumber: document.getElementById('value-number'),
   valueUnit: document.getElementById('value-unit'),
   valueDate: document.getElementById('value-date'),
@@ -99,7 +101,6 @@ const els = {
   riskMeterCaption: document.getElementById('risk-meter-caption'),
   categoryCard: document.getElementById('category-card'),
   categoryBars: document.getElementById('category-bars'),
-  categoryLead: document.getElementById('category-lead'),
   categoryNote: document.getElementById('category-note'),
   categoryPagination: document.getElementById('category-pagination'),
   categoryPrev: document.getElementById('category-prev'),
@@ -107,7 +108,6 @@ const els = {
   categoryPageInfo: document.getElementById('category-page-info'),
   productCard: document.getElementById('product-card'),
   productBars: document.getElementById('product-bars'),
-  productLead: document.getElementById('product-lead'),
   productNote: document.getElementById('product-note'),
   productPagination: document.getElementById('product-pagination'),
   productPrev: document.getElementById('product-prev'),
@@ -115,7 +115,6 @@ const els = {
   productPageInfo: document.getElementById('product-page-info'),
   monthlyCategoryCard: document.getElementById('monthly-category-card'),
   monthSelect: document.getElementById('month-select'),
-  monthlyCategoryTotal: document.getElementById('monthly-category-total'),
   monthlyCategoryBars: document.getElementById('monthly-category-bars'),
   monthlyCategoryNote: document.getElementById('monthly-category-note'),
   monthlyCategoryPagination: document.getElementById('monthly-category-pagination'),
@@ -124,7 +123,6 @@ const els = {
   monthlyCategoryPageInfo: document.getElementById('monthly-category-page-info'),
   monthlyProductCard: document.getElementById('monthly-product-card'),
   monthProductSelect: document.getElementById('month-product-select'),
-  monthlyProductTotal: document.getElementById('monthly-product-total'),
   monthlyProductBars: document.getElementById('monthly-product-bars'),
   monthlyProductNote: document.getElementById('monthly-product-note'),
   monthlyProductPagination: document.getElementById('monthly-product-pagination'),
@@ -133,7 +131,6 @@ const els = {
   monthlyProductPageInfo: document.getElementById('monthly-product-page-info'),
   highlightsCard: document.getElementById('highlights-card'),
   highlightsList: document.getElementById('highlights-list'),
-  highlightsLead: document.getElementById('highlights-lead'),
   highlightsMoreWrap: document.getElementById('highlights-more-wrap'),
   highlightsMore: document.getElementById('highlights-more'),
   highlightsPagination: document.getElementById('highlights-pagination'),
@@ -142,7 +139,6 @@ const els = {
   highlightsPageInfo: document.getElementById('highlights-page-info'),
   highlightsSecondary: document.getElementById('highlights-secondary'),
   highlightsSecondaryList: document.getElementById('highlights-secondary-list'),
-  trendLead: document.getElementById('trend-lead'),
   trendStats: document.getElementById('trend-stats'),
   trendStatsNote: document.getElementById('trend-stats-note'),
   statAvg: document.getElementById('stat-avg'),
@@ -155,6 +151,13 @@ const els = {
   historyPrev: document.getElementById('history-prev'),
   historyNext: document.getElementById('history-next'),
   historyPageInfo: document.getElementById('history-page-info'),
+  searchInput: document.getElementById('search-input'),
+  searchStatus: document.getElementById('search-status'),
+  searchResults: document.getElementById('search-results'),
+  searchPagination: document.getElementById('search-pagination'),
+  searchPrev: document.getElementById('search-prev'),
+  searchNext: document.getElementById('search-next'),
+  searchPageInfo: document.getElementById('search-page-info'),
 };
 
 let lastGood = null; // { data, queriedAtIso }
@@ -179,6 +182,16 @@ function renderHistoryTable(data) {
   els.historyPageInfo.textContent = `${historyPage} / ${totalPages}`;
   els.historyPrev.disabled = historyPage <= 1;
   els.historyNext.disabled = historyPage >= totalPages;
+}
+
+// "지어내지 않는다" 원칙: briefing이 없으면(키 없음·생성 실패·이 기능 이전 기록) 카드째 숨긴다 — 플레이스홀더 금지.
+function renderBriefing(entry) {
+  if (!entry.briefing) {
+    els.briefingCard.hidden = true;
+    return;
+  }
+  els.briefingCard.hidden = false;
+  els.briefingText.textContent = entry.briefing;
 }
 
 function renderCompare(data) {
@@ -297,16 +310,17 @@ const RISK_STEPS = [
 ];
 
 // 판단 기준을 코드·화면 양쪽에 그대로 노출 — 규칙을 숨긴 채 "위험/주의/보통"만 던지지 않기 위함
+// 임계값(5건)은 최근 기록 13일치 심각 건수 분포(0~20건, 대부분 1~4건)를 참고해 잡은 값 — 하루라도 심각이 뜨면
+// 무조건 "위험"으로 뜨던 이전 기준(critical > 0)은 거의 매일 빨간불이라 변별력이 없어 폐기
 function computeRisk(severity) {
   const critical = severity.critical || 0;
-  const high = severity.high || 0;
-  if (critical > 0) {
+  if (critical >= 5) {
     return { key: 'high', reason: `심각 ${critical}건 → 위험` };
   }
-  if (high > 0) {
-    return { key: 'mid', reason: `높음 ${high}건 → 주의` };
+  if (critical >= 1) {
+    return { key: 'mid', reason: `심각 ${critical}건 → 주의` };
   }
-  return { key: 'low', reason: '심각·높음 없음 → 보통' };
+  return { key: 'low', reason: '심각 0건 → 보통' };
 }
 
 function renderRisk(entry) {
@@ -378,6 +392,69 @@ function buildHighlightIndex(data) {
   return index;
 }
 
+// 검색용 색인 — 지금까지 불러온 기록 전체의 highlights(대표 CVE)+secondaryHighlights(CWE 없는 CVE)를
+// 한 배열로 펼친다. secondaryHighlights 원본에는 date가 없어(엔트리 단위로만 저장) 여기서 채워 넣는다 —
+// 검색 결과는 여러 날짜를 섞어 보여주므로 각 항목이 자기 날짜를 들고 있어야 한다.
+let searchIndex = [];
+
+function buildSearchHaystack(item) {
+  const parts = [
+    item.id,
+    item.category,
+    item.title,
+    item.summaryEn,
+    item.summaryKo,
+    item.interpretation,
+    ...(item.cwe || []).flatMap((c) => [c.id, c.label]),
+  ];
+  return parts.filter(Boolean).join(' ').toLowerCase();
+}
+
+function buildSearchIndex(data) {
+  const index = [];
+  for (const entry of data) {
+    const dayIds = new Set(); // 대표/부가 목록에 이미 있는 CVE — 예시 CVE로 다시 추가하지 않기 위함
+    for (const h of entry.highlights || []) {
+      index.push({ ...h, kind: 'primary', _haystack: buildSearchHaystack(h) });
+      dayIds.add(h.id);
+    }
+    for (const s of entry.secondaryHighlights || []) {
+      const withDate = { ...s, date: entry.date };
+      index.push({ ...withDate, kind: 'secondary', _haystack: buildSearchHaystack(withDate) });
+      dayIds.add(s.id);
+    }
+
+    // 대표/부가 목록엔 없지만 유형·제품 차트의 예시로 등장하는 CVE(유형/제품당 최대 3건, id·url만 있음) —
+    // 이미 화면에 링크로 노출돼 있으니 검색에서도 찾을 수 있어야 한다. 같은 CVE가 CWE·제품 양쪽 예시에
+    // 모두 나오면 두 카테고리 이름을 모두 haystack에 합쳐 어느 키워드로 검색해도 걸리게 한다.
+    const exampleItems = new Map();
+    const addExample = (ex, extraTerms) => {
+      if (dayIds.has(ex.id)) return;
+      const existing = exampleItems.get(ex.id);
+      if (existing) {
+        existing._haystack += ` ${extraTerms.filter(Boolean).join(' ').toLowerCase()}`;
+        return;
+      }
+      const item = {
+        id: ex.id,
+        url: ex.url,
+        date: entry.date,
+        kind: 'example',
+        _haystack: [ex.id, ...extraTerms].filter(Boolean).join(' ').toLowerCase(),
+      };
+      exampleItems.set(ex.id, item);
+      index.push(item);
+    };
+    for (const c of entry.cweBreakdown || []) {
+      for (const ex of c.examples || []) addExample(ex, [c.label, c.key]);
+    }
+    for (const p of entry.productBreakdown || []) {
+      for (const ex of p.examples || []) addExample(ex, [p.label, p.key]);
+    }
+  }
+  return index;
+}
+
 // category-bars 형식 <li> 마크업 생성 — 오늘 유형/제품 카드, 월별 유형/제품 카드 전부 이걸 재사용
 // 설명 문구는 각 항목이 스스로 들고 있는 desc를 그대로 씀(백엔드가 CWE_INFO에서 채워 보냄) — 프론트에
 // 별도 글로서리 사전을 두지 않아 서버·클라 설명이 어긋날 일이 없다. desc가 없으면 그냥 설명 없이 예시 링크만 보여줌.
@@ -402,9 +479,15 @@ function renderCategoryBarList(breakdown, maxCountOverride = null) {
             .map((ex) => `<li><a href="${escapeHtml(ex.url)}" target="_blank" rel="noopener">${escapeHtml(ex.id)}</a></li>`)
             .join('')}</ul>`
         : '';
+      // 설명(desc)이 이 블록의 핵심이고 예시 CVE는 그걸 뒷받침하는 근거라, 설명을 뚜렷한 본문으로
+      // 먼저 보여주고 예시는 "관련 CVE" 라벨을 붙여 한 단계 낮은 보조 정보로 구분한다.
+      const examplesLabel = desc && (cardsHtml || examplesHtml)
+        ? `<span class="category-bar-examples-label">관련 CVE</span>`
+        : '';
       const detailBlock = desc || cardsHtml || examplesHtml
         ? `<div class="category-bar-desc" hidden>
-            ${desc ? `<p>${escapeHtml(desc)}</p>` : ''}
+            ${desc ? `<p class="category-bar-desc-text">${escapeHtml(desc)}</p>` : ''}
+            ${examplesLabel}
             ${cardsHtml}
             ${examplesHtml}
           </div>`
@@ -473,20 +556,6 @@ const productPager = createBarListPager({
   pageInfo: els.productPageInfo,
 });
 
-// 막대 차트 위에 "1위가 무엇인지"를 한 문장으로 먼저 말해주는 결론 문구
-function renderTopLead(el, breakdown, unit) {
-  const [first, second] = breakdown;
-  if (!first) {
-    el.hidden = true;
-    return;
-  }
-  el.hidden = false;
-  const runnerUp = second
-    ? `<span class="card-lead-sub">다음은 ${escapeHtml(second.label)} ${second.count}${unit}</span>`
-    : '';
-  el.innerHTML = `<b>${escapeHtml(first.label)}</b> ${first.count}${unit}${runnerUp}`;
-}
-
 // NVD 공식 CWE(취약점 유형) 분류를 집계한 결과 — data/history.json의 cweBreakdown을 그대로 시각화
 function renderCategory(entry) {
   const breakdown = entry.cweBreakdown;
@@ -496,9 +565,6 @@ function renderCategory(entry) {
   }
   els.categoryCard.hidden = false;
   categoryPager.setData(breakdown);
-  // 차트 제목만으로는 "그래서 뭐가 많다는 건데"가 안 읽혀서, 1위 항목을 문장으로 먼저 말해준다.
-  // 'none'(CWE 미분류)은 유형이 아니라 "분류가 없음"이라 1위여도 결론으로 쓰지 않는다.
-  renderTopLead(els.categoryLead, breakdown.filter((c) => c.key !== 'none'), '건');
 
   els.categoryNote.textContent =
     `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건을 NVD 공식 CWE(취약점 유형) 분류로 집계한 결과예요. CVE 하나에 CWE가 여러 개 매겨져 있으면 그중 첫 번째(주 분류)만 반영하고, NVD가 아직 CWE를 안 매긴 CVE는 "CWE 미분류"로 묶여요. 아직 심각도가 안 매겨진 CVE는 포함되지 않아 전체(${entry.count}건) 비율과는 다를 수 있어요.`;
@@ -513,7 +579,6 @@ function renderProduct(entry) {
   }
   els.productCard.hidden = false;
   productPager.setData(breakdown);
-  renderTopLead(els.productLead, breakdown, '건');
 
   els.productNote.textContent =
     `오늘 등록분 중 심각도가 평가된 CVE ${entry.categorySampleSize}건의 설명 문구에서 미리 정해둔 벤더·제품 목록에 확실히 걸린 것만 보여줘요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`;
@@ -563,7 +628,6 @@ const MONTHLY_WIDGETS = [
       pageInfo: els.monthlyCategoryPageInfo,
     }),
     note: () => els.monthlyCategoryNote,
-    total: () => els.monthlyCategoryTotal,
     emptyNote: '이 달은 CWE 분류 데이터가 없어요.',
     noteText: (month, dayCount) =>
       `${month} 한 달(기록 ${dayCount}일) 동안의 일별 NVD 공식 CWE 분류를 모두 더한 결과예요. CVE 하나당 CWE 하나(주 분류)만 반영하고, CWE가 없는 CVE는 "CWE 미분류"로 묶여요. 각 날짜도 심각도가 평가된 CVE만 대상이라 그 달 전체 등록 건수와는 차이가 있을 수 있어요.`,
@@ -580,7 +644,6 @@ const MONTHLY_WIDGETS = [
       pageInfo: els.monthlyProductPageInfo,
     }),
     note: () => els.monthlyProductNote,
-    total: () => els.monthlyProductTotal,
     emptyNote: '이 달은 목록에 걸린 벤더·제품이 없어요.',
     noteText: (month, dayCount) =>
       `${month} 한 달(기록 ${dayCount}일) 동안 미리 정해둔 벤더·제품 목록에 걸린 것만 더한 결과예요(AI 없이 목록 매칭, 목록에 없으면 표시 안 함). 라벨을 누르면 해당 벤더가 언급된 원본 CVE 링크가 펼쳐져요.`,
@@ -590,13 +653,6 @@ const MONTHLY_WIDGETS = [
 // resetPage=true는 사용자가 월을 직접 바꿨을 때만 — 그냥 데이터 새로고침으로는 보던 페이지가 안 튐
 function renderMonthlyBreakdownBars(data, month, widget, resetPage = false) {
   const { breakdown, dayCount } = aggregateMonthlyBreakdown(data, month, widget.field);
-  const monthTotal = data
-    .filter((e) => monthKey(e.date) === month)
-    .reduce((sum, e) => sum + (e.count || 0), 0);
-  const top = breakdown.filter((c) => c.key !== 'none')[0];
-  widget.total().innerHTML = top
-    ? `<b>${escapeHtml(top.label)}</b> ${top.count}건<span class="card-lead-sub">${month} 한 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록</span>`
-    : `${month} 한 달 총 ${monthTotal.toLocaleString('ko-KR')}건 등록`;
 
   widget.pager.setData(breakdown, { resetPage });
   widget.note().textContent = breakdown.length === 0 ? widget.emptyNote : widget.noteText(month, dayCount);
@@ -662,6 +718,8 @@ function renderHighlightItems(list) {
       const cvssPlain = h.cvssPlain
         ? `<span class="hl-cvss-plain">${escapeHtml(h.cvssPlain)}</span>`
         : '';
+      // 등록일은 백엔드가 그날 조회한 NVD 등록 기준일(kstDate)을 그대로 내려줌 — 없으면(과거 백필 전 데이터) 생략.
+      const dateTag = h.date ? `<span class="hl-date">${escapeHtml(h.date)} 등록</span>` : '';
       const categoryDesc = CATEGORY_GLOSSARY[h.category] || '';
       const categoryTag = h.category
         ? `<button type="button" class="hl-category">${escapeHtml(h.category)}</button>
@@ -719,6 +777,7 @@ function renderHighlightItems(list) {
           <a class="hl-id" href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.id)}</a>
           ${cweTag}
           ${categoryTag}
+          ${dateTag}
         </div>
         <h3 class="hl-headline">${escapeHtml(title)}</h3>
         ${lead}
@@ -767,15 +826,6 @@ function renderHighlights(entry) {
   }
   els.highlightsCard.hidden = false;
 
-  // 목록은 CVSS 내림차순이라 맨 앞이 그날 가장 위험한 CVE — 스크롤 전에 그걸 먼저 알려준다.
-  const top = list[0];
-  els.highlightsLead.hidden = !top;
-  if (top) {
-    const cvssText = top.cvssScore != null ? ` · CVSS ${top.cvssScore.toFixed(1)}` : '';
-    els.highlightsLead.innerHTML =
-      `<b>${escapeHtml(top.id)}</b>${cvssText}<span class="card-lead-sub">해설을 붙인 ${list.length}건을 위험한 순서로 정렬했어요</span>`;
-  }
-
   els.highlightsSecondary.hidden = !hasSecondary;
   if (hasSecondary) {
     els.highlightsSecondaryList.innerHTML = renderSecondaryHighlightItems(secondaryList);
@@ -816,7 +866,6 @@ function renderHighlights(entry) {
 
 function renderTrendStats(data) {
   if (data.length < 2) {
-    els.trendLead.hidden = true;
     els.trendStats.hidden = true;
     els.trendStatsNote.hidden = true;
     return;
@@ -826,13 +875,6 @@ function renderTrendStats(data) {
   const avg = counts.reduce((a, b) => a + b, 0) / week.length;
   const maxEntry = week.reduce((a, b) => (b.count > a.count ? b : a));
   const minEntry = week.reduce((a, b) => (b.count < a.count ? b : a));
-
-  const latest = week[week.length - 1];
-  const vsAvg = latest.count - avg;
-  els.trendLead.hidden = false;
-  els.trendLead.innerHTML = Math.abs(vsAvg) < 0.5
-    ? `오늘은 최근 ${week.length}일 평균과 <b>비슷한</b> 수준이에요`
-    : `오늘은 최근 ${week.length}일 평균보다 <b>${Math.abs(vsAvg).toFixed(1)}건 ${vsAvg > 0 ? '많아요' : '적어요'}</b>`;
 
   els.trendStats.hidden = false;
   els.statAvg.textContent = `${avg.toFixed(1)}건`;
@@ -876,12 +918,16 @@ function renderTrend(data) {
       const h = Math.max(6, ratio * plotH);
       const y = padTop + (plotH - h);
       const isLast = i === n - 1;
-      const fill = isLast ? '#ffffff' : 'rgba(255,255,255,0.32)';
+      const risk = entry.severity ? computeRisk(entry.severity) : null;
+      const baseFill = risk ? RISK_STEPS.find((s) => s.key === risk.key).color : 'rgba(255,255,255,0.32)';
+      // 오늘(마지막 막대)은 색은 그대로 위험도를 따르되, 흰 테두리로 "오늘"임을 구분
+      const stroke = isLast ? 'stroke="#ffffff" stroke-width="1.5"' : '';
+      const titleSuffix = risk ? ` (${risk.reason})` : '';
       const shortDate = entry.date.slice(5); // MM-DD
       return `
         <g>
-          <title>${entry.date}: ${entry.count}${entry.unit}</title>
-          <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${fill}"></rect>
+          <title>${entry.date}: ${entry.count}${entry.unit}${titleSuffix}</title>
+          <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${baseFill}" ${stroke}></rect>
           <text x="${x + barW / 2}" y="${y - 8}" text-anchor="middle" font-size="11" fill="#f1f5f9">${entry.count}</text>
           <text x="${x + barW / 2}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#98979c">${shortDate}</text>
         </g>`;
@@ -895,12 +941,15 @@ function renderTrend(data) {
 function renderNormal(data) {
   lastGood = { data, queriedAtIso: new Date().toISOString() };
   highlightIndex = buildHighlightIndex(data); // 차트 예시 CVE 카드가 이 색인을 쓰므로 렌더링 전에 먼저 만든다
+  searchIndex = buildSearchIndex(data);
+  if (els.searchInput.value.trim()) runSearch(els.searchInput.value); // 재조회 후에도 열려 있던 검색 결과를 최신 데이터로 갱신
   els.statusBanner.hidden = true;
   els.statusBanner.textContent = '';
   els.statusBanner.className = 'status-banner';
 
   const latest = data[data.length - 1];
   if (!latest) {
+    els.briefingCard.hidden = true;
     els.valueNumber.textContent = '기록 없음';
     els.valueUnit.textContent = '';
     els.valueSeverityRow.hidden = true;
@@ -929,6 +978,7 @@ function renderNormal(data) {
   els.recordDate.textContent = `${latest.date} (KST) 00:00 ~ 조회 시각까지 누적`;
   els.headerDate.textContent = `KST ${latest.date}`;
 
+  renderBriefing(latest);
   renderSeverity(latest);
   renderValueSeverityRow(latest);
   renderRisk(latest);
@@ -1047,6 +1097,82 @@ els.historyNext.addEventListener('click', () => {
   historyPage += 1;
   renderHistoryTable(lastGood.data);
 });
+
+const SEARCH_PAGE_SIZE = 5;
+let searchResults = [];
+let searchPage = 1;
+
+// CWE 없는 CVE(secondaryHighlights)와 차트 예시로만 등장하는 CVE(example)는 AI 해설은커녕 심각도·CVSS 같은
+// 부가 정보도 색인에 없어서, 검색 결과에서는 CVE 번호 링크 하나로만 보여준다 — 다룬 적 없는 CVE를 다룬 것처럼 보이게 하지 않기 위함.
+function renderSearchLinkItems(list) {
+  return list
+    .map((s) => `<li class="search-link-item">
+        <a class="hl-id" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.id)}</a>
+        ${s.date ? `<span class="hl-date">${escapeHtml(s.date)} 등록</span>` : ''}
+      </li>`)
+    .join('');
+}
+
+function renderSearchResultItems(list) {
+  return list
+    .map((item) => (item.kind === 'primary' ? renderHighlightItems([item]) : renderSearchLinkItems([item])))
+    .join('');
+}
+
+function renderSearchResults() {
+  const q = els.searchInput.value.trim();
+  if (!q) {
+    els.searchStatus.hidden = true;
+    els.searchResults.innerHTML = '';
+    els.searchPagination.hidden = true;
+    return;
+  }
+  els.searchStatus.hidden = false;
+  if (searchResults.length === 0) {
+    els.searchStatus.textContent = `"${q}"에 대한 검색 결과가 없어요.`;
+    els.searchResults.innerHTML = '';
+    els.searchPagination.hidden = true;
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(searchResults.length / SEARCH_PAGE_SIZE));
+  searchPage = Math.min(Math.max(searchPage, 1), totalPages);
+  const start = (searchPage - 1) * SEARCH_PAGE_SIZE;
+
+  els.searchStatus.textContent = `"${q}" 검색 결과 ${searchResults.length}건`;
+  els.searchResults.innerHTML = renderSearchResultItems(searchResults.slice(start, start + SEARCH_PAGE_SIZE));
+  els.searchPagination.hidden = searchResults.length <= SEARCH_PAGE_SIZE;
+  els.searchPageInfo.textContent = `${searchPage} / ${totalPages}`;
+  els.searchPrev.disabled = searchPage <= 1;
+  els.searchNext.disabled = searchPage >= totalPages;
+}
+
+function runSearch(query) {
+  const q = query.trim().toLowerCase();
+  searchPage = 1;
+  searchResults = q
+    ? searchIndex.filter((item) => item._haystack.includes(q)).sort((a, b) => b.date.localeCompare(a.date))
+    : [];
+  renderSearchResults();
+}
+
+let searchDebounceTimer = null;
+els.searchInput.addEventListener('input', () => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => runSearch(els.searchInput.value), 150);
+});
+
+els.searchPrev.addEventListener('click', () => {
+  if (searchPage <= 1) return;
+  searchPage -= 1;
+  renderSearchResults();
+});
+
+els.searchNext.addEventListener('click', () => {
+  searchPage += 1;
+  renderSearchResults();
+});
+
+els.searchResults.addEventListener('click', toggleTagDesc);
 
 // 오늘 / 월별 비교 / 추이·기록 구역 전환 — 데이터는 이미 다 불러와 있고 보이는 구역만 토글하는 것뿐이라 재조회 없음
 const tabButtons = document.querySelectorAll('.tab-btn');

@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { CWE_INFO } from './cwe-info.mjs';
+import { PRODUCT_INFO } from './product-info.mjs';
 
 const HISTORY_PATH = new URL('../data/history.json', import.meta.url);
 const TIMEZONE = 'Asia/Seoul';
@@ -331,6 +332,79 @@ async function explainHighlightWithLlm(desc, cweList) {
   }
 }
 
+// 그날 집계된 숫자(총 건수·심각도별 건수·최다 CWE 유형·최다 제품)만 근거로 1~3문장 브리핑을 만든다.
+// 개별 CVE 설명은 넘기지 않는다 — 대표 CVE 카드가 이미 그 역할을 하므로, 브리핑은 "오늘 하루 전체 그림"만 담당.
+// 키 없음/실패 시 null 반환 — 프론트는 이 필드가 없으면 카드 자체를 숨긴다(지어내지 않음 원칙 유지).
+async function generateBriefingWithLlm(stats) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.log('[skip] GEMINI_API_KEY 없음 — 오늘의 브리핑 생성 건너뜀');
+    return null;
+  }
+
+  const { count, severity, topCwe, topProduct, categorySampleSize } = stats;
+  const statLines = [
+    `오늘(KST) 신규 등록 CVE 총 ${count}건`,
+    `심각도별 — 심각 ${severity.critical}건 / 높음 ${severity.high}건 / 중간 ${severity.medium}건 / 낮음 ${severity.low}건 / 평가 대기 ${severity.unrated}건`,
+    topCwe
+      ? `가장 많이 나온 취약점 유형(CWE): ${topCwe.label} ${topCwe.count}건 (심각도 평가된 ${categorySampleSize}건 중)`
+      : '오늘은 CWE 유형 집계 대상(심각도 평가된 CVE)이 없음',
+    topProduct
+      ? `가장 많이 언급된 제품·벤더: ${topProduct.label} ${topProduct.count}건`
+      : '오늘은 특정 제품·벤더가 두드러지지 않음',
+  ].join('\n');
+
+  const responseSchema = {
+    type: 'object',
+    properties: { briefing: { type: 'string' } },
+    required: ['briefing'],
+  };
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [
+            {
+              text:
+                '너는 오늘 하루 등록된 CVE(보안 취약점) 현황을 한국어로 브리핑하는 보안 분석가야. ' +
+                '아래 수치만 근거로 1~3문장 요약을 써. 수치에 없는 특정 CVE 번호·제품·공격 사례를 지어내지 말고, ' +
+                '실제 공격이 벌어졌다는 식의 근거 없는 단정도 하지 마. 평범한 날이면 평범하다고 담백하게 쓰고, ' +
+                '확신이 없는 내용은 아예 문장에 넣지 마(지어내지 마).',
+            },
+          ],
+        },
+        contents: [{ role: 'user', parts: [{ text: statLines }] }],
+        generationConfig: { responseMimeType: 'application/json', responseSchema },
+      }),
+    });
+
+    if (!res.ok) {
+      console.warn(`[warn] 오늘의 브리핑 생성 실패: HTTP ${res.status} ${await res.text()}`);
+      return null;
+    }
+
+    const body = await res.json();
+    const usage = body.usageMetadata;
+    if (usage) {
+      console.log(`[llm] 오늘의 브리핑 생성 — 입력 ${usage.promptTokenCount} / 출력 ${usage.candidatesTokenCount} 토큰`);
+    }
+
+    const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      console.warn('[warn] 오늘의 브리핑 응답이 비어 있음');
+      return null;
+    }
+    return JSON.parse(text).briefing?.trim() || null;
+  } catch (e) {
+    console.warn(`[warn] 오늘의 브리핑 생성 실패: ${e.message}`);
+    return null;
+  }
+}
+
 // 한 심각도의 CVE를 startIndex로 계속 넘겨가며 전량 수집한다 — 더 이상 앞쪽 일부만 보는 표본이 아니라
 // 그 심각도의 당일 등록분 전체(rated)를 받아옴. PAGE_SIZE(2000)가 NVD 최대치라 보통은 while이 한 번만 돈다.
 async function fetchAllForSeverity(baseUrl, level) {
@@ -505,7 +579,13 @@ async function main() {
   const productLabels = Object.fromEntries(PRODUCT_RULES.map((r) => [r.key, r.label]));
   const productBreakdown = Object.entries(productCounts)
     .filter(([key]) => key !== 'other')
-    .map(([key, count]) => ({ key, label: productLabels[key], count, examples: productExamples[key] || [] }))
+    .map(([key, count]) => ({
+      key,
+      label: productLabels[key],
+      count,
+      desc: PRODUCT_INFO[key] || '',
+      examples: productExamples[key] || [],
+    }))
     .sort((a, b) => b.count - a.count);
 
   // 대표 CVE마다 번역+해석+발생 원인+방지법을 LLM 호출 한 번으로 생성 (NVD 호출과 별개 서비스라 위 5회 제한과 무관,
@@ -517,6 +597,7 @@ async function main() {
     const llm = await explainHighlightWithLlm(h.fullEn, h.cwe);
     highlights.push({
       id: h.id,
+      date: kstDate,
       severity: h.severity,
       title: llm?.title || null,
       summaryEn: h.fullEn,
@@ -544,6 +625,11 @@ async function main() {
     category: categoryLabels[s.categoryKey],
   }));
 
+  await sleep(HIGHLIGHT_LLM_INTERVAL_MS); // 대표 CVE 해설과 별개 호출이지만 동일 레이트리밋 관례를 지킴
+  const topCwe = cweBreakdown.filter((c) => c.key !== 'none')[0] || null; // '미분류'는 유형이 아니므로 브리핑 근거에서 제외
+  const topProduct = productBreakdown[0] || null;
+  const briefing = await generateBriefingWithLlm({ count: total, severity, topCwe, topProduct, categorySampleSize });
+
   const entry = {
     date: kstDate,
     count: total,
@@ -557,6 +643,7 @@ async function main() {
     cweBreakdown,
     categorySampleSize,
     productBreakdown,
+    briefing, // 문자열 또는 null(키 없음·생성 실패·이 기능 이전 기록) — 프론트는 null이면 카드를 통째로 숨김
   };
 
   history.push(entry);

@@ -264,6 +264,8 @@ header h1 {
 .highlights-card,
 .trend-card,
 .history-card,
+.briefing-card,
+.search-card,
 .debug-panel {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -512,6 +514,41 @@ header h1 {
   font-weight: 400;
 }
 
+.briefing-text {
+  margin: 0 0 0.6rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.briefing-disclaimer {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg-2);
+  color: var(--text);
+  margin-bottom: 0.9rem;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.search-status {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin: 0.6rem 0;
+}
+
 
 .severity-card {
   display: flex;
@@ -651,12 +688,43 @@ header h1 {
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted);
-  font-size: 0.78rem;
-  line-height: 1.5;
+  font-size: 0.94rem;
+  line-height: 1.6;
 }
 
 .category-bar-desc p {
   margin: 0;
+}
+
+/* 설명(desc)은 이 블록의 핵심 정보라, 아래 CVE 카드의 화려한 배지·색상에 묻히지 않도록
+   본문 색·굵기·크기를 뚜렷하게 키운다 — 왼쪽 강조선까지 붙여 "여기부터 읽으라"는 신호를 준다 */
+.category-bar-desc-text {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.65;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--accent);
+}
+
+.category-bar-examples-label {
+  display: block;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* 라벨이 이미 구분선을 그어줬으니 바로 뒤따르는 카드·링크 목록은 자기 몫의 구분선을 또 긋지 않는다 */
+.category-bar-examples-label + .category-bar-cards,
+.category-bar-examples-label + .category-bar-examples {
+  margin-top: 0.5rem;
+  padding-top: 0;
+  border-top: none;
 }
 
 /* 막대 설명 안에 들어가는 대표 CVE 카드 — 이미 카드 안(--card-bg-2)이라 배경을 한 겹 더 쌓지 않고
@@ -744,33 +812,6 @@ header h1 {
 .note-details summary:hover { color: var(--text); }
 
 .note-details[open] summary { color: var(--text); margin-bottom: 0.6rem; }
-
-/* 차트 제목 바로 밑에서 "그래서 1위가 뭔데"를 먼저 말해주는 줄 — 막대를 읽기 전에 결론이 잡히게 */
-.card-lead,
-.monthly-total {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.15rem 0.65rem;
-  margin: -0.5rem 0 1.1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.card-lead b,
-.monthly-total b {
-  color: var(--text);
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.card-lead-sub {
-  color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 500;
-}
 
 .highlights-list {
   list-style: none;
@@ -860,6 +901,14 @@ header h1 {
   text-underline-offset: 2px;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.hl-date {
+  color: var(--muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .hl-category {
