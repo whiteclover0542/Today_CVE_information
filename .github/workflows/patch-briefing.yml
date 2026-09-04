@@ -1,0 +1,33 @@
+name: (Temp) Patch Today's Briefing
+
+# 브리핑 기능을 배포하기 전에 이미 저장된 오늘자 history.json 항목에는 briefing 필드가 없다.
+# 전체 배치를 다시 돌리지 않고 briefing 하나만 채우기 위한 일회성 임시 워크플로.
+# 실행 후 이 파일과 scripts/patch-todays-briefing.mjs는 삭제한다(data/history.json 변경만 남김).
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate and patch today's briefing only
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/patch-todays-briefing.mjs
+
+      - name: Commit history.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/history.json
+          git diff --cached --quiet || git commit -m "chore: 오늘자 briefing 소급 반영"
+          git push
