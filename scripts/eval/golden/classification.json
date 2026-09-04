@@ -1,0 +1,327 @@
+{
+  "generatedAt": "2026-09-04T01:54:08.631Z",
+  "cases": [
+    {
+      "id": "CVE-2026-66786",
+      "description": "A flaw was found in submariner. In cert-auth mode, the connection configuration is built using free-form strings from the Custom Resource Definition (CRD) without proper validation. A malicious cluster can exploit this by publishing a CableName that includes newlines and ipsec.conf directives. This allows an attacker to inject arbitrary configuration parameters or execute commands through leftupdown hooks, leading to remote code execution as root on the gateway node.",
+      "primaryCwe": "CWE-94",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-18058",
+      "description": "The mobile Smart Connect dashboard UI was subject to manipulation\nby 3rd party apps. When paired with a phishing attack, this manipulation could\nresult in escalated privileges of an attacker within the system.",
+      "primaryCwe": "CWE-862",
+      "expectedCategoryKey": "access-control",
+      "actualCategoryKeyInHistory": "priv-esc"
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "primaryCwe": "CWE-367",
+      "expectedCategoryKey": "race-condition",
+      "actualCategoryKeyInHistory": "path-traversal"
+    },
+    {
+      "id": "CVE-2026-82524",
+      "description": "UnoPim before 2.1.5 contains an authenticated file upload vulnerability that allows authenticated administrators to upload arbitrary PHP files through the TinyMCE image upload endpoint due to missing file extension and MIME type validation. Attackers can upload a PHP web shell to the public storage disk and execute arbitrary operating system commands on the server by accessing the uploaded file at the URL returned in the server response.",
+      "primaryCwe": "CWE-434",
+      "expectedCategoryKey": "file-upload",
+      "actualCategoryKeyInHistory": "file-upload"
+    },
+    {
+      "id": "CVE-2026-84839",
+      "description": "A vulnerability was determined in tsi-coop tsi-dpdp-cms up to 0.5.0. Affected by this issue is some unknown functionality of the file web.xml of the component Admin Console/DPO Compliance Console. Executing a manipulation can lead to missing authentication. It is possible to launch the attack remotely. The exploit has been publicly disclosed and may be utilized. Upgrading to version 0.5.1 can resolve this issue. It is suggested to upgrade the affected component.",
+      "primaryCwe": "CWE-287",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-75134",
+      "description": "SEOWriting plugin for WordPress through 1.12.5 contains a stored cross-site scripting vulnerability that allows authenticated contributors to inject malicious JavaScript by exploiting an overly permissive KSES allowlist that explicitly permits the onload event handler on iframe elements. Attackers can store crafted JavaScript payloads in post content that execute when the affected post is viewed or previewed by higher-privileged users, potentially leading to privilege escalation or account compromise.",
+      "primaryCwe": "CWE-79",
+      "expectedCategoryKey": "xss",
+      "actualCategoryKeyInHistory": "priv-esc"
+    },
+    {
+      "id": "CVE-2026-84852",
+      "description": "A security vulnerability has been detected in Reader Tools PDF Reader App 98.8 on Android. The affected element is the function ActSplashNew.handleDeeplink of the component File Handler. The manipulation of the argument _display_name leads to path traversal. An attack has to be approached locally. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
+      "primaryCwe": "CWE-22",
+      "expectedCategoryKey": "path-traversal",
+      "actualCategoryKeyInHistory": "path-traversal"
+    },
+    {
+      "id": "CVE-2026-70352",
+      "description": "Missing authentication for critical function in Azure AI Language allows an unauthorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-306",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-83711",
+      "description": "Authorization bypass through user-controlled key in Microsoft Azure Active Directory B2C allows an unauthorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85223",
+      "description": "A vulnerability was found in D-Link DNS-340L 1.01B04. Affected by this issue is some unknown functionality of the file /cgi-bin/dropbox.cgi of the component CGI Handler. Performing a manipulation of the argument callback_url/sync_interval results in os command injection. The attack can be initiated remotely. The exploit has been made public and could be used.",
+      "primaryCwe": "CWE-77",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85424",
+      "description": "MOOS core-moos through 10.4.0 lacks authentication in the wire protocol, allowing unauthenticated clients to connect with full publish, subscribe, and database clear privileges. Attackers can bypass the compile-time protocol string check and connect with arbitrary client names to execute privileged operations including DB_CLEAR which resets all variables and clears client mail queues.",
+      "primaryCwe": "CWE-306",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85425",
+      "description": "MOOS-IvP iSay through 24.8.1 contains a remote code execution vulnerability in the SAY_MOOS variable handler that passes unsanitized text to a shell command. Attackers can publish SAY_MOOS messages containing backticks or command substitution syntax to execute arbitrary commands as the iSay process user.",
+      "primaryCwe": "CWE-78",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85426",
+      "description": "MOOS-IvP uMemWatch through 24.8.1 constructs shell commands from attacker-chosen MOOS client names without sanitization. Attackers can inject shell metacharacters into client names to execute arbitrary commands as the uMemWatch process user through unquoted redirection targets in system calls.",
+      "primaryCwe": "CWE-78",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85428",
+      "description": "MOOS core-moos through 10.4.0 contains an authentication bypass vulnerability in the optional MOOSDB HTTP server that allows unauthenticated clients to write variables. Attackers can send HTTP requests with variable names and values to the MOOSDB HTTP server port to modify MOOS variables including actuator and override commands without authentication.",
+      "primaryCwe": "CWE-306",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85433",
+      "description": "MOOS essential-moos pShare through 10.0.1 fails to properly authorize PSHARE_CMD messages, allowing any publisher to reconfigure network routes and listeners at runtime. Attackers can send crafted PSHARE_CMD messages with cmd=output or cmd=input parameters to open new listeners on arbitrary addresses and redirect or duplicate bus traffic to attacker-controlled destinations.",
+      "primaryCwe": "CWE-862",
+      "expectedCategoryKey": "access-control",
+      "actualCategoryKeyInHistory": "access-control"
+    },
+    {
+      "id": "CVE-2026-85437",
+      "description": "MOOS-IvP through 24.8.1 contains multiple buffer overflow vulnerabilities in IvP function string decoders that trust attacker-controlled length fields without validation. Attackers can craft malicious encoded strings with mismatched declared and actual field lengths to overflow heap and stack buffers, potentially achieving remote code execution through MOOS variables or alog files.",
+      "primaryCwe": "CWE-787",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85438",
+      "description": "MOOS-IvP through 24.8.1 contains a buffer overflow vulnerability in StringToIvPFunction() where dimension, piece, and degree counts from encoded BHV_IPF payloads are used as allocation sizes and loop bounds without validation. Attackers can supply crafted payloads with mismatched dimension values to write attacker-controlled doubles past the end of the IvPBox weight array, causing memory corruption and potential code execution.",
+      "primaryCwe": "CWE-190",
+      "expectedCategoryKey": "integer-overflow",
+      "actualCategoryKeyInHistory": "buffer-overflow"
+    },
+    {
+      "id": "CVE-2026-85440",
+      "description": "MOOS core-moos through 10.4.0 contains a pre-authentication heap overflow vulnerability in MOOSCommPkt packet handling that allows remote attackers to write arbitrary data by declaring a negative packet length. Attackers can exploit the signed integer check in InflateTo() and negative size conversion in recv() to overflow a four-byte heap buffer during the HandShake phase before authentication.",
+      "primaryCwe": "CWE-787",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "buffer-overflow"
+    },
+    {
+      "id": "CVE-2026-85183",
+      "description": "Taipy configures its socket.io server with wildcard CORS origin and credential flag enabled, allowing any web page to establish credentialed WebSocket connections to victim applications. Attackers can open socket.io sessions from arbitrary domains and invoke state variable modifications and action callbacks without CSRF protection.",
+      "primaryCwe": "CWE-1385",
+      "expectedCategoryKey": "other",
+      "actualCategoryKeyInHistory": "csrf"
+    },
+    {
+      "id": "CVE-2026-80098",
+      "description": "Improper verification of cryptographic signature in Copilot Studio allows an unauthorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-347",
+      "expectedCategoryKey": "other",
+      "actualCategoryKeyInHistory": "priv-esc"
+    },
+    {
+      "id": "CVE-2026-85394",
+      "description": "python-jose through 3.5.0 fails to properly validate asymmetric keys in HMAC initialization, accepting DER-encoded public keys that lack PEM armor or SSH prefixes. Attackers holding the service's public key can forge HS256 tokens that pass verification when algorithms are not explicitly restricted. This is an incomplete fix for CVE-2024-33663.",
+      "primaryCwe": "CWE-347",
+      "expectedCategoryKey": "other",
+      "actualCategoryKeyInHistory": "input-validation"
+    },
+    {
+      "id": "CVE-2026-85222",
+      "description": "A vulnerability has been found in D-Link DNS-340L 1.01B04. Affected by this vulnerability is an unknown functionality of the file /cgi-bin/addon_center.cgi of the component Add-On Center. Such manipulation of the argument f_name/f_url/f_flag/f_login_user leads to os command injection. It is possible to launch the attack remotely. The exploit has been disclosed to the public and may be used.",
+      "primaryCwe": "CWE-77",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85224",
+      "description": "A vulnerability was determined in D-Link DNS-320 ShareCenter 2.06B01. This affects an unknown part of the file /cgi/file_sharing.cgi of the component File Sharing. Executing a manipulation of the argument fileurl can lead to os command injection. The attack can be launched remotely. The exploit has been publicly disclosed and may be utilized.",
+      "primaryCwe": "CWE-77",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-62916",
+      "description": "Authentication bypass using an alternate path or channel in Microsoft Entra ID allows an unauthorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-288",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-71963",
+      "description": "Hermes Agent 0.18.2 through 0.21.0, fixed in commit f6234d0, contains a remote code execution vulnerability that allows attackers to execute arbitrary OS commands by supplying a malicious repository with a crafted .git/config that sets core.fsmonitor to an attacker-controlled command. When a user opens the malicious repository and sends any message, the agent triggers a git status index refresh which executes the injected command in the user's process context, exposing the full environment including configured provider API keys.",
+      "primaryCwe": "CWE-78",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85452",
+      "description": "MOOS ui-moos through 50b9c6c contains a buffer overflow vulnerability in ScopeTabPane.cpp and ScopeGrid.cpp where client and variable names are formatted into fixed 1024-byte buffers using sprintf without length validation. Attackers can supply arbitrarily long MOOS identifiers that overflow the buffers when an operator selects process list entries or pokes variables, enabling code execution.",
+      "primaryCwe": "CWE-787",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "buffer-overflow"
+    },
+    {
+      "id": "CVE-2026-85179",
+      "description": "Label Studio through 1.23.0 fails to validate webhook URLs, allowing authenticated users to dispatch requests to internal services including RFC 1918 addresses and cloud metadata endpoints. Attackers can create webhooks targeting private networks and exfiltrate annotation data by enabling payload transmission in outbound requests.",
+      "primaryCwe": "CWE-918",
+      "expectedCategoryKey": "ssrf",
+      "actualCategoryKeyInHistory": "ssrf"
+    },
+    {
+      "id": "CVE-2026-65818",
+      "description": "Server-side request forgery (ssrf) in Power Automate allows an authorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-918",
+      "expectedCategoryKey": "ssrf",
+      "actualCategoryKeyInHistory": "ssrf"
+    },
+    {
+      "id": "CVE-2026-69857",
+      "description": "Authorization bypass through user-controlled key in Azure Cosmos DB allows an authorized attacker to perform spoofing over a network.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-70178",
+      "description": "Missing authorization in Microsoft Fabric allows an authorized attacker to elevate privileges over a network.",
+      "primaryCwe": "CWE-862",
+      "expectedCategoryKey": "access-control",
+      "actualCategoryKeyInHistory": "access-control"
+    },
+    {
+      "id": "CVE-2026-85432",
+      "description": "MOOS core-moos through 10.4.0 fails to validate client identity in MOOSDB message processing, allowing authenticated attackers to attribute writes to other clients by supplying arbitrary source identifiers in serialized messages. Attackers can forge message origins and cancel third-party subscriptions by exploiting the disconnect between authenticated connection identity and wire-supplied source attribution.",
+      "primaryCwe": "CWE-290",
+      "expectedCategoryKey": "auth-bypass",
+      "actualCategoryKeyInHistory": "input-validation"
+    },
+    {
+      "id": "CVE-2026-85455",
+      "description": "MOOS core-moos through 10.4.0 contains a buffer over-read vulnerability in CMOOSCommPkt where a four-byte packet triggers out-of-bounds memory access during deserialization. Attackers can open a TCP connection to the MOOSDB port and send a crafted short packet to read memory before authentication.",
+      "primaryCwe": "CWE-125",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "deserialization"
+    },
+    {
+      "id": "CVE-2026-85214",
+      "description": "vhr fails to validate user authorization in the PUT /hr/info endpoint, allowing authenticated users to modify arbitrary HR profiles by supplying any profile ID in the request body. Attackers can overwrite other users' names, addresses, and disable accounts including administrators to cause denial of service.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "dos"
+    },
+    {
+      "id": "CVE-2026-85427",
+      "description": "MOOS essential-moos pAntler through 10.0.1 contains a remote code execution vulnerability that allows unauthenticated attackers to execute arbitrary programs by publishing a crafted MISSION_FILE message to the MOOSDB. Attackers can publish a mission file containing malicious Run entries that pAntler parses and executes via execvp() without authentication validation.",
+      "primaryCwe": "CWE-494",
+      "expectedCategoryKey": "other",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-83959",
+      "description": "Substance3D - Sampler is affected by a Heap-based Buffer Overflow vulnerability that could result in arbitrary code execution in the context of the current user. Exploitation of this issue requires user interaction in that a victim must open a malicious file.",
+      "primaryCwe": "CWE-122",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85439",
+      "description": "MOOS-IvP through 24.8.1 contains a remote code execution vulnerability in alogsplit's SplitHandler::handlePreCheckSplitDir() function that fails to sanitize shell metacharacters in log file pathnames. Attackers can embed shell syntax in log file names or the --dir parameter to execute arbitrary commands with the privileges of the operator running alogsplit.",
+      "primaryCwe": "CWE-78",
+      "expectedCategoryKey": "rce",
+      "actualCategoryKeyInHistory": "rce"
+    },
+    {
+      "id": "CVE-2026-85178",
+      "description": "Helicone's VaultManager.getDecryptedProviderKeyById() function in the GET /v1/vault/key/{providerKeyId} endpoint fails to validate the requester's organization against the vault key's organization identifier. Attackers with admin or owner privileges in any organization can retrieve decrypted upstream provider credentials for other tenants, including plaintext OpenAI, Anthropic, and Bedrock API keys.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "access-control"
+    },
+    {
+      "id": "CVE-2026-85211",
+      "description": "Label Studio fails to apply organization filters when resolving storage URIs for tasks and projects in proxy_api.py endpoints. Attackers can access other tenants' cloud storage objects by creating a separate organization and supplying arbitrary file URIs to presign or stream bucket contents.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "access-control"
+    },
+    {
+      "id": "CVE-2026-85213",
+      "description": "Kill Bill through 0.24.21 fails to enforce permission annotations on several AdminResource endpoints including getQueueEntries, invalidatesCache, and putOutOfRotation. Authenticated users with minimal account:read permissions can read internal queues, flush server caches, and disable the server by putting the host out of rotation.",
+      "primaryCwe": "CWE-862",
+      "expectedCategoryKey": "access-control",
+      "actualCategoryKeyInHistory": "access-control"
+    },
+    {
+      "id": "CVE-2026-85180",
+      "description": "Ollama fails to validate redirect destinations when pulling tensor-layer models, allowing unauthenticated attackers to redirect blob downloads to arbitrary hosts. An attacker can control a registry, serve a malicious tensor-layer manifest, and cause the server to issue GET requests to internal hosts including cloud metadata endpoints.",
+      "primaryCwe": "CWE-918",
+      "expectedCategoryKey": "ssrf",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85182",
+      "description": "vhr through commit 03abbd3 fails to verify that the account ID in PUT /hr/pass requests belongs to the authenticated caller. Authenticated attackers can change arbitrary account passwords by supplying a target account ID and that account's current password in the request body.",
+      "primaryCwe": "CWE-639",
+      "expectedCategoryKey": "idor",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85396",
+      "description": "rubyzip versions before 3.4.0 contain a path traversal vulnerability in Zip::Entry#extract that fails to properly validate extraction paths using prefix comparison without trailing separators. Attackers can craft archive entries with names like ../upload_backup/owned.sh to write files outside the intended extraction directory into sibling paths sharing the destination prefix.",
+      "primaryCwe": "CWE-22",
+      "expectedCategoryKey": "path-traversal",
+      "actualCategoryKeyInHistory": "path-traversal"
+    },
+    {
+      "id": "CVE-2026-82527",
+      "description": "R2R through 3.6.6 contains a SQL injection vulnerability that allows unauthenticated attackers to inject SQL predicates into the chunks search query by manipulating the filter key parameter in the retrieval search endpoint. Attackers can exploit the direct interpolation of filter keys into the SQL WHERE clause without parameterization or escaping to perform time-based and boolean-based data exfiltration from the application database.",
+      "primaryCwe": "CWE-89",
+      "expectedCategoryKey": "sqli",
+      "actualCategoryKeyInHistory": "auth-bypass"
+    },
+    {
+      "id": "CVE-2026-85436",
+      "description": "MOOS essential-moos through 10.0.1 contains a buffer overflow vulnerability in CMOOSUDPLink::ReadPktFromArray() that allows remote attackers to corrupt heap memory by sending UDP datagrams with negative declared lengths. Attackers can send crafted UDP packets to the configured UDPListen port to trigger an oversized memcpy operation that writes past the destination buffer, causing heap corruption and denial of service.",
+      "primaryCwe": "CWE-191",
+      "expectedCategoryKey": "integer-overflow",
+      "actualCategoryKeyInHistory": "buffer-overflow"
+    },
+    {
+      "id": "CVE-2026-85443",
+      "description": "MOOS core-moos through 10.4.0 contains a denial of service vulnerability in MOOSCommServer::ListenLoop() where the accept thread performs a blocking receive without timeout during the wire-protocol handshake. An attacker can open a TCP connection to the MOOSDB port and send no data, causing the accept thread to block indefinitely while holding the socket-list lock, preventing all subsequent client connections.",
+      "primaryCwe": "CWE-400",
+      "expectedCategoryKey": "dos",
+      "actualCategoryKeyInHistory": "dos"
+    },
+    {
+      "id": "CVE-2026-85444",
+      "description": "MOOS-IvP through 24.8.1 contains a buffer over-read vulnerability in isQuoted(), isBraced(), and isChevroned() functions that strip whitespace but index using the original string length. Attackers can send NODE_REPORT messages with leading or trailing whitespace to read past buffer bounds and access adjacent memory.",
+      "primaryCwe": "CWE-125",
+      "expectedCategoryKey": "buffer-overflow",
+      "actualCategoryKeyInHistory": "buffer-overflow"
+    }
+  ]
+}

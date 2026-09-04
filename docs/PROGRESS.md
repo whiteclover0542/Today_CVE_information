@@ -1,6 +1,6 @@
 # 오늘의 CVE 정보판 — 서비스 진행 관리
 
-> 과제 진행 당시의 `PROGRESS.md`는 [`assignment/PROGRESS.md`](assignment/PROGRESS.md)로 옮겨 그대로 보존했습니다.
+> 과제 진행 당시의 `PROGRESS.md`는 [`assignment/PROGRESS.md`](../assignment/PROGRESS.md)로 옮겨 그대로 보존했습니다.
 > 이 문서는 과제 통과 이후, [`PLAN.md`](PLAN.md)에서 정한 실 서비스 방향을 진행하며 계속 갱신하는 새 관리 문서입니다.
 
 ## 진행 상태
@@ -36,7 +36,7 @@
 
 ## 지금 서비스에 이미 있는 것 (과제 단계에서 완성, 유지)
 
-아래는 새로 할 일이 아니라, `assignment/PROGRESS.md`에서 이미 완료해 지금 서비스에 그대로 살아있는 부분입니다. 참고용으로만 남깁니다.
+아래는 새로 할 일이 아니라, [`assignment/PROGRESS.md`](../assignment/PROGRESS.md)에서 이미 완료해 지금 서비스에 그대로 살아있는 부분입니다. 참고용으로만 남깁니다.
 
 - 오늘(KST) NVD 신규 CVE 건수·심각도·위험도 표시
 - 대표 CVE(CVSS 포함) 카드, 유형/제품별 분포, 월별 비교, 추이·어제 대비 비교
@@ -46,7 +46,7 @@
 
 ## 설계 결정 이력
 
-> 이번 단계에서 내린 결정만 기록합니다. 과제 단계의 이력은 `assignment/PROGRESS.md`에 있습니다.
+> 이번 단계에서 내린 결정만 기록합니다. 과제 단계의 이력은 [`assignment/PROGRESS.md`](../assignment/PROGRESS.md)에 있습니다.
 
 - 2026-09-03: 실 서비스 전환을 시작하며 `ASSIGNMENT.md`·`PROGRESS.md`·`docs/SUBMISSION.*`·`docs/worksheet/`를 `assignment/`로 이동해 과제 자료와 실 서비스 문서를 분리. 기획서(`PLAN.md`)와 새 `PROGRESS.md`를 루트에 신설.
 - 2026-09-03: 대표 CVE 노출 건수 확대(현재 3건 고정)와 CVE별 설명·발생 원인·방지법 해설 카드 추가를 이번 단계 목표에 포함. 원인 해설은 LLM이 근거 없이 지어내지 않도록 NVD의 CWE 분류를 우선 근거로 삼는 방향으로 검토하기로 함.
@@ -79,6 +79,10 @@
 4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
 5. ~~CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등)를 매핑에 추가~~ ✅ 7종 추가 완료 + 과거 기록 백필까지 반영 — 앞으로도 ID만 뜨는 CWE가 보이면 `scripts/cwe-info.mjs`에 추가하고 `node scripts/backfill-cwe-labels.mjs`를 돌리면 됨
 6. ~~`docs/screenshots/*.png`가 개편 전 화면이라 README와 어긋남~~ ✅ 전부 재촬영해 교체하고, 개편 전 스크린샷 7장은 `assignment/screenshots/`로 옮겨 보존
+7. (AI 품질 평가 결과 반영, 착수 전) 분류 정확도 개선 — `docs/AI_EVAL_REPORT.md` §6-1·§7 참고
+   - `CATEGORY_RULES`(규칙 단계) 정규식 버그 수정: CWE-79(xss)가 `priv-esc`로 잘못 분류되는 등, LLM 이전 규칙 단계에서부터 틀리는 케이스가 있음
+   - LLM 재분류 프롬프트 보강: idor(전형적 서술 패턴 예시 추가), buffer-overflow↔rce(원인/결과 구분 기준 명시), "애매하면 other 유지" 지시 강조 — 반복 오분류 패턴 3종
+8. (착수 전) 대표 CVE 생성 성공률 88.2% → 목표(90%) 근소 미달 — Gemini 호출 실패 시 재시도 로직 도입 검토, 실패 원인(무료 티어 레이트리밋 충돌 가능성)부터 확인 필요 — `docs/AI_EVAL_REPORT.md` §6-3 참고
 
 ## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 

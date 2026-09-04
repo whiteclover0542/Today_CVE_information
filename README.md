@@ -5,17 +5,19 @@
 
 **🔗 https://today-cve-information.vercel.app/** — 서버·로그인·설치 없이 바로 열립니다.
 
-![오늘 건수와 위험도 판단](docs/screenshots/hero.png)
+![오늘의 브리핑과 건수·위험도 판단](docs/screenshots/hero.png)
 
 ## 무엇을 볼 수 있나
 
 **오늘 무슨 일이 있었는가 → 무엇이 가장 위험한가 → 왜 위험한가 → 어떤 유형·제품이 많은가 → 추세는 어떤가**
-순서로 읽히도록 구성했습니다.
+순서로 읽히도록 4개 탭(오늘 / 월별 비교 / 추이·기록 / 검색)에 나눠 구성했습니다.
 
+- **오늘의 브리핑** — 그날 집계된 수치(총 건수·심각도 분포·최다 유형/제품)만 근거로 AI가 쓴 1~3문장 요약. 근거 없는 사건·수치는 지어내지 않고, 생성에 실패하면 카드째 숨김
 - **오늘 건수와 위험도** — 신규 CVE 수, 심각도 분포, 그리고 그 분포로 판단한 보통/주의/위험 3단계
 - **가장 위험한 CVE** — CVSS 순으로 정렬. 제목과 한 줄 해석만 먼저 보이고, 펼치면 번역·원문·발생 원인·방지법
 - **취약점 유형(CWE)·제품별 집계** — 오늘 무엇이 많았는지. 막대를 누르면 실제 CVE와 그 해설이 그대로 펼쳐짐
 - **월별 비교와 추이** — 지난 달들과의 비교, 최근 14일 추이, 날짜별 전체 기록
+- **CVE 검색** — 지금까지 화면에 불러온 대표 CVE·미분류 CVE·차트 예시를 대상으로 CVE 번호·제품명·CWE·키워드로 찾기
 
 ## 화면
 
@@ -27,7 +29,19 @@ CVE 카드는 제목·CVSS·CWE까지만 보여주고, 상세는 눌러야 펼�
 
 ![취약점 유형 차트](docs/screenshots/category.png)
 
+![제품·벤더 차트](docs/screenshots/product.png)
+
+월별 비교 탭에서는 지난 달들과 유형·제품 순위를 겹쳐 볼 수 있습니다.
+
+![월별 CWE·제품 비교](docs/screenshots/monthly-comparison.png)
+
+추이·기록 탭은 최근 14일 흐름과 날짜별 전체 기록을 보여줍니다.
+
 ![최근 추이와 날짜별 기록](docs/screenshots/trend.png)
+
+검색 탭에서는 지금까지 불러온 CVE를 번호·제품명·CWE·키워드로 바로 찾을 수 있습니다.
+
+![CVE 검색](docs/screenshots/search.png)
 
 ## 어떻게 동작하나
 
@@ -38,7 +52,7 @@ Cloudflare Cron Trigger (매일 09:00 KST 정각)
 GitHub Actions
   └ NVD CVE API 2.0 조회 (오늘 00:00 KST ~ 실행 시각)
   └ 심각도·CWE 유형·제품 집계
-  └ 중요 CVE는 Gemini로 번역 + 해석 + 발생 원인 + 방지법 생성
+  └ 중요 CVE는 Gemini로 번역 + 해석 + 발생 원인 + 방지법 생성, 오늘의 브리핑도 함께 생성
   └ data/history.json 에 하루 1건 추가 → commit & push
         ↓
 Vercel (GitHub 연동, push마다 자동 재배포)
@@ -74,17 +88,26 @@ index.html                       # 화면
 assets/app.js, style.css         # 렌더링·집계·장애 시뮬레이터
 data/history.json                # 날짜별 기록 — 배치가 쓰고, 화면은 읽기만
 scripts/
-├── fetch-daily-count.mjs        # NVD 조회 → 집계·번역·해설 → history.json 갱신
+├── fetch-daily-count.mjs        # NVD 조회 → 집계·번역·해설·브리핑 → history.json 갱신
 ├── cwe-info.mjs                 # CWE 한글 라벨·근거 문장 매핑
-└── backfill-cwe-labels.mjs      # 매핑 추가 시 과거 기록에 소급 적용
+├── backfill-cwe-labels.mjs      # 매핑 추가 시 과거 기록에 소급 적용
+└── eval/                        # LLM 출력(분류·번역·해설·브리핑) 품질 평가 프레임워크
 .github/workflows/                # workflow_dispatch로 실행되는 배치 (스케줄은 아래 워커가 트리거)
 cloudflare-worker/                # 매일 09:00 KST 정각에 위 워크플로를 깨우는 Cron Trigger
-docs/screenshots/                # 이 README의 스크린샷
+docs/                             # 기획서·진행 관리 문서, 스크린샷
+├── PLAN.md
+├── PROGRESS.md
+├── AI_EVAL_REPORT.md            # LLM 출력 품질 평가 결과와 해석
+├── AI_EVAL_PROGRESS.md          # 위 평가의 진행 상태판
+└── screenshots/                  # 이 README의 스크린샷
 assignment/                      # 과제 단계 자료·개편 전 스크린샷 (동결)
 ```
 
 ## 문서
 
-- [`PLAN.md`](PLAN.md) — 서비스 기획서
-- [`PROGRESS.md`](PROGRESS.md) — 진행 상황과 설계 결정 이력
+- [`docs/SHOWCASE.md`](docs/SHOWCASE.md) — 스크린샷·아키텍처·AI 품질 평가 결과를 한 번에 모은 소개 자료
+- [`docs/PLAN.md`](docs/PLAN.md) — 서비스 기획서
+- [`docs/PROGRESS.md`](docs/PROGRESS.md) — 진행 상황과 설계 결정 이력
+- [`docs/AI_EVAL_REPORT.md`](docs/AI_EVAL_REPORT.md) — 분류·번역/해설·브리핑 등 LLM 출력 품질 평가 결과
+- [`scripts/eval/README.md`](scripts/eval/README.md) — 위 평가 프레임워크 사용법
 - [`assignment/`](assignment/) — 과제 원문·제출 문서·근거 자료 (실 서비스 문서와 분리)

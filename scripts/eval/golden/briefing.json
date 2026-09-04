@@ -1,0 +1,53 @@
+{
+  "_readme": "generateBriefingWithLlm()에 실제 넘어가는 stats 모양을 그대로 흉내낸 합성 시나리오. 아직 운영 데이터에 briefing 필드가 없어(신규 기능) 실제 이력에서 뽑을 수 없어 손으로 대표 상황을 만들었다. generatedOutput은 2026-09-04 두 번째 실행(프롬프트 개선 후 — 조사 오용 수정, 429 재시도 로직 추가)에서 나온 브리핑으로 갱신됨 — 채점용으로 고정 저장(재실행하면 매번 바뀔 수 있어 재현 가능한 채점 대상이 필요해서 박아둠). 필요할 때 시나리오를 추가하면 됨.",
+  "cases": [
+    {
+      "id": "BRIEF-NORMAL",
+      "note": "평범한 하루 — 특정 유형/제품이 두드러지지 않음",
+      "stats": {
+        "count": 42,
+        "severity": { "critical": 2, "high": 10, "medium": 15, "low": 8, "unrated": 7 },
+        "topCwe": { "label": "부적절한 입력값 검증", "count": 3 },
+        "topProduct": { "label": "WordPress", "count": 4 },
+        "categorySampleSize": 35
+      },
+      "generatedOutput": "오늘 신규 등록된 CVE는 총 42건이며, 심각도별로는 중간 15건, 높음 10건, 낮음 8건, 평가 대기 7건, 심각 2건으로 집계되었습니다. 가장 많이 나온 취약점 유형은 부적절한 입력값 검증 3건이며, 벤더별로는 WordPress가 4건으로 가장 많이 언급되었습니다."
+    },
+    {
+      "id": "BRIEF-CWE-SPIKE",
+      "note": "특정 CWE(인증 누락)가 유난히 많이 몰린 날",
+      "stats": {
+        "count": 60,
+        "severity": { "critical": 5, "high": 18, "medium": 20, "low": 10, "unrated": 7 },
+        "topCwe": { "label": "인증 누락", "count": 14 },
+        "topProduct": { "label": "Cisco", "count": 6 },
+        "categorySampleSize": 53
+      },
+      "generatedOutput": "오늘 신규 등록된 CVE는 총 60건이며, 이 중 심각 5건, 높음 18건 등으로 확인되었습니다. 가장 많이 나온 취약점 유형은 인증 누락 14건이며, 벤더별로는 Cisco 제품이 6건으로 가장 많이 언급되었습니다."
+    },
+    {
+      "id": "BRIEF-QUIET",
+      "note": "집계 대상 자체가 적어 두드러지는 유형·제품이 없는 조용한 날",
+      "stats": {
+        "count": 5,
+        "severity": { "critical": 0, "high": 1, "medium": 2, "low": 2, "unrated": 0 },
+        "topCwe": null,
+        "topProduct": null,
+        "categorySampleSize": 3
+      },
+      "generatedOutput": "오늘 신규 등록된 CVE는 총 5건으로, 심각도별로는 높음 1건, 중간 2건, 낮음 2건이 확인되었습니다. 오늘은 CWE 유형 집계 대상이 없으며, 특정 제품·벤더가 두드러지지 않습니다."
+    },
+    {
+      "id": "BRIEF-CRITICAL-HEAVY",
+      "note": "심각(CRITICAL) 비중이 유난히 높은 날 — 과장하지 않고 사실만 담는지 확인",
+      "stats": {
+        "count": 30,
+        "severity": { "critical": 12, "high": 8, "medium": 6, "low": 2, "unrated": 2 },
+        "topCwe": { "label": "원격 코드 실행", "count": 9 },
+        "topProduct": { "label": "Fortinet", "count": 5 },
+        "categorySampleSize": 28
+      },
+      "generatedOutput": "오늘 신규 등록된 CVE는 총 30건이며, 심각 등급 12건과 높음 등급 8건이 포함되어 있습니다. CWE 유형별로는 원격 코드 실행이 9건으로 가장 많이 집계되었고, 벤더별로는 Fortinet이 5건으로 가장 많이 언급되었습니다."
+    }
+  ]
+}

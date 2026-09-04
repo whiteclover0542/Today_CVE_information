@@ -1,7 +1,7 @@
 # 오늘의 CVE 정보판 — 서비스 기획서
 
 > 이 문서는 과제 완료 이후, 실제 서비스로 발전시키는 단계의 기획을 담습니다.
-> 과제 당시 자료는 [`assignment/`](assignment/)에 그대로 남아 있고, 이 문서는 별도로 계속 갱신합니다.
+> 과제 당시 자료는 [`assignment/`](../assignment/)에 그대로 남아 있고, 이 문서는 별도로 계속 갱신합니다.
 > 진행 상황은 [`PROGRESS.md`](PROGRESS.md)에서 관리합니다.
 
 ## 1. 서비스 개요
@@ -90,5 +90,5 @@
 ## 5. 참고 문서
 
 - [`PROGRESS.md`](PROGRESS.md) — 이 기획을 실제로 진행하며 갱신하는 상태표
-- [`README.md`](README.md) — 현재 서비스의 기능·구조 설명
-- [`assignment/`](assignment/) — 과제 원문·제출 문서·근거 자료(동결, 실 서비스 기획과 별도)
+- [`README.md`](../README.md) — 현재 서비스의 기능·구조 설명
+- [`assignment/`](../assignment/) — 과제 원문·제출 문서·근거 자료(동결, 실 서비스 기획과 별도)

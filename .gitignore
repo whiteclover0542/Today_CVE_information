@@ -1,3 +1,4 @@
 .history/
 cloudflare-worker/node_modules/
 cloudflare-worker/.wrangler/
+scripts/eval/reports/

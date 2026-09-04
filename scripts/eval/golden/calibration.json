@@ -1,0 +1,79 @@
+{
+  "_readme": "손으로 직접 만든 사례들 — build-generation-golden-set.mjs로 재생성하지 않는다. 목적은 골든셋 확장이 아니라 G-Eval 심사 모델 자체가 제대로 작동하는지 검증하는 것. 'good' 사례는 faithfulness/translationAccuracy/groundedCause가 높게(4~5점), 'bad' 사례는 낮게(1~2점) 나와야 한다. 만약 bad 사례가 높은 점수를 받으면 심사 모델이나 프롬프트를 의심할 것.",
+  "cases": [
+    {
+      "id": "CALIB-GOOD-1",
+      "label": "good",
+      "severity": "HIGH",
+      "summaryEn": "A missing authentication check in the Acme Router admin panel allows a remote attacker to modify device configuration without credentials.",
+      "cwe": [{ "id": "CWE-306", "label": "인증 누락", "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생" }],
+      "output": {
+        "title": "Acme 라우터 관리 패널 인증 누락 취약점",
+        "summaryKo": "Acme 라우터 관리 패널에서 인증 확인이 누락되어, 원격 공격자가 자격증명 없이 장치 설정을 변경할 수 있습니다.",
+        "interpretation": "로그인 절차 없이 누구나 관리자 화면에 들어가 라우터 설정을 바꿀 수 있는 상태를 의미합니다.",
+        "cause": "관리 기능에 반드시 필요한 인증 절차 자체가 빠져 있어 발생했습니다.",
+        "mitigation": "제조사가 배포하는 최신 펌웨어로 업데이트해 인증 절차를 적용해야 합니다."
+      }
+    },
+    {
+      "id": "CALIB-GOOD-2",
+      "label": "good",
+      "severity": "MEDIUM",
+      "summaryEn": "The Submariner network plugin for Kubernetes does not validate certificates when establishing cross-cluster tunnels, allowing man-in-the-middle attacks.",
+      "cwe": [{ "id": "CWE-295", "label": "인증서 검증 오류", "hint": "통신 상대의 인증서를 제대로 검증하지 않아서 발생" }],
+      "output": {
+        "title": "Submariner 클러스터 간 터널 인증서 검증 오류",
+        "summaryKo": "쿠버네티스용 네트워크 플러그인 Submariner가 클러스터 간 터널을 맺을 때 인증서를 검증하지 않아, 중간자 공격에 노출될 수 있습니다.",
+        "interpretation": "통신 상대가 진짜인지 확인하는 절차가 빠져 있어, 공격자가 중간에서 통신 내용을 가로채거나 조작할 수 있는 상태입니다.",
+        "cause": "터널을 맺는 과정에서 상대방 인증서를 제대로 검증하지 않아 발생했습니다.",
+        "mitigation": "취약점이 수정된 버전으로 업데이트하고, 가능하다면 인증서 검증을 강제하는 설정을 적용해야 합니다."
+      },
+      "note": "고유명사(Submariner)를 '잠수함'으로 오역하지 않는지 확인하는 케이스 — 실제 memory에 기록된 과거 오역 사례를 재현함."
+    },
+    {
+      "id": "CALIB-BAD-MISTRANSLATION",
+      "label": "bad",
+      "severity": "MEDIUM",
+      "summaryEn": "The Submariner network plugin for Kubernetes does not validate certificates when establishing cross-cluster tunnels, allowing man-in-the-middle attacks.",
+      "cwe": [{ "id": "CWE-295", "label": "인증서 검증 오류", "hint": "통신 상대의 인증서를 제대로 검증하지 않아서 발생" }],
+      "output": {
+        "title": "잠수함 네트워크 플러그인 인증서 검증 오류",
+        "summaryKo": "쿠버네티스용 잠수함 네트워크 플러그인이 클러스터 간 터널을 맺을 때 인증서를 검증하지 않아, 중간자 공격에 노출될 수 있습니다.",
+        "interpretation": "통신 상대가 진짜인지 확인하는 절차가 빠져 있어, 공격자가 중간에서 통신 내용을 가로채거나 조작할 수 있는 상태입니다.",
+        "cause": "터널을 맺는 과정에서 상대방 인증서를 제대로 검증하지 않아 발생했습니다.",
+        "mitigation": "취약점이 수정된 버전으로 업데이트하고, 가능하다면 인증서 검증을 강제하는 설정을 적용해야 합니다."
+      },
+      "note": "고유명사 'Submariner'를 사전적 의미인 '잠수함'으로 오역 — translationAccuracy가 낮게 나와야 함."
+    },
+    {
+      "id": "CALIB-BAD-FABRICATED-INCIDENT",
+      "label": "bad",
+      "severity": "CRITICAL",
+      "summaryEn": "Missing authentication for critical function in Azure AI Language allows an unauthorized attacker to elevate privileges over a network.",
+      "cwe": [{ "id": "CWE-306", "label": "인증 누락", "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생" }],
+      "output": {
+        "title": "Azure AI Language 인증 누락 취약점, 국가 배후 해킹 그룹이 이미 악용 중",
+        "summaryKo": "Azure AI Language의 중요 기능에서 인증이 누락되어, 인증되지 않은 공격자가 네트워크를 통해 권한을 상승시킬 수 있습니다.",
+        "interpretation": "본인 확인 절차가 없어 아무나 시스템의 중요한 기능에 접근해 관리자 권한을 얻을 수 있으며, 실제로 지난달부터 랜섬웨어 조직이 이 취약점을 이용해 수백 개 기업을 공격한 것으로 알려졌습니다.",
+        "cause": "인증 절차 누락으로 발생했습니다.",
+        "mitigation": "최신 보안 패치를 적용해야 합니다."
+      },
+      "note": "원문에 없는 '국가 배후 해킹 그룹', '지난달부터 랜섬웨어 조직이 수백 개 기업 공격' 등을 지어냄 — faithfulness가 낮게 나와야 함."
+    },
+    {
+      "id": "CALIB-BAD-UNGROUNDED-CAUSE",
+      "label": "bad",
+      "severity": "HIGH",
+      "summaryEn": "An out-of-bounds write in the image parsing library allows a crafted file to cause memory corruption.",
+      "cwe": [{ "id": "CWE-787", "label": "버퍼 범위 밖 쓰기", "hint": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생" }],
+      "output": {
+        "title": "이미지 파싱 라이브러리 메모리 손상 취약점",
+        "summaryKo": "이미지 파싱 라이브러리에서 버퍼 범위 밖 쓰기가 발생해, 조작된 파일로 메모리 손상을 일으킬 수 있습니다.",
+        "interpretation": "특수하게 조작된 이미지 파일을 열기만 해도 프로그램 메모리가 손상될 수 있는 상태입니다.",
+        "cause": "개발팀이 최근 리팩터링 과정에서 코드 리뷰를 생략하고 테스트 없이 배포해 발생했습니다.",
+        "mitigation": "최신 버전으로 업데이트해야 합니다."
+      },
+      "note": "CWE-787 근거(경계 검사 누락)와 무관한 '코드 리뷰 생략', '테스트 없이 배포'를 원인으로 지어냄 — groundedCause가 낮게 나와야 함."
+    }
+  ]
+}

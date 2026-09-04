@@ -1,0 +1,395 @@
+{
+  "generatedAt": "2026-09-04T05:36:30.507Z",
+  "cases": [
+    {
+      "id": "CVE-2026-66786",
+      "severity": "CRITICAL",
+      "summaryEn": "A flaw was found in submariner. In cert-auth mode, the connection configuration is built using free-form strings from the Custom Resource Definition (CRD) without proper validation. A malicious cluster can exploit this by publishing a CableName that includes newlines and ipsec.conf directives. This allows an attacker to inject arbitrary configuration parameters or execute commands through leftupdown hooks, leading to remote code execution as root on the gateway node.",
+      "cwe": [
+        {
+          "id": "CWE-94",
+          "label": "코드 인젝션",
+          "hint": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Submariner 인증 모드 설정 주입으로 인한 원격 코드 실행 취약점",
+        "summaryKo": "Submariner에서 취약점이 발견되었습니다. 인증서 인증 모드에서 연결 설정은 적절한 검증 없이 사용자 정의 리소스(CRD)의 자유 형식 문자열을 사용하여 생성됩니다. 악성 클러스터는 줄바꿈과 ipsec.conf 지시문이 포함된 CableName을 게시하여 이를 악용할 수 있습니다. 이를 통해 공격자는 임의의 설정 매개변수를 주입하거나 leftupdown 후크를 통해 명령을 실행하여 게이트웨이 노드에서 root 권한으로 원격 코드를 실행할 수 있습니다.",
+        "interpretation": "공격자가 조작된 설정을 입력해 시스템 관리자 권한으로 임의의 명령을 실행할 수 있는 위험한 보안 취약점입니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생",
+        "mitigation": "공급업체가 제공하는 최신 보안 패치를 적용하고 관련 설정을 점검해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-18058",
+      "severity": "HIGH",
+      "summaryEn": "The mobile Smart Connect dashboard UI was subject to manipulation\nby 3rd party apps. When paired with a phishing attack, this manipulation could\nresult in escalated privileges of an attacker within the system.",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "label": "권한 검사 누락",
+          "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "모바일 Smart Connect 대시보드 UI 조작 취약점",
+        "summaryKo": "모바일 Smart Connect 대시보드 UI가 제3자 앱에 의해 조작될 수 있는 취약점이 있습니다. 피싱 공격과 결합될 경우, 이 조작으로 인해 시스템 내에서 공격자의 권한이 상승할 수 있습니다.",
+        "interpretation": "다른 악성 앱이 스마트폰 화면의 대시보드 화면을 조작하여 사용자를 속이고, 이를 피싱 공격과 함께 악용하면 시스템 권한을 빼앗을 수 있는 보안 문제입니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없아서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고, 신뢰할 수 없는 출처의 앱 설치를 주의해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-78408",
+      "severity": "HIGH",
+      "summaryEn": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "cwe": [
+        {
+          "id": "CWE-775",
+          "label": "파일 핸들 미해제",
+          "hint": "열어 둔 파일 핸들·디스크립터를 다 쓴 뒤 닫지 않아 자원이 고갈되면서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "nsenter 도구의 cgroups 파일 핸들 미해제 취약점",
+        "summaryKo": "nsenter의 --join-cgroup 옵션은 루트 권한으로 대상 cgroup.procs 파일을 연 후, 네임스페이스 및 자격 증명 변경과 execve() 호출 이후에도 해당 파일 디스크립터를 닫지 않고 유지합니다. 공격자가 제어하는 대상에서 실행된 프로그램은 호스트 프로세스를 cgroup 간에 이동시킬 수 있는 루트의 권한을 상속받을 수 있으며, 권한이 없는 사용자가 관련 없는 루트 프로세스를 이동시키고 종료할 수 있게 됩니다.",
+        "interpretation": "프로그램이 사용한 파일을 제대로 닫지 않아, 공격자가 이 틈을 타 시스템 관리자 권한으로 다른 중요한 프로그램들을 임의로 조작하거나 강제로 종료할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 열어 둔 파일 핸들·디스크립터를 다 쓴 뒤 닫지 않아 자원이 고갈되면서 발생",
+        "mitigation": "공급업체가 제공하는 보안 업데이트를 적용하여 nsenter 도구의 파일 핸들 관리 로직을 수정해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-78409",
+      "severity": "HIGH",
+      "summaryEn": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "cwe": [
+        {
+          "id": "CWE-59",
+          "label": "링크 따라가기 오류",
+          "hint": "파일에 접근하기 전에 심볼릭 링크가 가리키는 실제 경로를 확인하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Linux 커널 X-mount.subdir 심볼릭 링크 우회 취약점",
+        "summaryKo": "Linux 6.15 이상 버전의 X-mount.subdir 옵션은 open_tree()에 AT_SYMLINK_NOFOLLOW 플래그를 사용하여 분리된 트리 빠른 경로를 사용합니다. 이 플래그는 중간 심볼릭 링크 탐색을 중단시키거나 해결 과정을 새로 마운트된 파일 시스템 내부로 유지하지 않습니다. 권한이 없는 로컬 사용자는 fstab에 승인된 X-mount.subdir 항목을 사용하여 의도된 마운트 지점에 호스트 경로를 연결할 수 있습니다.",
+        "interpretation": "공격자가 파일 시스템 마운트 과정의 허점을 악용하여 시스템의 다른 중요한 파일 경로에 접근할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 파일에 접근하기 전에 심볼릭 링크가 가리키는 실제 경로를 확인하지 않아서 발생합니다.",
+        "mitigation": "취약점이 해결된 최신 리눅스 커널 버전으로 패치를 적용하고 마운트 설정(fstab)을 점검해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-78410",
+      "severity": "HIGH",
+      "summaryEn": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "cwe": [
+        {
+          "id": "CWE-367",
+          "label": "경쟁 조건(TOCTOU)",
+          "hint": "확인한 시점과 실제 사용하는 시점 사이에 상태가 바뀔 수 있어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "util-linux 제한적 바인드 마운트 권한 상승 취약점",
+        "summaryKo": "util-linux에서 결함이 발견되었습니다. 제한된 바인드 마운트는 fstab에서 소스 경로를 가져오지만 권한 있는 마운트 전에 해당 소스를 고정하지 않습니다. 승인된 소스나 쓰기 가능한 상위 경로를 교체할 수 있는 로컬 권한 없는 사용자가 SUID mount(8)를 리다이렉트하여 다른 호스트 디렉토리를 바인드할 수 있습니다. fstab 항목이 X-mount.owner, X-mount.group 또는 X-mount.mode를 설정하는 경우 루트는 해당 리다이렉트된 아이노드의 소유권이나 모드를 변경합니다.",
+        "interpretation": "프로그램이 파일을 처리하는 과정에서 확인 단계와 실제 사용 단계 사이에 시간 차이가 발생하여, 공격자가 몰래 파일 경로를 바꿔치기해 시스템의 중요한 권한이나 설정을 임의로 조작할 수 있는 위험이 있습니다.",
+        "cause": "경쟁 조건(TOCTOU)으로 인해 일반적으로 확인한 시점과 실제 사용하는 시점 사이에 상태가 바뀔 수 있어서 발생합니다.",
+        "mitigation": "제공되는 최신 보안 패치를 적용하여 util-linux를 업데이트하시기 바랍니다."
+      }
+    },
+    {
+      "id": "CVE-2026-84841",
+      "severity": "HIGH",
+      "summaryEn": "A security flaw has been discovered in tsi-coop tsi-dpdp-cms up to 0.5.0. This vulnerability affects unknown code. The manipulation results in client-side enforcement of server-side security. The attack can be launched remotely. The exploit has been released to the public and may be used for attacks. Upgrading to version 0.5.1 is able to resolve this issue. It is recommended to upgrade the affected component.",
+      "cwe": [
+        {
+          "id": "CWE-602",
+          "label": "서버 검증을 클라이언트에 의존",
+          "hint": "서버가 해야 할 보안 검증을 클라이언트에 맡겨, 클라이언트를 조작하면 우회돼서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "tsi-coop tsi-dpdp-cms 클라이언트 측 보안 검증 우회 취약점",
+        "summaryKo": "tsi-coop tsi-dpdp-cms 0.5.0 이하 버전에서 보안 허점이 발견되었습니다. 이 취약점은 알 수 없는 코드를 영향받게 하며, 서버 측에서 해야 할 보안 검증을 클라이언트 측에서 처리하도록 강제하는 조작을 허용합니다. 원격 공격이 가능하며 이미 공격에 악용될 수 있는 익스플로잇이 공개되었습니다. 버전 0.5.1로 업그레이드하여 이 문제를 해결할 수 있습니다.",
+        "interpretation": "원래는 서버가 철저히 확인해야 할 보안 검증을 사용자의 컴퓨터(클라이언트)에 맡겨버려, 악의적인 사용자가 이를 쉽게 조작하고 우회할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 서버가 해야 할 보안 검증을 클라이언트에 맡겨, 클라이언트를 조작하면 우회돼서 발생",
+        "mitigation": "영향을 받는 컴포넌트를 버전 0.5.1 이상으로 업그레이드하는 것을 권장합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-82524",
+      "severity": "HIGH",
+      "summaryEn": "UnoPim before 2.1.5 contains an authenticated file upload vulnerability that allows authenticated administrators to upload arbitrary PHP files through the TinyMCE image upload endpoint due to missing file extension and MIME type validation. Attackers can upload a PHP web shell to the public storage disk and execute arbitrary operating system commands on the server by accessing the uploaded file at the URL returned in the server response.",
+      "cwe": [
+        {
+          "id": "CWE-434",
+          "label": "위험한 파일 업로드",
+          "hint": "업로드되는 파일의 종류·내용을 제한하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "UnoPim 관리자 권한 PHP 파일 업로드를 통한 원격 코드 실행 취약점",
+        "summaryKo": "2.1.5 버전 미만의 UnoPim에는 인증된 관리자가 TinyMCE 이미지 업로드 엔드포인트를 통해 임의의 PHP 파일을 업로드할 수 있는 파일 업로드 취약점이 포함되어 있습니다. 파일 확장자와 MIME 타입 검증이 누락되어 있어, 공격자는 퍼블릭 스토리지에 PHP 웹 셸을 업로드하고 서버 응답의 URL에 접근하여 서버에서 임의의 운영체제 명령을 실행할 수 있습니다.",
+        "interpretation": "관리자 권한을 가진 공격자가 시스템에 악성 프로그램을 심어 서버를 완전히 장악할 수 있는 심각한 보안 문제입니다.",
+        "cause": "일반적으로 업로드되는 파일의 종류와 내용을 제한하지 않아서 발생합니다.",
+        "mitigation": "UnoPim을 2.1.5 버전 이상으로 업데이트하거나 제조사가 제공하는 보안 패치를 적용하세요."
+      }
+    },
+    {
+      "id": "CVE-2026-84839",
+      "severity": "MEDIUM",
+      "summaryEn": "A vulnerability was determined in tsi-coop tsi-dpdp-cms up to 0.5.0. Affected by this issue is some unknown functionality of the file web.xml of the component Admin Console/DPO Compliance Console. Executing a manipulation can lead to missing authentication. It is possible to launch the attack remotely. The exploit has been publicly disclosed and may be utilized. Upgrading to version 0.5.1 can resolve this issue. It is suggested to upgrade the affected component.",
+      "cwe": [
+        {
+          "id": "CWE-287",
+          "label": "부적절한 인증",
+          "hint": "인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생"
+        },
+        {
+          "id": "CWE-306",
+          "label": "인증 누락",
+          "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "tsi-dpdp-cms 관리자 콘솔 인증 누락 취약점",
+        "summaryKo": "tsi-coop의 tsi-dpdp-cms 0.5.0 버전 이하에서 취약점이 확인되었습니다. Admin Console 및 DPO Compliance Console 컴포넌트의 web.xml 파일 내 일부 알 수 없는 기능에 영향을 미칩니다. 조작을 실행하면 인증 누락으로 이어질 수 있습니다. 원격으로 공격을 수행하는 것이 가능하며, 익스플로잇이 공개되어 악용될 수 있습니다. 버전을 0.5.1 이상으로 업그레이드하여 이 문제를 해결할 수 있습니다.",
+        "interpretation": "로그인이나 신원 확인 절차 없이도 중요한 관리자 페이지에 누구나 접근할 수 있는 보안 구멍이 발견되었습니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "mitigation": "취약한 컴포넌트를 0.5.1 버전 이상으로 업그레이드하십시오."
+      }
+    },
+    {
+      "id": "CVE-2026-75134",
+      "severity": "MEDIUM",
+      "summaryEn": "SEOWriting plugin for WordPress through 1.12.5 contains a stored cross-site scripting vulnerability that allows authenticated contributors to inject malicious JavaScript by exploiting an overly permissive KSES allowlist that explicitly permits the onload event handler on iframe elements. Attackers can store crafted JavaScript payloads in post content that execute when the affected post is viewed or previewed by higher-privileged users, potentially leading to privilege escalation or account compromise.",
+      "cwe": [
+        {
+          "id": "CWE-79",
+          "label": "크로스사이트 스크립팅(XSS)",
+          "hint": "사용자 입력을 검증·이스케이프 없이 웹페이지에 그대로 출력해서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "워드프레스 SEOWriting 플러그인 저장형 XSS 취약점",
+        "summaryKo": "1.12.5 버전 이하의 워드프레스용 SEOWriting 플러그인은 기고자 권한을 가진 사용자가 악성 자바스크립트를 삽입할 수 있는 저장형 크로스사이트 스크립팅(XSS) 취약점을 포함하고 있습니다. 공격자는 게시물 내용에 조작된 자바스크립트 페이로드를 저장할 수 있으며, 권한이 더 높은 사용자가 해당 게시물을 볼 때 코드가 실행되어 권한 상승이나 계정 탈취로 이어질 수 있습니다.",
+        "interpretation": "권한이 낮은 사용자가 게시판 등에 악성 코드를 심어두고, 관리자가 이를 열어보았을 때 관리자의 계정을 탈취하거나 권한을 빼앗을 수 있는 보안 취약점입니다.",
+        "cause": "일반적으로 사용자 입력을 검증·이스케이프 없이 웹페이지에 그대로 출력해서 발생하며, 이 취약점의 경우 iframe 요소의 onload 이벤트 핸들러를 허용하는 과도하게 허용적인 KSES 허용 목록으로 인해 발생합니다.",
+        "mitigation": "플러그인 제작사가 제공하는 최신 보안 패치 버전으로 업데이트를 적용해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-84852",
+      "severity": "MEDIUM",
+      "summaryEn": "A security vulnerability has been detected in Reader Tools PDF Reader App 98.8 on Android. The affected element is the function ActSplashNew.handleDeeplink of the component File Handler. The manipulation of the argument _display_name leads to path traversal. An attack has to be approached locally. The exploit has been disclosed publicly and may be used. The vendor was contacted early about this disclosure but did not respond in any way.",
+      "cwe": [
+        {
+          "id": "CWE-22",
+          "label": "경로 순회",
+          "hint": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "PDF Reader 앱 경로 순회 취약점으로 인한 파일 조작 위험",
+        "summaryKo": "안드로이드용 Reader Tools PDF Reader App 98.8 버전의 File Handler 컴포넌트 내 ActSplashNew.handleDeeplink 함수에서 보안 취약점이 발견되었습니다. _display_name 인자를 조작하면 경로 순회(Path Traversal) 공격이 발생할 수 있습니다. 이 공격은 로컬에서 수행되어야 하며, 공격 코드가 이미 공개되어 악용될 수 있습니다. 제조사는 이 문제에 대해 연락을 받았으나 아무런 응답도 하지 않았습니다.",
+        "interpretation": "스마트폰에 설치된 특정 PDF 앱이 파일 이름을 제대로 확인하지 않아, 공격자가 권한이 없는 내부 파일에 접근하거나 조작할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생합니다.",
+        "mitigation": "제조사가 제공하는 보안 업데이트를 적용하거나, 신뢰할 수 없는 출처의 앱 사용을 자제하고 최신 버전으로 관리하세요."
+      }
+    },
+    {
+      "id": "CVE-2026-70352",
+      "severity": "CRITICAL",
+      "summaryEn": "Missing authentication for critical function in Azure AI Language allows an unauthorized attacker to elevate privileges over a network.",
+      "cwe": [
+        {
+          "id": "CWE-306",
+          "label": "인증 누락",
+          "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Azure AI Language 인증 누락으로 인한 권한 상승 취약점",
+        "summaryKo": "Azure AI Language의 중요 기능에서 인증이 누락되어, 인증되지 않은 공격자가 네트워크를 통해 권한을 상승시킬 수 있습니다.",
+        "interpretation": "비밀번호나 신원 확인 절차 없이 중요한 기능에 접근할 수 있어, 해커가 시스템 내에서 더 높은 권한을 얻어 악용할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하고 최신 버전으로 업데이트해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-83711",
+      "severity": "CRITICAL",
+      "summaryEn": "Authorization bypass through user-controlled key in Microsoft Azure Active Directory B2C allows an unauthorized attacker to elevate privileges over a network.",
+      "cwe": [
+        {
+          "id": "CWE-639",
+          "label": "취약한 직접 개체 참조(IDOR)",
+          "hint": "요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Microsoft Azure AD B2C 권한 상승 취약점",
+        "summaryKo": "Microsoft Azure Active Directory B2C에서 사용자가 제어하는 키를 통한 권한 부여 우회로 인해 인증되지 않은 공격자가 네트워크를 통해 권한을 상승시킬 수 있습니다.",
+        "interpretation": "공격자가 시스템의 인증 절차를 우회하여 관리자나 다른 사용자의 권한을 몰래 획득할 수 있는 위험한 보안 허점입니다.",
+        "cause": "일반적으로 요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생합니다.",
+        "mitigation": "제공되는 최신 보안 패치를 적용하고 액세스 제어 설정을 철저히 점검해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-85223",
+      "severity": "CRITICAL",
+      "summaryEn": "A vulnerability was found in D-Link DNS-340L 1.01B04. Affected by this issue is some unknown functionality of the file /cgi-bin/dropbox.cgi of the component CGI Handler. Performing a manipulation of the argument callback_url/sync_interval results in os command injection. The attack can be initiated remotely. The exploit has been made public and could be used.",
+      "cwe": [
+        {
+          "id": "CWE-77",
+          "label": "명령 인젝션",
+          "hint": "사용자 입력이 실행할 명령의 일부로 해석되도록 방치해서 발생"
+        },
+        {
+          "id": "CWE-78",
+          "label": "OS 명령 인젝션",
+          "hint": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "D-Link DNS-340L 운영체제 명령 인젝션 취약점",
+        "summaryKo": "D-Link DNS-340L 버전 1.01B04의 CGI 핸들러에 있는 /cgi-bin/dropbox.cgi 파일에서 취약점이 발견되었습니다. callback_url 또는 sync_interval 인수를 조작하면 OS 명령 인젝션이 발생하며, 원격으로 공격을 수행할 수 있습니다. 이미 익스플로잇이 공개되어 악용될 수 있습니다.",
+        "interpretation": "공격자가 악의적인 명령어를 시스템에 몰래 주입하여 원격으로 기기를 제어할 수 있는 심각한 보안 취약점입니다.",
+        "cause": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하거나 해당 장비의 외부 인터넷 접근을 차단하세요."
+      }
+    },
+    {
+      "id": "CVE-2026-85425",
+      "severity": "CRITICAL",
+      "summaryEn": "MOOS-IvP iSay through 24.8.1 contains a remote code execution vulnerability in the SAY_MOOS variable handler that passes unsanitized text to a shell command. Attackers can publish SAY_MOOS messages containing backticks or command substitution syntax to execute arbitrary commands as the iSay process user.",
+      "cwe": [
+        {
+          "id": "CWE-78",
+          "label": "OS 명령 인젝션",
+          "hint": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "MOOS-IvP iSay 원격 코드 실행 취약점",
+        "summaryKo": "MOOS-IvP iSay 24.8.1 버전 이하는 SAY_MOOS 변수 핸들러에서 검증되지 않은 텍스트를 쉘 명령어로 전달하여 원격 코드 실행 취약점이 발생합니다. 공격자는 백틱이나 명령어 치환 구문이 포함된 SAY_MOOS 메시지를 게시하여 iSay 프로세스 권한으로 임의의 명령어를 실행할 수 있습니다.",
+        "interpretation": "프로그램이 사용자가 보낸 입력값을 제대로 검증하지 않고 시스템 명령어처럼 실행해 버려, 해커가 시스템을 마음대로 조종할 수 있는 위험한 상태를 말합니다.",
+        "cause": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생했습니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하거나 입력값 검증 로직을 보완해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-85433",
+      "severity": "CRITICAL",
+      "summaryEn": "MOOS essential-moos pShare through 10.0.1 fails to properly authorize PSHARE_CMD messages, allowing any publisher to reconfigure network routes and listeners at runtime. Attackers can send crafted PSHARE_CMD messages with cmd=output or cmd=input parameters to open new listeners on arbitrary addresses and redirect or duplicate bus traffic to attacker-controlled destinations.",
+      "cwe": [
+        {
+          "id": "CWE-862",
+          "label": "권한 검사 누락",
+          "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "MOOS pShare 메시지 권한 검사 누락으로 인한 네트워크 경로 임의 변경 취약점",
+        "summaryKo": "MOOS essential-moos 10.0.1 이하 버전의 pShare는 PSHARE_CMD 메시지에 대한 권한을 적절히 부여하지 않아, 모든 게시자가 런타임에 네트워크 경로와 수신기를 재구성할 수 있게 합니다. 공격자는 cmd=output 또는 cmd=input 매개변수가 포함된 조작된 PSHARE_CMD 메시지를 보내 임의 주소에 새 수신기를 열고 버스 트래픽을 공격자가 제어하는 목적지로 리디렉션하거나 복제할 수 있습니다.",
+        "interpretation": "비인가된 사용자가 네트워크 트래픽을 가로채거나 다른 곳으로 빼돌릴 수 있도록 시스템 경로를 마음대로 바꿀 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생합니다.",
+        "mitigation": "공급업체가 제공하는 최신 보안 패치를 적용하여 권한 검사 로직을 보완해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-85437",
+      "severity": "CRITICAL",
+      "summaryEn": "MOOS-IvP through 24.8.1 contains multiple buffer overflow vulnerabilities in IvP function string decoders that trust attacker-controlled length fields without validation. Attackers can craft malicious encoded strings with mismatched declared and actual field lengths to overflow heap and stack buffers, potentially achieving remote code execution through MOOS variables or alog files.",
+      "cwe": [
+        {
+          "id": "CWE-787",
+          "label": "버퍼 범위 밖 쓰기",
+          "hint": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "MOOS-IvP 문자열 디코더 버퍼 오버플로우 취약점",
+        "summaryKo": "24.8.1 버전 이하의 MOOS-IvP는 공격자가 제어하는 길이 필드를 검증 없이 신뢰하는 IvP 함수 문자열 디코더에 다수의 버퍼 오버플로우 취약점을 포함하고 있습니다. 공격자는 선언된 길이와 실제 필드 길이가 일치하지 않는 악성 인코딩 문자열을 만들어 힙 및 스택 버퍼를 오버플로우시킬 수 있으며, 이를 통해 MOOS 변수나 alog 파일을 통해 원격 코드 실행을 달성할 수 있습니다.",
+        "interpretation": "프로그램이 입력값의 길이를 제대로 확인하지 않고 받아들일 때 생기는 보안 문제로, 해커가 이 틈을 타 시스템을 장악하거나 임의의 명령을 실행할 수 있습니다.",
+        "cause": "일반적으로 쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하여 최신 버전으로 업데이트하고, 입력값의 길이를 검증하도록 설정을 점검해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-85438",
+      "severity": "CRITICAL",
+      "summaryEn": "MOOS-IvP through 24.8.1 contains a buffer overflow vulnerability in StringToIvPFunction() where dimension, piece, and degree counts from encoded BHV_IPF payloads are used as allocation sizes and loop bounds without validation. Attackers can supply crafted payloads with mismatched dimension values to write attacker-controlled doubles past the end of the IvPBox weight array, causing memory corruption and potential code execution.",
+      "cwe": [
+        {
+          "id": "CWE-190",
+          "label": "정수 오버플로우",
+          "hint": "계산 결과가 변수가 담을 수 있는 범위를 넘는지 확인하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "MOOS-IvP의 StringToIvPFunction 버퍼 오버플로우 취약점",
+        "summaryKo": "MOOS-IvP 24.8.1 버전 이하의 StringToIvPFunction() 함수에는 인코딩된 BHV_IPF 페이로드의 차원, 조각 및 차수 개수가 검증 없이 할당 크기 및 루프 경계로 사용되는 버퍼 오버플로우 취약점이 존재합니다. 공격자는 일치하지 않는 차원 값이 포함된 조작된 페이로드를 제공하여 IvPBox 가중치 배열의 끝을 넘어 공격자가 제어하는 실수를 기록함으로써 메모리 손상 및 잠재적인 코드 실행을 유발할 수 있습니다.",
+        "interpretation": "프로그램이 입력값의 크기를 제대로 검사하지 않고 메모리를 할당하여, 해커가 이를 조작하면 시스템을 망가뜨리거나 임의의 코드를 실행할 수 있게 되는 위험한 보안 약점입니다.",
+        "cause": "CWE-190 (정수 오버플로우): 일반적으로 계산 결과가 변수가 담을 수 있는 범위를 넘는지 확인하지 않아서 발생",
+        "mitigation": "제공되는 보안 패치를 적용하여 입력값 검증 로직을 업데이트하고 최신 버전으로 업그레이드해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-85183",
+      "severity": "CRITICAL",
+      "summaryEn": "Taipy configures its socket.io server with wildcard CORS origin and credential flag enabled, allowing any web page to establish credentialed WebSocket connections to victim applications. Attackers can open socket.io sessions from arbitrary domains and invoke state variable modifications and action callbacks without CSRF protection.",
+      "cwe": [
+        {
+          "id": "CWE-1385",
+          "label": "WebSocket Origin 검증 누락",
+          "hint": "웹소켓 연결을 수락할 때 요청 출처(Origin)를 확인하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Taipy 웹소켓 CORS 및 인증 설정 미흡에 따른 세션 탈취 취약점",
+        "summaryKo": "Taipy는 와일드카드 CORS 출처와 자격 증명 플래그가 활성화된 상태로 socket.io 서버를 설정하여, 모든 웹 페이지가 피해자 애플리케이션에 자격 증명이 포함된 웹소켓 연결을 설정할 수 있도록 합니다. 공격자는 임의의 도메인에서 socket.io 세션을 열고 CSRF 보호 없이 상태 변수 수정 및 작업 콜백을 호출할 수 있습니다.",
+        "interpretation": "보안 설정이 허술하여 악의적인 웹사이트가 사용자의 권한을 이용해 Taipy 프로그램의 중요 데이터를 몰래 조작할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 웹소켓 연결을 수락할 때 요청 출처(Origin)를 확인하지 않아서 발생합니다.",
+        "mitigation": "Taipy를 최신 버전으로 업데이트하고, socket.io 서버 설정에서 CORS 출처를 신뢰할 수 있는 도메인으로 엄격하게 제한해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-80098",
+      "severity": "CRITICAL",
+      "summaryEn": "Improper verification of cryptographic signature in Copilot Studio allows an unauthorized attacker to elevate privileges over a network.",
+      "cwe": [
+        {
+          "id": "CWE-347",
+          "label": "전자서명 검증 미흡",
+          "hint": "데이터에 첨부된 전자서명을 제대로 검증하지 않아서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Copilot Studio 전자서명 검증 미흡으로 인한 권한 상승 취약점",
+        "summaryKo": "Copilot Studio의 암호화 서명 부적절한 검증으로 인해 인증되지 않은 공격자가 네트워크를 통해 권한을 상승시킬 수 있습니다.",
+        "interpretation": "프로그램이 데이터의 진짜 여부를 확인하는 디지털 도장을 제대로 확인하지 않아, 해커가 권한을 몰래 높일 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 데이터에 첨부된 전자서명을 제대로 검증하지 않아서 발생합니다.",
+        "mitigation": "제공사의 최신 보안 패치를 적용하고 소프트웨어를 업데이트해야 합니다."
+      }
+    },
+    {
+      "id": "CVE-2026-62916",
+      "severity": "CRITICAL",
+      "summaryEn": "Authentication bypass using an alternate path or channel in Microsoft Entra ID allows an unauthorized attacker to elevate privileges over a network.",
+      "cwe": [
+        {
+          "id": "CWE-288",
+          "label": "우회 경로를 통한 인증 우회",
+          "hint": "정식 인증 절차를 거치지 않아도 되는 다른 경로·채널이 남아 있어서 발생"
+        }
+      ],
+      "storedOutput": {
+        "title": "Microsoft Entra ID 인증 우회로 인한 권한 상승 취약점",
+        "summaryKo": "Microsoft Entra ID의 우회 경로 또는 채널을 사용한 인증 우회 취약점으로 인해, 네트워크를 통해 권한이 없는 공격자가 권한을 상승시킬 수 있습니다.",
+        "interpretation": "정상적인 신원 확인 과정을 거치지 않고 시스템에 접근할 수 있는 숨겨진 통로가 존재하여, 공격자가 관리자 같은 높은 권한을 몰래 획득할 수 있는 위험한 상태입니다.",
+        "cause": "일반적으로 정식 인증 절차를 거치지 않아도 되는 다른 경로·채널이 남아 있어서 발생합니다.",
+        "mitigation": "제공된 보안 패치를 신속하게 적용하고, 시스템 접근 제어 및 인증 설정을 점검하여 불필요한 우회 경로가 차단되었는지 확인해야 합니다."
+      }
+    }
+  ]
+}
