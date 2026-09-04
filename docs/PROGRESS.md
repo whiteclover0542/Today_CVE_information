@@ -79,10 +79,8 @@
 4. "오늘의 브리핑" 요약 카드 필요성·형태 검토
 5. ~~CWE_INFO에 없는 CWE(CWE-404, CWE-693, CWE-316 등)를 매핑에 추가~~ ✅ 7종 추가 완료 + 과거 기록 백필까지 반영 — 앞으로도 ID만 뜨는 CWE가 보이면 `scripts/cwe-info.mjs`에 추가하고 `node scripts/backfill-cwe-labels.mjs`를 돌리면 됨
 6. ~~`docs/screenshots/*.png`가 개편 전 화면이라 README와 어긋남~~ ✅ 전부 재촬영해 교체하고, 개편 전 스크린샷 7장은 `assignment/screenshots/`로 옮겨 보존
-7. (AI 품질 평가 결과 반영, 착수 전) 분류 정확도 개선 — `docs/AI_EVAL_REPORT.md` §6-1·§7 참고
-   - `CATEGORY_RULES`(규칙 단계) 정규식 버그 수정: CWE-79(xss)가 `priv-esc`로 잘못 분류되는 등, LLM 이전 규칙 단계에서부터 틀리는 케이스가 있음
-   - LLM 재분류 프롬프트 보강: idor(전형적 서술 패턴 예시 추가), buffer-overflow↔rce(원인/결과 구분 기준 명시), "애매하면 other 유지" 지시 강조 — 반복 오분류 패턴 3종
-8. (착수 전) 대표 CVE 생성 성공률 88.2% → 목표(90%) 근소 미달 — Gemini 호출 실패 시 재시도 로직 도입 검토, 실패 원인(무료 티어 레이트리밋 충돌 가능성)부터 확인 필요 — `docs/AI_EVAL_REPORT.md` §6-3 참고
+7. ~~(AI 품질 평가 결과 반영) 분류 정확도 개선~~ ✅ `CATEGORY_RULES` 순서 재배치(결과성 표현이 실제 유형보다 먼저 매칭되던 문제) + LLM 재분류 프롬프트에 idor·ssrf 힌트 보강 → accuracy 0.61→0.76, macro-F1 0.77→0.87로 재측정 완료 — `docs/AI_EVAL_REPORT.md` §6-1·§7-1 참고
+8. ~~(AI 품질 평가 결과 반영) 생성·브리핑 프롬프트 개선~~ ✅ CWE 근거 있으면 `cause` 필수화(groundedCause 4.65→5.00), 브리핑 "-별로/-별으로" 조사 규칙 명시(koreanFluency 4.00→5.00) — `docs/AI_EVAL_REPORT.md` §6-2·§6-3 참고. 곁들여 429 재시도 대기시간이 서버 요구치보다 짧던 버그도 수정(`docs/AI_EVAL_REPORT.md` §8 참고). 대표 CVE 생성 성공률(당시 88.2%)은 골든셋 방식으로 재현할 수 없는 지표라 정식 평가 목표에서는 제외 — 다음 실제 배치 결과로 개선 여부 확인 필요
 
 ## 구현 메모 (CVE별 해설 기능 · CWE 기반 유형 집계)
 

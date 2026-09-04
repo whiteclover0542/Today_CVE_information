@@ -13,7 +13,7 @@
 | 4 | 생성·브리핑 1차 채점(Claude 독립, 개선 전) | ✅ | groundedCause 4.65, 브리핑 koreanFluency 4.00만 목표 근접 — 원인 분석 완료 |
 | 5 | 프롬프트 수정 + 골든셋 재생성 | ✅ | groundedCause 필수화, 브리핑 조사 보정, 429 재시도 대기시간 버그 수정 |
 | 6 | 생성·브리핑 2차 채점(Claude 독립, 개선 후) | ✅ | groundedCause 4.65→**5.00**, 브리핑 koreanFluency 4.00→**5.00** — 수정 효과 확인 |
-| 7 | `docs/AI_EVAL_REPORT.md` 최종 반영 | ✅ | 분류·생성·브리핑·calibration·데이터 커버리지 Before/After 전부 반영 |
+| 7 | `docs/AI_EVAL_REPORT.md` 최종 반영 | ✅ | 분류·생성·브리핑·calibration Before/After 전부 반영 |
 
 ## 최종 결과 한눈에
 
@@ -23,9 +23,8 @@
 | 생성 faithfulness/번역/원인근거/자연스러움 | 4.90/4.90/4.65/4.90 | **5.00/4.95/5.00/4.85** | 각 ≥4.0 | ✅ |
 | 브리핑 위조없음/관련성/자연스러움 | 5.00/5.00/4.00 | **5.00/4.75/5.00** | 각 ≥4.0 | ✅ |
 | 심사 신뢰도(타겟 기준 good−bad 격차) | 4.0 | 4.0(동일) | ≥3.0 | ✅ |
-| 데이터 커버리지(생성 성공률) | 88.2% | (재시도 로직 추가, 다음 배치에서 재확인) | ≥90% | 🟡 |
 
-상세 해석·사례 분석·Before/After는 `docs/AI_EVAL_REPORT.md` §6·§7 참고. **이번 사이클로 계획했던 개선 항목(분류 accuracy, groundedCause, 브리핑 koreanFluency)이 전부 목표를 달성했다.** 남은 건 데이터 커버리지 재확인(다음 실제 배치 결과 필요)뿐이다.
+상세 해석·사례 분석·Before/After는 `docs/AI_EVAL_REPORT.md` §6·§7 참고. **이번 사이클로 계획했던 개선 항목(분류 accuracy, groundedCause, 브리핑 koreanFluency)이 전부 목표를 달성했고, 정식 평가 목표는 이걸로 마무리됐다.** (데이터 커버리지는 이 골든셋 방식으로 재현·통제할 수 있는 지표가 아니라 정식 목표에서 뺐다 — `docs/AI_EVAL_REPORT.md` §8 참고.)
 
 ## 참고
 

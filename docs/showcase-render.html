@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>TODAY CVE — Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080a;
+    --surface:#131316;
+    --surface-2:#1b1b20;
+    --border:#2a2a30;
+    --border-soft:#1e1e23;
+    --text:#eaeaef;
+    --text-dim:#9a9aa4;
+    --text-faint:#6d6d76;
+    --accent:#6ea8ff;
+    --accent-soft:rgba(110,168,255,.10);
+    --crit:#ff5c5c;
+    --high:#ff9a3c;
+    --med:#ffd43b;
+    --low:#51cf66;
+    --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+    --sans:'Public Sans',-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent-soft);color:var(--text);}
+  .page{max-width:920px;margin:0 auto;padding:0 40px;}
+
+  /* ---------- Cover / Hero ---------- */
+  .cover{padding:72px 40px 56px;max-width:920px;margin:0 auto;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    display:flex;align-items:center;gap:10px;
+    margin:0 0 18px;
+  }
+  .eyebrow::before{content:'';width:7px;height:7px;background:var(--accent);display:inline-block;}
+  .cover h1{
+    font-family:var(--mono);
+    font-size:56px;
+    font-weight:800;
+    letter-spacing:-.01em;
+    margin:0 0 6px;
+    text-wrap:balance;
+    line-height:1.02;
+  }
+  .cover .kr-title{
+    font-size:20px;
+    color:var(--text-dim);
+    font-weight:500;
+    margin:0 0 22px;
+  }
+  .cover .lede{
+    font-size:17px;
+    color:var(--text);
+    max-width:70ch;
+    margin:0 0 28px;
+  }
+  .cover .lede b{color:var(--text);font-weight:700;border-bottom:1px solid var(--accent);}
+  .links-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px;}
+  .link-chip{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    padding:8px 14px;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .link-chip .dot{width:6px;height:6px;background:var(--low);flex:none;}
+
+  .kpi-row{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    border:1px solid var(--border);
+    border-left:none;
+  }
+  .kpi{
+    border-left:1px solid var(--border);
+    padding:18px 16px;
+    background:var(--surface);
+  }
+  .kpi .num{
+    font-family:var(--mono);
+    font-size:26px;
+    font-weight:700;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+    line-height:1.1;
+  }
+  .kpi .num small{font-size:13px;color:var(--text-faint);font-weight:500;margin-left:2px;}
+  .kpi .label{font-size:11.5px;color:var(--text-dim);margin-top:6px;line-height:1.4;}
+
+  /* ---------- Sections ---------- */
+  section{padding:56px 40px;max-width:920px;margin:0 auto;border-top:1px solid var(--border-soft);}
+  section > .eyebrow{margin-bottom:22px;}
+  h2{
+    font-family:var(--mono);
+    font-size:26px;
+    font-weight:700;
+    margin:0 0 14px;
+    text-wrap:balance;
+  }
+  h3{
+    font-family:var(--sans);
+    font-size:16px;
+    font-weight:700;
+    color:var(--text);
+    margin:0 0 6px;
+  }
+  p{color:var(--text-dim);max-width:70ch;}
+  p.section-intro{font-size:15.5px;color:var(--text-dim);max-width:68ch;margin-bottom:32px;}
+
+  /* feature grid */
+  .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .feature{background:var(--surface);padding:22px;}
+  .feature h3{font-size:14.5px;margin-bottom:8px;}
+  .feature p{font-size:13.5px;margin:0;color:var(--text-dim);}
+  .feature .tag{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:block;}
+
+  /* screenshots */
+  .shot{margin-bottom:36px;break-inside:avoid;}
+  .shot:last-child{margin-bottom:0;}
+  .shot .cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:16px;}
+  .shot .cap h3{margin:0;}
+  .shot .cap .tag{font-family:var(--mono);font-size:10.5px;color:var(--text-faint);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
+  .shot p.desc{font-size:13.5px;margin:0 0 12px;}
+  .shot img{
+    width:100%;display:block;
+    border:1px solid var(--border);
+    background:var(--surface);
+  }
+  .shot-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .shot-pair img{height:220px;object-fit:cover;object-position:top;}
+
+  /* architecture diagrams — box/line flow, not ASCII (CJK breaks monospace column math) */
+  .arch-note{font-size:13.5px;}
+  .arch-block{margin-bottom:40px;}
+  .arch-block:last-child{margin-bottom:0;}
+
+  .diagram-panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    padding:28px 30px;
+    margin:0 0 22px;
+  }
+
+  /* vertical timeline (infra flow) */
+  .timeline{display:flex;flex-direction:column;}
+  .tl-step{display:flex;gap:18px;}
+  .tl-rail{flex:none;width:11px;display:flex;flex-direction:column;align-items:center;}
+  .tl-dot{width:11px;height:11px;border:2px solid var(--accent);background:var(--surface);flex:none;}
+  .tl-line{flex:1;width:1px;background:var(--border);margin:3px 0;min-height:20px;}
+  .tl-step:last-child .tl-line{display:none;}
+  .tl-body{flex:1;padding-bottom:26px;}
+  .tl-step:last-child .tl-body{padding-bottom:0;}
+  .tl-title{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text);margin-bottom:9px;letter-spacing:.01em;}
+  .tl-body ul{margin:0;padding-left:18px;color:var(--text-dim);font-size:13.3px;}
+  .tl-body ul li{margin-bottom:5px;}
+  .tl-body ul li:last-child{margin-bottom:0;}
+
+  /* AI pipeline diagram */
+  .pl-node{
+    font-family:var(--mono);font-weight:700;font-size:13px;color:var(--text);
+    background:var(--surface-2);border:1px solid var(--border);
+    padding:12px 18px;text-align:center;width:fit-content;margin:0 auto;
+  }
+  .pl-arrow-v{width:1px;height:22px;background:var(--border);margin:0 auto;position:relative;}
+  .pl-arrow-v::after{content:'▾';position:absolute;left:50%;top:100%;transform:translate(-50%,-8px);color:var(--accent);font-size:11px;}
+  .pl-branches{display:flex;flex-direction:column;gap:10px;margin:6px 0;}
+  .pl-branch{display:grid;grid-template-columns:1fr 28px 1.15fr;align-items:stretch;gap:0;}
+  .pl-src{
+    font-size:12.3px;color:var(--text-dim);
+    display:flex;flex-direction:column;align-items:flex-end;justify-content:center;text-align:right;gap:3px;
+    padding:10px 14px;border:1px solid var(--border-soft);background:var(--surface);
+  }
+  .pl-src .sub{color:var(--text-faint);font-size:11px;}
+  .pl-arrow-h{display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:var(--mono);font-size:14px;}
+  .pl-dst{
+    border:1px solid var(--border);background:var(--surface-2);padding:10px 14px;
+    display:flex;flex-direction:column;justify-content:center;gap:3px;
+  }
+  .pl-dst .name{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.02em;}
+  .pl-dst .metric{font-size:12.3px;color:var(--text-dim);}
+  .pl-sub{
+    margin-left:calc(1fr + 28px);
+    font-size:11.8px;color:var(--text-faint);
+    padding:7px 14px 0 14px;
+  }
+  .pl-sub-row{display:grid;grid-template-columns:1fr 28px 1.15fr;}
+  .pl-sub-row .pl-sub-note{grid-column:3;font-size:11.8px;color:var(--text-faint);padding:2px 14px 0;}
+
+  /* eval table */
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);margin-bottom:20px;}
+  table{width:100%;border-collapse:collapse;font-size:13.3px;}
+  thead th{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    text-align:left;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    background:var(--surface-2);
+    font-weight:600;
+  }
+  tbody td{padding:11px 16px;border-bottom:1px solid var(--border-soft);color:var(--text);}
+  tbody tr:nth-child(even){background:var(--surface);}
+  tbody tr:last-child td{border-bottom:none;}
+  td.area{color:var(--text-dim);font-size:12.5px;}
+  td.metric{font-weight:600;}
+  td.result{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  td.result .arrow{color:var(--text-faint);margin:0 6px;}
+  td.result .after{color:var(--text);font-weight:700;}
+  .pass{
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    color:var(--low);
+    margin-left:8px;
+  }
+  .pass::before{content:'✓';}
+
+  .callout{
+    border:1px solid var(--border);
+    border-left:3px solid var(--low);
+    background:var(--surface);
+    padding:20px 24px;
+    font-size:13.8px;
+    color:var(--text-dim);
+  }
+  .callout b{color:var(--text);}
+  .callout .num-inline{font-family:var(--mono);color:var(--text);font-weight:700;}
+
+  /* principles */
+  .principle-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .principle{background:var(--surface);padding:24px;}
+  .principle .idx{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:10px;}
+  .principle h3{font-size:15px;margin-bottom:8px;}
+  .principle p{font-size:13.3px;margin:0;}
+
+  /* stack */
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    padding:7px 12px;
+    background:var(--surface);
+  }
+
+  footer{padding:48px 40px 64px;max-width:920px;margin:0 auto;border-top:1px solid var(--border-soft);}
+  footer .eyebrow{margin-bottom:20px;}
+  .foot-links{list-style:none;padding:0;margin:0 0 28px;display:flex;flex-direction:column;gap:9px;}
+  .foot-links li{font-size:13.5px;color:var(--text-dim);font-family:var(--mono);}
+  .foot-links b{color:var(--text);font-family:var(--sans);font-weight:600;}
+  .foot-meta{font-size:12px;color:var(--text-faint);font-family:var(--mono);}
+
+  @page{ size: 10in 15in; margin: 0; }
+
+  @media print{
+    .shot, .diagram-panel, .callout, .feature, .principle{break-inside:avoid-page;}
+    .kpi-row{break-inside:avoid-page;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <p class="eyebrow">Security Intelligence · Static Dashboard</p>
+  <h1>TODAY CVE</h1>
+  <p class="kr-title">오늘의 CVE 정보판</p>
+  <p class="lede">NVD가 매일 새로 등록하는 보안 취약점(CVE)을 자동으로 모아 <b>몇 건이고, 얼마나 위험하고, 무엇이 문제인지</b>를 한 화면에서 보여주는 정적 대시보드. 심각한 CVE는 AI가 한국어로 번역·해설하고, 그 AI 출력의 품질은 별도의 평가 프레임워크로 정량 검증한다.</p>
+  <div class="links-row">
+    <span class="link-chip"><span class="dot"></span>today-cve-information.vercel.app</span>
+    <span class="link-chip">github.com/whiteclover0542/Today_CVE_information</span>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">09:00<small>KST</small></div><div class="label">매일 자동 수집·배포</div></div>
+    <div class="kpi"><div class="num">$0</div><div class="label">서버·API 비용</div></div>
+    <div class="kpi"><div class="num">4<small>개 검문소</small></div><div class="label">AI 출력 품질 정량 검증</div></div>
+    <div class="kpi"><div class="num">0.76</div><div class="label">분류 Accuracy(개선 후)</div></div>
+    <div class="kpi"><div class="num">5.00<small>/5.0</small></div><div class="label">번역·해설 faithfulness</div></div>
+  </div>
+</div>
+
+<section>
+  <p class="eyebrow">Overview</p>
+  <h2>한눈에 보기</h2>
+  <div class="feature-grid">
+    <div class="feature">
+      <span class="tag">Automation</span>
+      <h3>매일 자동 갱신</h3>
+      <p>사람 개입 없이 매일 09:00 KST에 NVD 신규 등록분을 수집·집계·배포한다.</p>
+    </div>
+    <div class="feature">
+      <span class="tag">Generation</span>
+      <h3>번역이 아니라 해설까지</h3>
+      <p>대표 CVE마다 한국어 요약·해석·발생 원인·방지법을 한 번의 LLM 호출로 생성한다.</p>
+    </div>
+    <div class="feature">
+      <span class="tag">Evaluation</span>
+      <h3>품질을 수치로 증명</h3>
+      <p>자체 G-Eval 평가 프레임워크로 분류 정확도·번역 정확도·환각(지어내기) 여부를 정기 측정한다.</p>
+    </div>
+    <div class="feature">
+      <span class="tag">Cost</span>
+      <h3>서버 비용 0원</h3>
+      <p>정적 사이트 + 무키 공개 API + LLM 무료 티어만으로 운영한다.</p>
+    </div>
+    <div class="feature" style="grid-column:1/-1;">
+      <span class="tag">Resilience</span>
+      <h3>장애에도 값을 지킨다</h3>
+      <p>API 실패 시 마지막 정상값을 유지한 채 "오래된 데이터" 배너로 투명하게 알린다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Screenshots</p>
+  <h2>화면</h2>
+
+  <div class="shot">
+    <div class="cap"><h3>오늘 — 브리핑과 위험도 판단</h3><span class="tag">TODAY</span></div>
+    <p class="desc">그날 집계된 수치만 근거로 AI가 1~3문장 브리핑을 쓰고, 바로 아래에 오늘 신규 건수와 심각도 분포로 판단한 위험도(보통/주의/위험)를 보여준다.</p>
+    <img src="screenshots/hero.png" alt="오늘의 브리핑과 건수·위험도 판단">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>오늘 — 가장 위험한 CVE</h3><span class="tag">TODAY</span></div>
+    <p class="desc">CVSS 순으로 정렬된 대표 CVE 카드. 제목과 한 줄 해석만 먼저 보이고, 펼치면 원문·번역·발생 원인·방지법까지 나온다(AI 생성 부분은 초록색으로 구분).</p>
+    <img src="screenshots/highlights.png" alt="대표 CVE 카드" style="margin-bottom:16px;">
+    <p class="desc">CWE 태그를 누르면 그 취약점 유형이 왜 생기는지 근거 문장이 바로 펼쳐진다(지어내지 않고 CWE 공식 정의를 그대로 인용).</p>
+    <img src="screenshots/cwe-tooltip.png" alt="CWE 태그 클릭 시 설명 노출" style="max-width:520px;">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>오늘 — 취약점 유형·제품 집계</h3><span class="tag">TODAY</span></div>
+    <p class="desc">"CWE 분포" 같은 분류명 대신 결론을 제목으로 단다. 막대를 누르면 그 유형의 실제 CVE와 해설이 그대로 펼쳐진다.</p>
+    <img src="screenshots/category.png" alt="취약점 유형 차트" style="margin-bottom:16px;">
+    <img src="screenshots/product.png" alt="제품·벤더 차트">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>월별 비교</h3><span class="tag">MONTHLY</span></div>
+    <p class="desc">지난 달들과 유형·제품 순위를 겹쳐 볼 수 있다.</p>
+    <img src="screenshots/monthly-comparison.png" alt="월별 CWE·제품 비교">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>추이·기록</h3><span class="tag">TREND</span></div>
+    <p class="desc">최근 14일 흐름과 날짜별 전체 기록이다.</p>
+    <img src="screenshots/trend.png" alt="최근 추이와 날짜별 기록">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>검색</h3><span class="tag">SEARCH</span></div>
+    <p class="desc">지금까지 화면에 불러온 CVE를 번호·제품명·CWE·키워드로 바로 찾을 수 있다.</p>
+    <img src="screenshots/search.png" alt="CVE 검색">
+  </div>
+
+  <div class="shot">
+    <div class="cap"><h3>장애 대응</h3><span class="tag">RESILIENCE</span></div>
+    <p class="desc"><code style="font-family:var(--mono);color:var(--accent);">?debug=1</code>로 timeout·인증 실패·호출 제한·오프라인·응답 형식 변경 5종의 실패를 직접 재현해, 값이 유지되고 배너로 상태가 안내되는지 확인할 수 있다.</p>
+    <img src="screenshots/failure-offline.png" alt="장애 재현 시 배너">
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Architecture</p>
+  <h2>인프라 흐름</h2>
+  <div class="arch-block">
+    <div class="diagram-panel">
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <div class="tl-title">Cloudflare Cron Trigger — 매일 09:00 KST 정각</div>
+            <ul><li>GitHub API로 <code style="font-family:var(--mono);">workflow_dispatch</code> 호출</li></ul>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <div class="tl-title">GitHub Actions</div>
+            <ul>
+              <li>NVD CVE API 2.0 조회 (오늘 00:00 KST ~ 실행 시각)</li>
+              <li>심각도·CWE 유형·제품 집계</li>
+              <li>중요 CVE는 Gemini로 번역+해석+발생 원인+방지법 생성, 오늘의 브리핑도 함께 생성</li>
+              <li><code style="font-family:var(--mono);">data/history.json</code>에 하루 1건 추가 → commit &amp; push</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-rail"><div class="tl-dot"></div></div>
+          <div class="tl-body">
+            <div class="tl-title">Vercel — GitHub 연동, push마다 자동 재배포</div>
+            <ul><li>같은 저장소의 <code style="font-family:var(--mono);">history.json</code>을 fetch 해서 렌더링</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="arch-note">GitHub Actions의 <code style="font-family:var(--mono);color:var(--text);">schedule</code> cron은 정시(0분)에 부하가 몰려 실행 시각이 매일 들쭉날쭉해지는 문제가 있어, 실행 시각만 Cloudflare Cron Trigger가 정확히 맞춰 트리거하고 실제 작업은 GitHub Actions가 그대로 수행한다. 서버리스 프록시 없이 <b style="color:var(--text);">정적 사이트 + 하루 1회 배치</b>로만 굴러간다.</p>
+  </div>
+
+  <h2>AI 파이프라인과 품질 검문소</h2>
+  <p class="section-intro">모델을 직접 재학습하는 대신, 각 LLM 호출의 출력물을 독립된 방식으로 채점하는 구조를 택했다.</p>
+  <div class="arch-block">
+    <div class="diagram-panel">
+      <div class="pl-node">NVD 신규 CVE 등록</div>
+      <div class="pl-arrow-v"></div>
+      <div class="pl-node">fetch-daily-count.mjs (배치)</div>
+      <div class="pl-arrow-v" style="margin-bottom:14px;"></div>
+
+      <div class="pl-branches">
+        <div class="pl-branch">
+          <div class="pl-src"><span>유형 태그</span><span class="sub">규칙 → '기타'만 LLM 재분류</span></div>
+          <div class="pl-arrow-h">→</div>
+          <div class="pl-dst"><span class="name">검문소 A · CWE 골든셋 대조</span><span class="metric">분류 정확도 · F1</span></div>
+        </div>
+        <div class="pl-branch">
+          <div class="pl-src"><span>번역·해설</span><span class="sub">요약/해석/원인/방지법</span></div>
+          <div class="pl-arrow-h">→</div>
+          <div class="pl-dst"><span class="name">검문소 B · G-Eval 독립 심사</span><span class="metric">지어내지 않음 · 번역정확도 · 근거성 · 자연스러움</span></div>
+        </div>
+        <div class="pl-branch">
+          <div class="pl-src"><span>오늘의 브리핑</span><span class="sub">1~3문장 요약</span></div>
+          <div class="pl-arrow-h">→</div>
+          <div class="pl-dst"><span class="name">검문소 C · G-Eval 독립 심사</span><span class="metric">무결성 · 관련성 · 자연스러움</span></div>
+        </div>
+        <div class="pl-sub-row">
+          <div></div><div></div>
+          <div class="pl-sub-note">└ <b style="color:var(--text-dim);">검문소 D</b> · calibration(good/bad 대조) — 검문소 B·C 심사 자체의 신뢰도 검증</div>
+        </div>
+      </div>
+
+      <div class="pl-arrow-v" style="margin-top:8px;"></div>
+      <div class="pl-node">data/history.json → index.html (사용자 화면)</div>
+    </div>
+    <p class="arch-note">분류는 정답이 있는 닫힌 문제라 NVD 공식 CWE로 만든 골든셋과 직접 대조하고, 번역·해설·브리핑은 정답 문장이 없는 열린 텍스트라 이 프로젝트가 가장 중시하는 <b style="color:var(--text);">"지어내지 않는다"</b> 원칙을 기준으로 G-Eval이 채점한다. 심사 모델은 Gemini 자기 채점(할당량 문제·자기 편향 우려)을 폐기하고, 완전히 다른 제공사·모델인 <b style="color:var(--text);">Claude가 별도의 새 세션에서 API 호출 없이 직접 채점</b>하는 방식으로 정착했다.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">AI Quality Evaluation</p>
+  <h2>AI 품질 평가 결과</h2>
+  <p class="section-intro">전체 방법론·사례 분석은 <code style="font-family:var(--mono);color:var(--accent);">AI_EVAL_REPORT.md</code>에, 도구 사용법은 <code style="font-family:var(--mono);color:var(--accent);">scripts/eval/README.md</code>에 있다. 아래는 1차 평가(개선 전) → 2차 평가(개선 후) 재측정 결과.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>영역</th><th>지표(만점 5.0)</th><th>목표</th><th>결과(개선 전 → 후)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="area">분류(카테고리)</td><td class="metric">Accuracy(전체 46건)</td><td>≥ 0.70</td><td class="result">0.61<span class="arrow">→</span><span class="after">0.76</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">분류(카테고리)</td><td class="metric">Macro-F1(전체)</td><td>≥ 0.70</td><td class="result">0.77<span class="arrow">→</span><span class="after">0.87</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">번역·해설 생성</td><td class="metric">faithfulness(지어내지 않음)</td><td>≥ 4.0</td><td class="result">4.90<span class="arrow">→</span><span class="after">5.00</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">번역·해설 생성</td><td class="metric">translationAccuracy</td><td>≥ 4.0</td><td class="result">4.90<span class="arrow">→</span><span class="after">4.95</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">번역·해설 생성</td><td class="metric">groundedCause(원인의 근거성)</td><td>≥ 4.0</td><td class="result">4.65<span class="arrow">→</span><span class="after">5.00</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">번역·해설 생성</td><td class="metric">koreanFluency</td><td>≥ 4.0</td><td class="result">4.90<span class="arrow">→</span><span class="after">4.85</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">오늘의 브리핑</td><td class="metric">noFabrication(무결성)</td><td>≥ 4.0</td><td class="result">5.00<span class="arrow">→</span><span class="after">5.00</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">오늘의 브리핑</td><td class="metric">relevance</td><td>≥ 4.0</td><td class="result">5.00<span class="arrow">→</span><span class="after">4.75</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">오늘의 브리핑</td><td class="metric">koreanFluency</td><td>≥ 4.0</td><td class="result">4.00<span class="arrow">→</span><span class="after">5.00</span><span class="pass">PASS</span></td></tr>
+        <tr><td class="area">심사 자체 신뢰도</td><td class="metric">bad/good 판별력(격차)</td><td>≥ 3.0점</td><td class="result"><span class="after">4.0점</span><span class="pass">PASS</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <b>핵심 성과.</b> 1차 평가에서 발견한 약점 3가지를 실제로 고치고 재측정까지 마쳤다 — ① 분류 규칙 배열 순서 문제를 고쳐 accuracy <span class="num-inline">0.61→0.76</span>, ② "CWE 근거가 있으면 원인을 반드시 채워라"는 지시를 추가해 groundedCause <span class="num-inline">4.65→5.00</span>, ③ 브리핑 조사(助詞) 사용 규칙을 명확히 해 koreanFluency <span class="num-inline">4.00→5.00</span>. 덤으로 API 429(요청 한도 초과) 재시도 로직이 서버가 요구하는 대기시간보다 짧게 기다려 재시도가 무의미했던 버그도 찾아 고쳤다. 남은 과제는 위조가 아니라 카테고리 경계·어순 같은 다듬기 수준의 결함뿐이다.
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Principles</p>
+  <h2>설계 원칙</h2>
+  <div class="principle-grid">
+    <div class="principle">
+      <div class="idx">01</div>
+      <h3>지어내지 않는다</h3>
+      <p>AI 해설은 NVD 공식 CWE 분류를 근거로만 생성하고, 근거가 없으면 그 항목을 아예 비운다. CWE가 없는 CVE는 해설 없이 목록으로만 보여준다.</p>
+    </div>
+    <div class="principle">
+      <div class="idx">02</div>
+      <h3>비밀값을 만들지 않는다</h3>
+      <p>브라우저가 쓰는 건 전부 무키 공개 데이터다. Gemini 키는 배치 환경(GitHub Actions 시크릿)에만 있고 배포 파일·Git 기록 어디에도 없다.</p>
+    </div>
+    <div class="principle">
+      <div class="idx">03</div>
+      <h3>실패해도 값은 남긴다</h3>
+      <p>조회에 실패하면 마지막 정상값을 유지한 채 "오래된 데이터"임을 배너로 알린다. <code style="font-family:var(--mono);color:var(--accent);">?debug=1</code>로 실패 5종을 직접 재현해 검증할 수 있다.</p>
+    </div>
+    <div class="principle">
+      <div class="idx">04</div>
+      <h3>측정으로 증명한다</h3>
+      <p>AI 출력을 자체 평가 프레임워크로 정기 채점하고, 그 결과와 방법론을 문서로 공개한다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Stack</p>
+  <h2>기술 스택</h2>
+  <div class="chip-row">
+    <span class="chip">HTML/CSS/JS (no framework)</span>
+    <span class="chip">Node.js 20</span>
+    <span class="chip">GitHub Actions</span>
+    <span class="chip">Vercel</span>
+    <span class="chip">Cloudflare Workers (Cron Trigger)</span>
+    <span class="chip">NVD CVE API 2.0</span>
+    <span class="chip">Gemini API (무료 티어)</span>
+    <span class="chip">자체 G-Eval 프레임워크</span>
+  </div>
+</section>
+
+<footer>
+  <p class="eyebrow">More</p>
+  <ul class="foot-links">
+    <li><b>README.md</b> — 리포지토리 기본 안내</li>
+    <li><b>docs/PLAN.md</b> — 서비스 기획서</li>
+    <li><b>docs/PROGRESS.md</b> — 진행 상황과 설계 결정 이력</li>
+    <li><b>docs/AI_EVAL_REPORT.md</b> — AI 품질 평가 전체 리포트</li>
+    <li><b>scripts/eval/README.md</b> — 평가 프레임워크 사용법</li>
+  </ul>
+  <p class="foot-meta">TODAY CVE — Showcase · generated 2026-09-04</p>
+</footer>
+
+</body>
+</html>
