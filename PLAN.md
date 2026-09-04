@@ -8,7 +8,7 @@
 
 오늘(KST) 새로 등록된 [NVD](https://nvd.nist.gov/) CVE(보안 취약점)를 건수·심각도·위험도·대표 사례·유형/제품별 분포·추이까지 한 화면에서 보여주는 보안 정보판입니다. 서버·로그인·설치 없이 브라우저로 바로 접근할 수 있는 정적 사이트를 지향합니다.
 
-- **공개 주소**: https://whiteclover0542.github.io/Today_CVE_information/
+- **공개 주소**: https://today-cve-information.vercel.app/
 - **저장소**: https://github.com/whiteclover0542/Today_CVE_information
 
 ## 2. 이번 단계의 목표
@@ -17,9 +17,11 @@
 
 ### 2-1. 배포 재설정
 
-- 현재는 GitHub Pages(저장소 설정에서 활성화)로 배포되어 있습니다.
-- 배포 파이프라인을 다시 점검·재설정합니다 — 목적은 이후 기능 추가(특히 LLM 호출 시크릿 관리)가 늘어나도 배포가 끊기지 않고, 실패했을 때 원인을 바로 알 수 있는 구조를 만드는 것입니다.
-- 구체적인 방식(그대로 GitHub Pages 유지 vs. 다른 정적 호스팅으로 이전)은 착수 시점에 다시 판단하고, 결정 근거는 `PROGRESS.md`의 설계 결정 이력에 남깁니다.
+> ✅ 완료(2026-09-04). GitHub Pages에서 Vercel로 이전했습니다.
+
+- Vercel이 GitHub 저장소를 직접 연동해 push마다(배치의 `data/history.json` 커밋 포함) 자동 재배포합니다.
+- 빌드 스텝이 없는 순수 정적 사이트라 코드 변경 없이 그대로 옮겨졌고, GitHub Actions 배치·시크릿 관리 방식도 변경 없습니다.
+- 결정 근거는 `PROGRESS.md`의 설계 결정 이력에 남깁니다.
 
 ### 2-2. LLM 기반 번역·요약 품질 개선
 

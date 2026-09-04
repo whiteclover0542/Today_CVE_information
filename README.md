@@ -3,7 +3,7 @@
 오늘 새로 등록된 보안 취약점(CVE)이 **몇 건이고, 얼마나 위험하고, 무엇이 문제인지**를 한 화면에서 보여줍니다.
 매일 자동으로 [NVD](https://nvd.nist.gov/)에서 데이터를 받아 집계하고, 중요한 CVE는 AI가 한국어로 번역·해설합니다.
 
-**🔗 https://whiteclover0542.github.io/Today_CVE_information/** — 서버·로그인·설치 없이 바로 열립니다.
+**🔗 https://today-cve-information.vercel.app/** — 서버·로그인·설치 없이 바로 열립니다.
 
 ![오늘 건수와 위험도 판단](docs/screenshots/hero.png)
 
@@ -32,15 +32,22 @@ CVE 카드는 제목·CVSS·CWE까지만 보여주고, 상세는 눌러야 펼�
 ## 어떻게 동작하나
 
 ```
-GitHub Actions (매일 09:00 KST)
+Cloudflare Cron Trigger (매일 09:00 KST 정각)
+  └ GitHub API로 workflow_dispatch 호출
+        ↓
+GitHub Actions
   └ NVD CVE API 2.0 조회 (오늘 00:00 KST ~ 실행 시각)
   └ 심각도·CWE 유형·제품 집계
   └ 중요 CVE는 Gemini로 번역 + 해석 + 발생 원인 + 방지법 생성
   └ data/history.json 에 하루 1건 추가 → commit & push
         ↓
-GitHub Pages (index.html + app.js)
+Vercel (GitHub 연동, push마다 자동 재배포)
   └ 같은 저장소의 history.json 을 fetch 해서 렌더링
 ```
+
+GitHub Actions의 `schedule` cron은 정시(0분)에 부하가 몰려 실행 시각이 매일 들쭉날쭉해지는 문제가 있어(
+자세한 내용은 [`cloudflare-worker/README.md`](cloudflare-worker/README.md)), 실행 시각만 Cloudflare Cron Trigger가
+정확히 맞춰 트리거하고 실제 작업은 그대로 GitHub Actions가 합니다.
 
 서버리스 프록시 없이 **정적 사이트 + 하루 1회 배치**로만 굴러갑니다.
 
@@ -57,7 +64,7 @@ GitHub Pages (index.html + app.js)
 
 ## 기술 스택
 
-순수 HTML/CSS/JS (프레임워크 없음) · Node.js 20 배치 · GitHub Actions · GitHub Pages
+순수 HTML/CSS/JS (프레임워크 없음) · Node.js 20 배치 · GitHub Actions · Vercel
 · [NVD CVE API 2.0](https://nvd.nist.gov/developers/vulnerabilities)(무키) · Gemini API(번역·해설, 무료 티어)
 
 ## 구조
@@ -70,7 +77,8 @@ scripts/
 ├── fetch-daily-count.mjs        # NVD 조회 → 집계·번역·해설 → history.json 갱신
 ├── cwe-info.mjs                 # CWE 한글 라벨·근거 문장 매핑
 └── backfill-cwe-labels.mjs      # 매핑 추가 시 과거 기록에 소급 적용
-.github/workflows/               # 매일 09:00 KST 배치
+.github/workflows/                # workflow_dispatch로 실행되는 배치 (스케줄은 아래 워커가 트리거)
+cloudflare-worker/                # 매일 09:00 KST 정각에 위 워크플로를 깨우는 Cron Trigger
 docs/screenshots/                # 이 README의 스크린샷
 assignment/                      # 과제 단계 자료·개편 전 스크린샷 (동결)
 ```

@@ -1,0 +1,16 @@
+name = "today-cve-scheduler"
+main = "worker.js"
+compatibility_date = "2026-09-04"
+
+# 00:00 UTC = 09:00 KST (Asia/Seoul) — daily-cve-count.yml이 원래 쓰던 스케줄과 동일
+[triggers]
+crons = ["0 0 * * *"]
+
+[vars]
+GITHUB_OWNER = "whiteclover0542"
+GITHUB_REPO = "Today_CVE_information"
+GITHUB_WORKFLOW_FILE = "daily-cve-count.yml"
+GITHUB_REF = "main"
+
+# GITHUB_TOKEN(레포 Actions 실행 권한이 있는 PAT)은 시크릿이라 여기 안 넣음 — README.md 참고,
+# `wrangler secret put GITHUB_TOKEN` 으로 별도 등록.
