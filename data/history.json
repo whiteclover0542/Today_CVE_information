@@ -3398,5 +3398,1856 @@
       }
     ],
     "briefing": "오늘 신규 등록된 CVE 취약점은 총 229건이며, 이 중 심각 등급은 20건, 높음 등급은 44건으로 확인되었습니다. 가장 많이 언급된 제품은 PHP로 13건이 등록되었고, 취약점 유형 중에서는 IDOR가 9건으로 가장 많이 나타났습니다."
+  },
+  {
+    "date": "2026-09-05",
+    "count": 402,
+    "unit": "건",
+    "timezone": "Asia/Seoul",
+    "sourceApiUrl": "https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=2026-09-04T15%3A00%3A00.000Z&pubEndDate=2026-09-05T00%3A00%3A25.001Z&resultsPerPage=1",
+    "queriedAtUtc": "2026-09-05T00:00:25.001Z",
+    "severity": {
+      "critical": 8,
+      "high": 36,
+      "medium": 46,
+      "low": 2,
+      "unrated": 310
+    },
+    "highlights": [
+      {
+        "id": "CVE-2026-85661",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "excel-mcp-server 경로 제한 우회로 인한 임의 파일 읽기 및 쓰기 취약점",
+        "summaryEn": "excel-mcp-server 0.1.8 fails to enforce path confinement in stdio mode when EXCEL_FILES_PATH is unset, allowing attackers to read and write arbitrary files. Attackers can supply unchecked file paths to read and write tools to access any file accessible to the process.",
+        "summaryKo": "excel-mcp-server 버전 0.1.8은 EXCEL_FILES_PATH가 설정되지 않은 경우 표준 입출력 모드에서 경로 제한을 강제하지 못해, 공격자가 임의의 파일을 읽고 쓸 수 있게 합니다. 공격자는 검증되지 않은 파일 경로를 읽기 및 쓰기 도구에 제공하여 프로세스가 접근할 수 있는 모든 파일에 접근할 수 있습니다.",
+        "interpretation": "프로그램이 사용자가 접근할 수 있는 파일의 범위를 제대로 제한하지 않아, 악의적인 사용자가 시스템 내부의 중요한 파일들을 몰래 훔쳐보거나 수정할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "mitigation": "EXCEL_FILES_PATH 환경 변수를 명시적으로 설정하여 접근 가능한 파일 경로를 제한하고, 최신 보안 패치가 적용된 버전으로 업데이트하세요.",
+        "cwe": [
+          {
+            "id": "CWE-22",
+            "label": "경로 순회",
+            "hint": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85661",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      },
+      {
+        "id": "CVE-2026-85672",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "zerox 파일 다운로드 기능 OS 명령 인젝션 취약점",
+        "summaryEn": "zerox 1.1.20 contains an OS command injection vulnerability in the file download mechanism where the temporary file extension derived from document URLs is interpolated unsanitized into shell commands executed by poppler utilities. Attackers can craft document URLs with malicious file extensions containing command substitution syntax to execute arbitrary OS commands before document processing occurs.",
+        "summaryKo": "zerox 1.1.20 버전의 파일 다운로드 메커니즘에서 문서 URL에서 파생된 임시 파일 확장자가 poppler 유틸리티에 의해 실행되는 쉘 명령어에 정화되지 않은 채로 삽입되는 OS 명령 인젝션 취약점이 존재합니다. 공격자는 문서 처리가 이루어지기 전에 임의의 OS 명령어를 실행하기 위해 명령어 대체 구문이 포함된 악성 파일 확장자를 가진 문서 URL을 조작할 수 있습니다.",
+        "interpretation": "해커가 조작된 웹 주소를 이용해 시스템 내부에서 원하는 명령어를 몰래 실행할 수 있는 위험한 보안 취약점입니다.",
+        "cause": "일반적으로 사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생",
+        "mitigation": "zerox를 취약점이 해결된 최신 버전으로 업데이트하고, 신뢰할 수 없는 문서 URL의 입력을 차단하거나 입력값을 철저히 검증해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-78",
+            "label": "OS 명령 인젝션",
+            "hint": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85672",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-85688",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "TEN Framework TMAN Designer 파일 임의 읽기 및 쓰기 취약점",
+        "summaryEn": "TEN Framework 0.11.71 contains unauthenticated arbitrary file read and write vulnerabilities in the TMAN Designer file-content API endpoints. Attackers can submit POST and PUT requests to the /api/designer/v1/file-content endpoints to read arbitrary files or write malicious content to system paths, enabling code execution through authorized_keys, cron files, or executable graph files.",
+        "summaryKo": "TEN Framework 버전 0.11.71의 TMAN Designer 파일 콘텐츠 API 엔드포인트에 인증되지 않은 임의 파일 읽기 및 쓰기 취약점이 존재합니다. 공격자는 POST 및 PUT 요청을 통해 임의 파일을 읽거나 시스템 경로에 악성 콘텐츠를 작성할 수 있으며, 이를 통해 authorized_keys, cron 파일, 실행 가능한 그래프 파일을 이용한 코드 실행이 가능해집니다.",
+        "interpretation": "로그인 등 본인 확인 절차를 거치지 않고도 시스템 내부의 중요한 파일을 훔쳐보거나 임의로 수정할 수 있어, 해커가 서버를 완전히 장악할 수 있는 위험한 보안 취약점입니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "mitigation": "최신 보안 패치가 적용된 버전으로 프레임워크를 업데이트하고, 해당 API 엔드포인트에 대한 접근 통제 및 인증 절차를 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85688",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-85696",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "SadTalker 비디오 합성 과정의 OS 명령 인젝션 취약점",
+        "summaryEn": "SadTalker contains an OS command injection vulnerability in the video muxing process where uploaded audio filenames are interpolated into ffmpeg commands without proper escaping. Attackers can upload audio files with shell metacharacters in the filename to break out of quoted arguments and execute arbitrary system commands when video generation occurs.",
+        "summaryKo": "SadTalker는 업로드된 오디오 파일 이름이 적절한 이스케이프 처리 없이 ffmpeg 명령어에 삽입되는 비디오 믹싱 과정에서 OS 명령 인젝션 취약점을 포함하고 있습니다. 공격자는 파일 이름에 쉘 메타문자가 포함된 오디오 파일을 업로드하여 따옴표로 묶인 인수를 탈출하고 비디오 생성 시 임의의 시스템 명령을 실행할 수 있습니다.",
+        "interpretation": "해커가 악의적인 파일 이름을 가진 오디오를 업로드하면 시스템이 이를 그대로 실행해버려 서버가 해커의 조종을 받게 될 위험이 있습니다.",
+        "cause": "일반적으로 사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하거나 입력값에 대한 철저한 검증 및 이스케이프 처리를 수행하세요.",
+        "cwe": [
+          {
+            "id": "CWE-78",
+            "label": "OS 명령 인젝션",
+            "hint": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85696",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-18658",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "IBM Operational Decision Manager SQL 인젝션 취약점",
+        "summaryEn": "IBM Operational Decision Manager 9.6.0.0, 9.5.0.0, 8.11.1.0, 8.11.0.1, 8.12.0.1, 9.5.0.1, and 9.0.0.1 is vulnerable to SQL injection. An unauthenticated attacker can execute arbitrary SQL statements and leverage database functionality to write a web shell to the application web root, resulting in remote code execution.",
+        "summaryKo": "IBM Operational Decision Manager는 SQL 인젝션 취약점에 취약합니다. 인증되지 않은 공격자가 임의의 SQL 문을 실행하고 데이터베이스 기능을 활용하여 애플리케이션 웹 루트에 웹 쉘을 작성하여 원격 코드 실행으로 이어질 수 있습니다.",
+        "interpretation": "해커가 웹사이트의 데이터베이스 입력창 등을 통해 악성 명령어를 주입하여 시스템을 완전히 장악하고 원격에서 마음대로 조종할 수 있는 심각한 보안 취약점입니다.",
+        "cause": "일반적으로 사용자 입력을 SQL 문에 그대로 이어붙여서 발생",
+        "mitigation": "제조사에서 제공하는 보안 패치를 적용하고 최신 버전으로 업데이트하세요.",
+        "cwe": [
+          {
+            "id": "CWE-89",
+            "label": "SQL 인젝션",
+            "hint": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18658",
+        "cvssScore": 9.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SQL 인젝션"
+      },
+      {
+        "id": "CVE-2026-85695",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "FastChat 인증 누회로 인한 임의 작업자 등록 및 요청 위조 취약점",
+        "summaryEn": "FastChat contains an authentication bypass vulnerability in the /register_worker endpoint that allows unauthenticated attackers to register arbitrary worker addresses and perform server-side request forgery. Attackers can register malicious workers under victim model names to intercept user prompts, images, and responses, or probe internal network ports across the worker mesh.",
+        "summaryKo": "FastChat의 /register_worker 엔드포인트에 인증 우회 취약점이 있어, 인증되지 않은 공격자가 임의의 작업자 주소를 등록하고 서버 측 요청 위조를 수행할 수 있습니다. 공격자는 피해자 모델 이름으로 악성 작업자를 등록하여 사용자 프롬프트, 이미지, 응답을 가로채거나 작업자 네트워크의 내부 포트를 탐색할 수 있습니다.",
+        "interpretation": "비밀번호나 로그인 확인 절차 없이 누구나 시스템 내부 기능을 이용할 수 있어서, 해커가 가짜 서버를 등록해 사용자의 중요한 정보나 대화 내용을 훔쳐볼 수 있는 위험한 상태입니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "mitigation": "FastChat을 최신 버전으로 패치하고, /register_worker 엔드포인트에 대한 접근 통제 및 인증 절차를 강화하세요.",
+        "cwe": [
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85695",
+        "cvssScore": 9.4,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85667",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "xiaobei 웹훅 엔드포인트 인증 누락으로 인한 메시지 주입 및 SSRF 취약점",
+        "summaryEn": "xiaobei through 5.5.2 fails to implement authentication or signature validation on webhook endpoints, allowing unauthenticated attackers to inject arbitrary messages into the agent pipeline. Attackers can publish malicious messages via the /webhook_worktool handler and exploit unvalidated media URL fetching to perform server-side request forgery against internal services.",
+        "summaryKo": "xiaobei 5.5.2 버전을 포함한 이전 버전은 웹훅 엔드포인트에 대한 인증이나 서명 검증을 구현하지 않아, 인증되지 않은 공격자가 에이전트 파이프라인에 임의의 메시지를 주입할 수 있습니다. 공격자는 /webhook_worktool 핸들러를 통해 악성 메시지를 게시하고 검증되지 않은 미디어 URL 가져오기를 악용하여 내부 서비스를 대상으로 서버 측 요청 위조(SSRF)를 수행할 수 있습니다.",
+        "interpretation": "비밀번호나 신원 확인 절차 없이 누구나 시스템 내부 기능에 접근할 수 있어, 해커가 가짜 명령을 보내거나 내부 망을 공격하는 통로로 악용될 수 있습니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생합니다.",
+        "mitigation": "제공사의 보안 패치를 적용하여 웹훅 엔드포인트에 인증 및 서명 검증 로직을 추가하고 내부망 접근을 통제해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85667",
+        "cvssScore": 9.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85684",
+        "date": "2026-09-05",
+        "severity": "CRITICAL",
+        "title": "marker 파일 업로드 기능의 경로 순회 취약점",
+        "summaryEn": "marker through 2.0.0 contains a path traversal vulnerability in the FastAPI /marker/upload handler that fails to sanitize the file.filename parameter. Unauthenticated attackers can supply filenames containing directory traversal sequences to write arbitrary files to any location or delete existing files on the system.",
+        "summaryKo": "marker 2.0.0 버전의 FastAPI /marker/upload 핸들러에는 file.filename 파라미터를 올바르게 검증하지 않는 경로 순회 취약점이 포함되어 있습니다. 인증되지 않은 공격자가 디렉토리 순회 시퀀스가 포함된 파일 이름을 제공하여 시스템의 임의 위치에 파일을 작성하거나 기존 파일을 삭제할 수 있습니다.",
+        "interpretation": "공격자가 악의적인 파일 이름을 사용하여 서버의 원하는 위치에 파일을 마음대로 올리거나 지울 수 있는 보안 허점입니다.",
+        "cause": "입력값에 대한 충분한 검증과 살균(Sanitization) 과정을 거치지 않아 경로 이동 문자가 그대로 처리되었기 때문에 발생합니다.",
+        "mitigation": "제공 업체의 보안 패치를 적용하고 파일 업로드 시 입력값 검증 로직을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-73",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85684",
+        "cvssScore": 9.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      },
+      {
+        "id": "CVE-2026-85607",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Blinko 권한 우회 취약점으로 인한 AI 대화 내역 유출 가능",
+        "summaryEn": "Blinko 1.8.7 contains an authorization bypass (IDOR) vulnerability in multiple tRPC procedures (message.list, message.update, message.delete, message.clearAfter in server/routerTrpc/message.ts and conversation.clearMessages in server/routerTrpc/conversation.ts). Although these procedures require authentication, they query the database by caller-supplied conversation or message ID without verifying that the resource belongs to the requesting account. Any authenticated user can therefore read another user's full AI chat history, modify individual message content, and delete or wipe entire conversations by enumerating sequential integer IDs.",
+        "summaryKo": "Blinko 1.8.7 버전은 여러 tRPC 프로시저에서 권한 우회(IDOR) 취약점을 포함하고 있습니다. 인증된 사용자가 요청에 포함된 대화 또는 메시지 ID 값을 조작하여 다른 사용자의 AI 채팅 내역을 조회, 수정, 삭제할 수 있습니다.",
+        "interpretation": "로그인한 사용자가 다른 사람의 고유 번호를 입력하기만 하면 타인의 비밀 대화 내용을 훔쳐보거나 마음대로 지울 수 있는 보안 문제입니다.",
+        "cause": "일반적으로 요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생합니다.",
+        "mitigation": "제공사의 보안 패치를 적용하여 리소스 접근 시 소유권 확인 로직을 추가해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-639",
+            "label": "취약한 직접 개체 참조(IDOR)",
+            "hint": "요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85607",
+        "cvssScore": 8.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "취약한 직접 개체 참조(IDOR)"
+      },
+      {
+        "id": "CVE-2026-85623",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "goose 레시피 stdio 확장 및 재시도 검증의 임의 명령어 실행 취약점",
+        "summaryEn": "goose 1.37.0 executes arbitrary commands from recipe stdio extensions and retry.checks without security inspection. Attackers can distribute malicious recipes that execute shell commands as the user running goose, bypassing the recipe security scan which does not inspect extensions or retry configurations.",
+        "summaryKo": "goose 1.37.0 버전은 보안 검사 없이 레시피의 stdio 확장 및 retry.checks에서 임의의 명령어를 실행합니다. 공격자는 확장 프로그램이나 재시도 구성을 검사하지 않는 레시피 보안 스캔을 우회하여, goose를 실행하는 사용자의 권한으로 쉘 명령어를 실행하는 악성 레시피를 배포할 수 있습니다.",
+        "interpretation": "프로그램이 외부에서 들어온 설정을 검증 없이 그대로 실행하여, 공격자가 악의적인 명령어를 시스템에 몰래 실행할 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고, 신뢰할 수 없는 출처의 레시피나 확장 프로그램 사용을 주의해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-94",
+            "label": "코드 인젝션",
+            "hint": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85623",
+        "cvssScore": 8.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-19298",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM Langflow 인증 우회로 인한 원격 코드 실행 취약점",
+        "summaryEn": "IBM Langflow OSS 1.0.0 through 1.11.2 could allow a remote authenticated attacker to execute arbitrary code due to an authorization bypass in the flow build process.",
+        "summaryKo": "IBM Langflow OSS 1.0.0 버전부터 1.11.2 버전까지의 흐름 구축 과정에서 권한 부여 우회로 인해, 원격의 인증된 공격자가 임의의 코드를 실행할 수 있습니다.",
+        "interpretation": "로그인한 공격자가 시스템의 권한 검사를 피해 악성 코드를 실행할 수 있는 위험한 보안 취약점입니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생하며, 이 취약점은 흐름 구축 과정에서 권한 검증이 적절히 이루어지지 않아 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고 업데이트를 수행해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-94",
+            "label": "코드 인젝션",
+            "hint": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19298",
+        "cvssScore": 8.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-18486",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM ContextForge 민감 정보 노출 및 권한 상승 취약점",
+        "summaryEn": "IBM ContextForge MCP Gateway <= v1.0.7 MCP Context Forge could allow a remote authenticated attacker to obtain sensitive credentials and escalate privileges due to improper validation of jq filters.",
+        "summaryKo": "IBM ContextForge MCP Gateway 1.0.7 이하 버전은 jq 필터의 부적절한 검증으로 인해 원격 인증된 공격자가 민감한 자격 증명을 획득하고 권한을 상승시킬 수 있는 취약점이 있습니다.",
+        "interpretation": "프로그램이 입력값을 제대로 검사하지 않아, 시스템에 로그인한 공격자가 몰래 중요한 비밀번호를 훔쳐내고 관리자 권한까지 빼앗을 수 있는 보안 문제입니다.",
+        "cause": "일반적으로 노출되면 안 되는 정보를 접근 제한 없이 응답에 포함해서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하여 취약점을 해결해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-200",
+            "label": "민감 정보 노출",
+            "hint": "노출되면 안 되는 정보를 접근 제한 없이 응답에 포함해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18486",
+        "cvssScore": 8.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-82538",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "ILIAS 저장소 휴지통 SQL 인젝션으로 인한 권한 탈취 취약점",
+        "summaryEn": "ILIAS before versions 9.22, 10.10, and 11.3 contains a SQL injection vulnerability in the repository trash table where the table navigation sort field from HTTP requests is passed directly into the ORDER BY clause of a SQL query without validation against declared sortable columns. Authenticated users with write permission on any container can inject arbitrary SQL through the sort parameter, and because multi-statement execution is enabled in the database layer, stacked queries enable full database read and write access as well as administrator account takeover.",
+        "summaryKo": "버전 9.22, 10.10, 11.3 이전의 ILIAS는 저장소 휴지통 테이블에 SQL 인젝션 취약점을 포함하고 있으며, HTTP 요청의 테이블 탐색 정렬 필드가 허용된 열에 대한 검증 없이 SQL 쿼리의 ORDER BY 절에 직접 전달됩니다. 컨테이너에 대한 쓰기 권한이 있는 인증된 사용자는 sort 매개변수를 통해 임의의 SQL을 주입할 수 있으며, 데이터베이스 계층에서 다중 문 실행이 활성화되어 있어 스택 쿼리를 통해 전체 데이터베이스 읽기 및 쓰기 권한과 관리자 계정 탈취가 가능합니다.",
+        "interpretation": "공격자가 웹사이트의 정렬 기능을 조작하여 데이터베이스를 완전히 제어하고 관리자 계정까지 빼앗을 수 있는 심각한 보안 취약점입니다.",
+        "cause": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치 버전(9.22, 10.10, 11.3 이상)으로 업그레이드하세요.",
+        "cwe": [
+          {
+            "id": "CWE-89",
+            "label": "SQL 인젝션",
+            "hint": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82538",
+        "cvssScore": 8.8,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "SQL 인젝션"
+      },
+      {
+        "id": "CVE-2026-85620",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Postgres MCP Pro 제한 모드 우회 파일 읽기 취약점",
+        "summaryEn": "Postgres MCP Pro 0.3.0 contains a restricted-mode bypass vulnerability where function-name validation is not applied to RangeFunction nodes in FROM clauses. Attackers can execute file-reading functions like pg_read_file through FROM-clause syntax to read arbitrary files despite restricted-mode protections.",
+        "summaryKo": "Postgres MCP Pro 0.3.0 버전은 FROM 절의 RangeFunction 노드에 함수 이름 검증이 적용되지 않는 제한 모드 우회 취약점을 포함하고 있습니다. 공격자는 제한 모드의 보호에도 불구하고 FROM 절 구문을 통해 pg_read_file과 같은 파일 읽기 함수를 실행하여 임의의 파일을 읽을 수 있습니다.",
+        "interpretation": "보안 기능이 켜져 있어 접근하지 못해야 하는 중요한 파일들을 공격자가 훔쳐볼 수 있는 문제입니다.",
+        "cause": "일반적으로 권한 검사는 있지만 조건이 잘못돼 있어서 발생합니다.",
+        "mitigation": "공급업체가 제공하는 최신 보안 패치를 적용하여 취약한 버전을 업그레이드해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-863",
+            "label": "부정확한 권한 검사",
+            "hint": "권한 검사는 있지만 조건이 잘못돼 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85620",
+        "cvssScore": 8.6,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-19305",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM Langflow OSS 서버 사이드 요청 위조로 인한 민감 정보 노출 취약점",
+        "summaryEn": "IBM Langflow OSS 1.0.0 through 1.11.2 could allow a remote attacker to obtain sensitive information due to server-side request forgery.",
+        "summaryKo": "IBM Langflow OSS 1.0.0 버전부터 1.11.2 버전까지는 서버 사이드 요청 위조(SSRF) 취약점으로 인해 원격 공격자가 민감한 정보를 획득할 수 있습니다.",
+        "interpretation": "공격자가 서버를 조작해 내부망 등 외부에서 접근할 수 없는 곳으로 요청을 보내게 만듦으로써, 중요한 정보가 유출될 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생합니다.",
+        "mitigation": "제공사의 보안 공지를 확인하고 최신 버전으로 패치를 적용해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19305",
+        "cvssScore": 8.6,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85651",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Trigger.dev 환경 멤버십 검증 누락으로 인한 임의 작업 주입 취약점",
+        "summaryEn": "Trigger.dev versions before 4.5.2 fail to validate environment membership during run replay operations, allowing authenticated attackers to inject task runs into arbitrary environments. Attackers can replay their own runs into other organizations' or projects' environments to consume victim resources and pollute run history.",
+        "summaryKo": "4.5.2 버전 미만의 Trigger.dev는 실행 재생 작업 중에 환경 멤버십을 올바르게 검증하지 못하여, 인증된 공격자가 임의의 환경에 작업 실행을 주입할 수 있습니다. 공격자는 자신의 실행을 다른 조직이나 프로젝트의 환경으로 재생하여 피해자의 리소스를 소모하고 실행 기록을 오염시킬 수 있습니다.",
+        "interpretation": "권한이 없는 사용자가 다른 사람의 작업 환경에 무단으로 개입하여 시스템 자원을 낭비하게 만들고 기록을 엉망으로 만들 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생합니다.",
+        "mitigation": "Trigger.dev를 4.5.2 버전 이상으로 업데이트하여 취약점을 해결해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-862",
+            "label": "권한 검사 누락",
+            "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85651",
+        "cvssScore": 8.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-85625",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "sift 라이브러리의 프로토타입 오염 및 원격 코드 실행 취약점",
+        "summaryEn": "sift (sift.js) 17.1.3 enumerates query keys with for...in, which walks the object prototype chain, and dispatches any matched operator key including $where. The $where operation compiles a string value into a function using new Function unless CSP_ENABLED is set (not set by default). As a result, if a prototype-pollution primitive elsewhere in the process sets Object.prototype.$where to a malicious string, even benign filter calls such as sift({}) execute arbitrary JavaScript. Additionally, passing an untrusted query object containing a string $where directly to sift results in code execution under the default configuration.",
+        "summaryKo": "sift.js 17.1.3 버전은 객체 프로토타입 체인을 탐색하는 과정에서 $where 연산자를 포함한 키를 처리합니다. CSP_ENABLED가 설정되지 않은 기본 상태에서 공격자가 프로토타입 오염을 유발하거나 신뢰할 수 없는 쿼리를 전달하면 임의의 자바스크립트 코드가 실행될 수 있습니다.",
+        "interpretation": "프로그램이 데이터를 검사하는 과정에서 숨겨진 기본 설정값(프로토타입)을 조작당해 공격자가 원하는 악성 코드를 몰래 실행할 수 있게 되는 보안 취약점입니다.",
+        "cause": "프로그램이 객체의 속성을 검사할 때 프로토타입 체인에 포함된 속성까지 불필요하게 탐색하고, 입력된 문자열을 안전하게 검증하지 않은 채 그대로 실행 가능한 코드로 변환하기 때문에 발생합니다.",
+        "mitigation": "sift 라이브러리를 안전한 최신 버전으로 업데이트하고, 신뢰할 수 없는 사용자 입력이 쿼리 객체로 직접 전달되지 않도록 입력값을 철저히 검증해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-1321",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85625",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-85694",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "LaVague 원격 코드 실행 취약점",
+        "summaryEn": "LaVague 0.2.35 contains a remote code execution vulnerability in PythonFromMarkdownExtractor.extract_as_object that evaluates untrusted language model output derived from web page content. Attackers can inject malicious Python code through web pages using indirect prompt injection to execute arbitrary code on the operator's host without review.",
+        "summaryKo": "LaVague 버전 0.2.35의 PythonFromMarkdownExtractor.extract_as_object 함수는 웹페이지 콘텐츠에서 파생된 신뢰할 수 없는 언어 모델 출력을 평가하여 원격 코드 실행 취약점을 포함하고 있습니다. 공격자는 간접 프롬프트 인젝션을 사용하여 웹페이지를 통해 악성 파이썬 코드를 주입하고, 검토 없이 운영자의 호스트에서 임의의 코드를 실행할 수 있습니다.",
+        "interpretation": "신뢰할 수 없는 웹사이트의 내용을 그대로 실행 가능한 프로그램 코드로 오인하여 처리하기 때문에, 공격자가 내 심어둔 악성 명령어가 컴퓨터에서 그대로 실행될 수 있는 위험이 있습니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생합니다.",
+        "mitigation": "제조사가 제공하는 보안 패치를 적용하거나 최신 버전으로 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-94",
+            "label": "코드 인젝션",
+            "hint": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85694",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-19303",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM Langflow 임의 파일 및 디렉토리 삭제 취약점",
+        "summaryEn": "IBM Langflow OSS 1.0.0 through 1.11.2 could allow a remote authenticated attacker to delete arbitrary local files or directories due to improper limitation of a pathname to a restricted directory.",
+        "summaryKo": "IBM Langflow OSS 1.0.0부터 1.11.2 버전은 제한된 디렉토리에 대한 경로 이름의 부적절한 제한으로 인해 원격 인증된 공격자가 임의의 로컬 파일이나 디렉토리를 삭제할 수 있는 취약점이 있습니다.",
+        "interpretation": "인증된 공격자가 시스템 내부의 중요한 파일이나 폴더를 임의로 삭제하여 서비스 장애를 유발할 수 있습니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고 소프트웨어를 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-22",
+            "label": "경로 순회",
+            "hint": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19303",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      },
+      {
+        "id": "CVE-2026-18175",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM i DDM 타겟 디스패처의 인가 우회로 인한 데이터베이스 트랜잭션 조작 가능",
+        "summaryEn": "IBM i 7.6, 7.5, 7.4, and 7.3 could allow a remote attacker to manipulate database transactions due to improper authorization in the DDM target dispatcher.",
+        "summaryKo": "IBM i 버전 7.6, 7.5, 7.4, 7.3은 DDM 타겟 디스패처의 부적절한 인가로 인해 원격 공격자가 데이터베이스 트랜잭션을 조작할 수 있는 취약점이 있습니다.",
+        "interpretation": "권한이 없는 외부 공격자가 시스템의 데이터베이스 처리 과정을 임의로 조작할 수 있어 데이터 무결성에 심각한 위협이 될 수 있습니다.",
+        "cause": "일반적으로 사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생합니다.",
+        "mitigation": "IBM에서 제공하는 공식 보안 패치 및 업데이트를 적용하여 취약점을 해결해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-285",
+            "label": "부적절한 인가",
+            "hint": "사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18175",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:H/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-18221",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM i 인증 파라미터 검증 미흡으로 인한 권한 획득 취약점",
+        "summaryEn": "IBM i 7.6, 7.5, 7.4, and 7.3 could allow a remote attacker to gain unauthorized access due to improper validation of client-supplied authentication parameters.",
+        "summaryKo": "IBM i 7.3, 7.4, 7.5, 7.6 버전에서는 클라이언트가 제공한 인증 파라미터의 부적절한 검증으로 인해 원격 공격자가 권한 없는 접근을 획득할 수 있습니다.",
+        "interpretation": "공격자가 시스템에 접속할 때 신원 확인 과정을 속이거나 우회하여 허가되지 않은 데이터나 기능에 접근할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생합니다.",
+        "mitigation": "IBM에서 제공하는 보안 공지를 확인하고 최신 보안 패치 및 업데이트를 적용해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-287",
+            "label": "부적절한 인증",
+            "hint": "인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18221",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-9317",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Nango 러너 서버 인증 누락으로 인한 원격 코드 실행 취약점",
+        "summaryEn": "Nango before 0.71.6 contains a missing authentication vulnerability in the runner tRPC server that allows unauthenticated attackers to execute arbitrary JavaScript code by invoking the exposed start procedure without credentials. Attackers with network access to the runner port can send requests to the unauthenticated start procedure, bypassing the unenforced RUNNER_SECRET_KEY environment variable, to achieve remote code execution within the runner process.",
+        "summaryKo": "0.71.6 버전 미만의 Nango는 러너 tRPC 서버에 인증 누락 취약점이 있어, 인증되지 않은 공격자가 자격 증명 없이 노출된 start 프로시저를 호출하여 임의의 JavaScript 코드를 실행할 수 있습니다. 러너 포트에 네트워크 접근 권한이 있는 공격자는 인증되지 않은 start 프로시저에 요청을 보내 설정되지 않은 RUNNER_SECRET_KEY 환경 변수를 우회하고 러너 프로세스 내에서 원격 코드를 실행할 수 있습니다.",
+        "interpretation": "비밀번호나 로그인 과정 없이도 누구나 시스템의 핵심 기능을 실행할 수 있어서, 해커가 마음대로 악성 코드를 실행할 수 있는 위험한 상태입니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생합니다.",
+        "mitigation": "Nango를 안전한 최신 버전(0.71.6 이상)으로 업그레이드하고, 러너 포트에 대한 외부 네트워크 접근을 제한하여 방어해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9317",
+        "cvssScore": 8.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "원격 코드 실행"
+      },
+      {
+        "id": "CVE-2026-85674",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Aider 설정 파일의 임의 명령어 실행 취약점",
+        "summaryEn": "aider (aider-chat) automatically loads a .aider.conf.yml configuration file from the root of the git repository it is launched in. A crafted repository can set test-cmd (executed at startup) or lint-cmd (executed on the first file edit), which aider runs through a shell (subprocess with shell=True) without any user confirmation, LLM interaction, or API key. Consequently, a user who clones and runs aider inside an attacker-supplied repository achieves arbitrary command execution on their machine. The behavior is long-standing and was confirmed on 0.86.3.dev (current main).",
+        "summaryKo": "aider는 실행된 깃 저장소의 루트에서 .aider.conf.yml 설정 파일을 자동으로 불러옵니다. 조작된 저장소는 사용자의 확인이나 LLM 상호작용 없이 셸을 통해 실행되는 test-cmd 또는 lint-cmd를 설정할 수 있어, 공격자가 제공한 저장소에서 aider를 복제하고 실행하는 사용자에게 임의 명령어 실행 피해를 줍니다.",
+        "interpretation": "신뢰할 수 없는 저장소에서 aider를 실행하기만 해도 악성 설정 파일로 인해 내 컴퓨터가 해커의 조종을 받게 될 수 있는 위험한 취약점입니다.",
+        "cause": "일반적으로 사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생합니다.",
+        "mitigation": "신뢰할 수 없는 출처의 저장소에서는 aider를 실행하지 말고, 최신 보안 패치가 적용된 버전으로 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-94",
+            "label": "코드 인젝션",
+            "hint": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85674",
+        "cvssScore": 7.8,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-80112",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "PassMark 커널 드라이버의 잘못된 권한 설정으로 인한 하드웨어 제어 우회 취약점",
+        "summaryEn": "PassMark PerformanceTest before 11.1 build 1012, BurnInTest before 11.1 build 1000, and OSForensics before 11.1 build 1016 contain an improper access control vulnerability in the DirectIo64.sys kernel driver that allows unprivileged local users to perform privileged hardware operations by opening a handle to the device object created without a security descriptor. Attackers can issue IOCTLs through the permissive default Windows ACL applied to the device to access restricted hardware operations regardless of privilege or integrity level.",
+        "summaryKo": "11.1 빌드 1012 이전의 PassMark PerformanceTest, 11.1 빌드 1000 이전의 BurnInTest, 그리고 11.1 빌드 1016 이전의 OSForensics는 DirectIo64.sys 커널 드라이버에 부적절한 접근 제어 취약점을 포함하고 있습니다. 권한이 없는 로컬 사용자가 보안 설명자 없이 생성된 디바이스 객체 핸들을 열어 권한 상승된 하드웨어 작업을 수행할 수 있습니다.",
+        "interpretation": "일반 사용자 권한을 가진 공격자가 컴퓨터의 하드웨어를 직접 제어할 수 있는 핵심 프로그램(드라이버)에 접근하여 제한된 시스템 작업을 몰래 실행할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 파일·자원의 접근 권한을 필요한 범위보다 넓게 설정해서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 버전으로 소프트웨어를 업데이트하거나 패치를 적용하여 드라이버의 접근 제어 설정을 보완해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-732",
+            "label": "잘못된 권한 설정",
+            "hint": "파일·자원의 접근 권한을 필요한 범위보다 넓게 설정해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80112",
+        "cvssScore": 7.8,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-80116",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "DirectIo64.sys 드라이버의 권한 상승 취약점",
+        "summaryEn": "PassMark PerformanceTest before 11.1 build 1012, BurnInTest before 11.1 build 1000, and OSForensics before 11.1 build 1016 contain a privilege escalation vulnerability in DirectIo64.sys that allows local users to modify hardware configuration by exploiting exposed IOCTLs with no validation on device selection, register offset, or value. Attackers can obtain a device handle and issue arbitrary PCI configuration space read/write operations to enable Bus Master DMA on any PCI device, halt storage controller I/O by clearing command registers, or remap Base Address Registers to redirect DMA to an attacker-chosen physical address.",
+        "summaryKo": "PassMark PerformanceTest 11.1 빌드 1012 이전 버전, BurnInTest 11.1 빌드 1000 이전 버전 및 OSForensics 11.1 빌드 1016 이전 버전의 DirectIo64.sys에는 권한 상승 취약점이 존재합니다. 로컬 사용자가 디바이스 선택, 레지스터 오프셋 또는 값에 대한 검증이 없는 노출된 IOCTL을 악용하여 하드웨어 구성을 수정할 수 있습니다.",
+        "interpretation": "컴퓨터에 로컬로 접근할 수 있는 공격자가 검증되지 않은 시스템 기능을 악용하여 하드웨어 설정을 임의로 변경하고 시스템 제어권을 탈취할 수 있는 취약점입니다.",
+        "cause": "이 취약점은 프로그램이 입력값이나 제어 명령에 대해 적절한 검증 절차를 거치지 않아 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 업데이트를 적용하여 취약한 버전을 패치해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-782",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80116",
+        "cvssScore": 7.8,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-86095",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "netcdf-c 속성 이름 처리 과정의 버퍼 범위 밖 쓰기 취약점",
+        "summaryEn": "Unidata netcdf-c through 4.10.1 contains an out-of-bounds write vulnerability in NC4_HDF5_inq_attname() that copies HDF5 attribute names into a fixed 256-byte buffer without length validation. Attackers can craft HDF5 files with oversized attribute names to overflow the destination buffer, causing memory corruption and crashes when applications enumerate attribute names.",
+        "summaryKo": "4.10.1 버전 이하의 Unidata netcdf-c는 NC4_HDF5_inq_attname() 함수에서 HDF5 속성 이름을 길이 검증 없이 256바이트 고정 버퍼로 복사하여 버퍼 범위 밖 쓰기 취약점을 포함하고 있습니다. 공격자는 크기가 초과된 속성 이름이 포함된 조작된 HDF5 파일을 만들어 대상 버퍼를 오버플로우시킬 수 있으며, 응용 프로그램이 속성 이름을 열거할 때 메모리 손상 및 충돌을 유발할 수 있습니다.",
+        "interpretation": "프로그램이 데이터를 저장할 때 공간이 충분한지 확인하지 않고 너무 큰 데이터를 억지로 넣으면서 시스템이 고장 나거나 비정상적으로 종료되는 보안 약점입니다.",
+        "cause": "일반적으로 쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생",
+        "mitigation": "제공되는 보안 패치를 적용하여 취약한 버전을 업그레이드하고, 출처가 불분명한 HDF5 파일의 사용을 자제하세요.",
+        "cwe": [
+          {
+            "id": "CWE-787",
+            "label": "버퍼 범위 밖 쓰기",
+            "hint": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86095",
+        "cvssScore": 7.8,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 필요",
+        "category": "버퍼 오버플로우"
+      },
+      {
+        "id": "CVE-2026-19283",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM Instana Agent Operator 인증 정보 유출 취약점",
+        "summaryEn": "IBM Observability with Instana (Agent) Build 1.0.303 through 1.0.323 IBM Instana Agent Operator could allow an authenticated remote attacker to obtain sensitive information, caused by missing destination namespace validation when copying etcd mTLS client credentials from the openshift-etcd system namespace into an attacker-controlled namespace.",
+        "summaryKo": "IBM Observability with Instana Agent 빌드 1.0.303부터 1.0.323의 IBM Instana Agent Operator는 openshift-etcd 시스템 네임스페이스에서 공격자가 제어하는 네임스페이스로 etcd mTLS 클라이언트 자격 증명을 복사할 때 대상 네임스페이스 유효성 검사가 누락되어, 인증된 원격 공격자가 민감한 정보를 획득할 수 있는 취약점이 있습니다.",
+        "interpretation": "공격자가 시스템의 중요한 인증 정보를 자신이 제어하는 공간으로 몰래 복사해 가져갈 수 있는 보안 허점입니다.",
+        "cause": "일반적으로 권한 검사는 있지만 조건이 잘못돼 있어서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치 및 업데이트를 적용하여 대상 네임스페이스 유효성 검사 로직을 수정해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-863",
+            "label": "부정확한 권한 검사",
+            "hint": "권한 검사는 있지만 조건이 잘못돼 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19283",
+        "cvssScore": 7.7,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-19304",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "IBM Langflow 내부 서비스 정보 유출 취약점",
+        "summaryEn": "IBM Langflow OSS 1.0.0 through 1.11.2 could allow a remote authenticated attacker to obtain sensitive information from internal services due to a URL parser discrepancy.",
+        "summaryKo": "IBM Langflow OSS 1.0.0부터 1.11.2 버전은 URL 파서의 차이점으로 인해 원격 인증된 공격자가 내부 서비스에서 민감한 정보를 획득할 수 있는 취약점이 있습니다.",
+        "interpretation": "공격자가 프로그램의 주소 분석 차이를 악용하여 외부에서 접근할 수 없는 내부 시스템의 중요 정보에 몰래 접근할 수 있습니다.",
+        "cause": "일반적으로 서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고 취약한 버전을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19304",
+        "cvssScore": 7.7,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-85606",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Firecrawl MCP 서버 경로 순회 취약점으로 임의 파일 읽기 가능",
+        "summaryEn": "firecrawl-mcp-server 3.20.2 contains an arbitrary local file read vulnerability in the firecrawl_parse tool that accepts unconstrained filePath arguments without directory containment validation. Attackers can supply absolute paths or directory traversal sequences to read sensitive files like credentials and environment variables, which are then uploaded and returned to the model context.",
+        "summaryKo": "firecrawl-mcp-server 3.20.2 버전은 디렉토리 제한 검증 없이 제약 없는 filePath 인자를 허용하는 firecrawl_parse 도구에서 임의 로컬 파일 읽기 취약점을 포함하고 있습니다. 공격자는 절대 경로나 디렉토리 순회 시퀀스를 제공하여 자격 증명 및 환경 변수와 같은 민감한 파일을 읽을 수 있으며, 이는 업로드되어 모델 컨텍스트로 반환됩니다.",
+        "interpretation": "공격자가 시스템 내부의 중요한 파일에 마음대로 접근하여 비밀번호나 설정 정보 등을 훔쳐볼 수 있는 위험한 보안 허점입니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "mitigation": "제공되는 보안 패치를 적용하여 파일 경로 입력값 검증 로직을 추가하고 최신 버전으로 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-22",
+            "label": "경로 순회",
+            "hint": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85606",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "경로 순회"
+      },
+      {
+        "id": "CVE-2026-85626",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "git-mcp-server 인자 삽입 취약점으로 인한 임의 파일 쓰기",
+        "summaryEn": "git-mcp-server 2.15.1 contains an argument injection vulnerability in the ref and object parameters of git_log, git_diff, and git_show tools that lack leading-dash validation. Attackers can inject git command-line options like --output= to write files outside the repository to arbitrary paths accessible by the process.",
+        "summaryKo": "git-mcp-server 2.15.1 버전의 git_log, git_diff, git_show 도구에 있는 ref 및 object 매개변수에서 선행 대시 검증이 누락되어 인자 삽입 취약점이 존재합니다. 공격자는 --output=과 같은 git 명령줄 옵션을 주입하여 프로세스가 접근할 수 있는 저장소 외부에 파일을 작성할 수 있습니다.",
+        "interpretation": "특정 입력값에 대한 검증이 부족하여, 공격자가 시스템 명령어를 조작해 원하지 않는 위치에 임의의 파일을 생성할 수 있는 위험이 있습니다.",
+        "cause": "입력값에 포함된 명령어 옵션 문자열을 올바르게 걸러내지 않아 발생한 취약점입니다.",
+        "mitigation": "취약점이 해결된 최신 버전으로 패치를 적용하고 입력값 검증 로직을 보완해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-88",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85626",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "입력값 검증 미흡"
+      },
+      {
+        "id": "CVE-2026-85664",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "Chroma 컬렉션 생성 시 인덱스 매개변수 검증 미흡으로 인한 서비스 거부 취약점",
+        "summaryEn": "Chroma 1.5.9 fails to validate maximum bounds on HNSW index parameters max_neighbors, ef_construction, and ef_search in collection-create requests. Unauthenticated attackers can supply arbitrarily large parameter values to exhaust server memory and cause denial of service during index compaction.",
+        "summaryKo": "Chroma 1.5.9 버전은 컬렉션 생성 요청에서 HNSW 인덱스 매개변수인 max_neighbors, ef_construction, ef_search의 최대 경계 값을 검증하지 못합니다. 인증되지 않은 공격자가 임의로 큰 매개변수 값을 제공하여 서버 메모리를 고갈시키고 인덱스 압축 과정에서 서비스 거부를 유발할 수 있습니다.",
+        "interpretation": "해커가 시스템에 과도하게 큰 설정 값을 보내 서버의 기억장치를 전부 소모시키고 결국 서비스를 멈추게 만들 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 메모리·연결·스레드 같은 자원을 요청하는 만큼 제한 없이 내줘서 과도한 요청에 시스템이 마비될 수 있어서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하여 매개변수 값 검증 기능을 활성화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-770",
+            "label": "자원 할당량 제한 없음",
+            "hint": "메모리·연결·스레드 같은 자원을 요청하는 만큼 제한 없이 내줘서 과도한 요청에 시스템이 마비될 수 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85664",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-85666",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "OGX OpenAI 호환 엔드포인트의 SSRF 취약점",
+        "summaryEn": "OGX (formerly Llama Stack, affected at commit fbe8e0f) contains an unauthenticated server-side request forgery vulnerability in the OpenAI-compatible POST /v1/responses endpoint. MCP tool definitions accept a server_url parameter (along with headers and authorization values) that is fetched server-side without destination validation; the existing validate_url_not_private() guard used for other URL inputs is not applied to server_url. On the default starter configuration, which runs without authentication, a remote unauthenticated attacker can cause the server to open connections to arbitrary internal addresses (including cloud metadata endpoints such as http://169.254.169.254/) and forward attacker-supplied headers and bearer tokens to those destinations.",
+        "summaryKo": "이전 Llama Stack인 OGX는 커밋 fbe8e0f에서 인증되지 않은 서버측 요청 위조 취약점을 포함하고 있습니다. OpenAI 호환 POST /v1/responses 엔드포인트의 MCP 도구 정의는 목적지 검증 없이 서버 측에서 가져오는 server_url 매개변수를 허용하며, 다른 URL 입력에 사용되는 기존 validate_url_not_private() 검증이 적용되지 않습니다. 인증 없이 실행되는 기본 시작 설정에서 원격의 인증되지 않은 공격자는 서버가 내부 주소로 연결을 열도록 유도할 수 있습니다.",
+        "interpretation": "외부 공격자가 인증 절차 없이 서버를 조종해 내부 시스템이나 클라우드 관리 주소로 몰래 접속하게 만들 수 있는 보안 약점입니다.",
+        "cause": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생",
+        "mitigation": "최신 패치를 적용하고 URL 입력값에 대한 검증 로직을 추가하여 내부 주소 접근을 차단해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85666",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85671",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "QAnything 문서 조회 API 인증 누락으로 인한 파일 유출 취약점",
+        "summaryEn": "QAnything 2.0.0 contains an authentication bypass vulnerability in the /api/local_doc_qa/get_file_base64 and /api/local_doc_qa/get_doc endpoints that allows unauthenticated attackers to access any uploaded file or document. Attackers can enumerate file identifiers through unauthenticated endpoints and retrieve base64-encoded files or parsed document chunks without ownership verification to disclose cross-tenant knowledge base content.",
+        "summaryKo": "QAnything 2.0.0 버전의 /api/local_doc_qa/get_file_base64 및 /api/local_doc_qa/get_doc 엔드포인트에 인증 우회 취약점이 존재합니다. 인증되지 않은 공격자가 소유권 검증 없이 업로드된 파일이나 문서를 조회하여 크로스 테넌트 지식 베이스 내용을 유출할 수 있습니다.",
+        "interpretation": "비밀번호나 로그인 확인 없이도 누구나 시스템에 업로드된 중요한 문서를 훔쳐볼 수 있는 보안 구멍입니다.",
+        "cause": "일반적으로 반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하거나 해당 API 엔드포인트에 대한 접근 제어 및 인증 절차를 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85671",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-85686",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "ms-swift 멀티모달 API의 서버 사이드 요청 위조 취약점",
+        "summaryEn": "ms-swift 4.5.2 contains a server-side request forgery vulnerability in the swift deploy OpenAI-compatible API that fetches multimodal media URLs without validation or redirect filtering. Unauthenticated attackers can supply arbitrary image_url, audio_url, or video_url parameters to make the server issue requests to internal services and cloud metadata endpoints.",
+        "summaryKo": "ms-swift 4.5.2 버전의 swift deploy OpenAI 호환 API에는 검증이나 리디렉션 필터링 없이 멀티모달 미디어 URL을 가져오는 서버 사이드 요청 위조(SSRF) 취약점이 포함되어 있습니다. 인증되지 않은 공격자는 임의의 image_url, audio_url, video_url 파라미터를 제공하여 서버가 내부 서비스 및 클라우드 메타데이터 엔드포인트로 요청을 보내도록 만들 수 있습니다.",
+        "interpretation": "공격자가 조작된 주소를 입력해 서버를 속이면, 서버가 외부가 아닌 내부의 중요한 시스템이나 숨겨진 정보에 몰래 접속하게 만들 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생합니다.",
+        "mitigation": "공급업체가 제공하는 최신 보안 패치를 적용하고, API에서 입력되는 URL의 유효성 검증 및 리디렉션 필터링 기능을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85686",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85691",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "MegaParse 서버 측 요청 위조 취약점",
+        "summaryEn": "MegaParse 0.0.55 contains an unauthenticated server-side request forgery vulnerability in the POST /v1/url endpoint that fetches caller-supplied URLs server-side. Attackers can supply internal service URLs or metadata endpoints without authentication to read their responses directly from the JSON response.",
+        "summaryKo": "MegaParse 0.0.55 버전의 POST /v1/url 엔드포인트에는 인증되지 않은 서버 측 요청 위조(SSRF) 취약점이 포함되어 있으며, 이로 인해 공격자가 호출자가 제공한 URL을 서버 측에서 가져올 수 있습니다. 공격자는 인증 없이 내부 서비스 URL이나 메타데이터 엔드포인트를 제공하여 응답을 JSON 응답에서 직접 읽을 수 있습니다.",
+        "interpretation": "외부 공격자가 서버를 대신해 내부 시스템이나 민감한 정보가 담긴 주소에 접속하도록 속여, 원래는 볼 수 없어야 할 내부 데이터를 가로챌 수 있는 보안 취약점입니다.",
+        "cause": "일반적으로 서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생합니다.",
+        "mitigation": "제공되는 보안 패치를 적용하여 MegaParse를 최신 버전으로 업데이트하고, 서버가 외부로 요청을 보낼 때 접근 가능한 주소를 엄격하게 제한하도록 설정을 점검해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85691",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-85699",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "jina-ai reader 서버 측 요청 위조(SSRF) 취약점",
+        "summaryEn": "jina-ai reader contains a server-side request forgery vulnerability where URL validation is performed only on the initial request but not re-applied to subsequent redirect hops. Attackers can craft a public URL that redirects to internal network addresses or cloud metadata endpoints, allowing the server to fetch and return the target's response body to the attacker.",
+        "summaryKo": "jina-ai reader는 초기 요청에 대해서만 URL 검증을 수행하고 후속 리디렉션 홉에는 다시 적용하지 않는 서버 측 요청 위조 취약점을 포함하고 있습니다. 공격자는 내부 네트워크 주소나 클라우드 메타데이터 엔드포인트로 리디렉션되는 공개 URL을 제작하여, 서버가 대상의 응답 본문을 가져와 공격자에게 반환하도록 할 수 있습니다.",
+        "interpretation": "서버가 외부 사이트인 척 속여 내부 시스템이나 외부에서 접근할 수 없는 비밀 정보에 접근하게 만드는 보안 약점입니다.",
+        "cause": "일반적으로 서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생",
+        "mitigation": "공급업체가 제공하는 최신 보안 패치를 적용하고, 리디렉션 경로에 대한 URL 검증을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-918",
+            "label": "SSRF",
+            "hint": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85699",
+        "cvssScore": 7.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "SSRF"
+      },
+      {
+        "id": "CVE-2026-86098",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "nDPI 힙 버퍼 오버플로우 취약점",
+        "summaryEn": "ntop nDPI versions before 6.0 contain a heap buffer overflow vulnerability in the ndpi_json_string_escape function that writes beyond caller-supplied buffer boundaries. Attackers can trigger the overflow by supplying crafted network packet data including TLS SNI, HTTP headers, or DNS names that reach the vulnerable function, causing heap corruption.",
+        "summaryKo": "6.0 버전 이전의 ntop nDPI는 ndpi_json_string_escape 함수에서 호출자가 제공한 버퍼 경계를 넘어 쓰기를 수행하는 힙 버퍼 오버플로우 취약점을 포함하고 있습니다. 공격자는 취약한 함수에 도달하는 TLS SNI, HTTP 헤더, DNS 이름 등 조작된 네트워크 패킷 데이터를 제공하여 오버플로우를 유발하고 힙 손상을 일으킬 수 있습니다.",
+        "interpretation": "특수하게 조작된 네트워크 패킷을 보내면 프로그램의 메모리가 손상되어 시스템이 비정상적으로 종료되거나 공격자가 이를 악용할 수 있습니다.",
+        "cause": "일반적으로 쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생합니다.",
+        "mitigation": "6.0 이후 버전으로 패치를 적용하거나 최신 보안 업데이트를 확인하여 반영해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-787",
+            "label": "버퍼 범위 밖 쓰기",
+            "hint": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86098",
+        "cvssScore": 7.4,
+        "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 높음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "버퍼 오버플로우"
+      },
+      {
+        "id": "CVE-2026-85638",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "jofpin trape 인가 우회 취약점",
+        "summaryEn": "A weakness has been identified in jofpin trape 2.0. This affects an unknown part of the file core/user.py. This manipulation of the argument vId/id causes authorization bypass. Remote exploitation of the attack is possible. The exploit has been made available to the public and could be used for attacks. The project was informed of the problem early through an issue report but has not responded yet.",
+        "summaryKo": "jofpin trape 2.0의 core/user.py 파일 내 알 수 없는 부분이 vId 및 id 인자의 조작을 통해 인가 우회 취약점에 노출되어 있습니다. 원격 공격이 가능하며 공격 코드가 이미 공개되었습니다.",
+        "interpretation": "시스템이 사용자의 접근 권한을 제대로 확인하지 않아, 공격자가 다른 사람의 권한을 도용하거나 제한된 기능에 마음대로 접근할 수 있는 보안 구멍이 존재합니다.",
+        "cause": "일반적으로 사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하거나 취약한 파일의 접근 권한 및 로직을 점검해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-285",
+            "label": "부적절한 인가",
+            "hint": "사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생"
+          },
+          {
+            "id": "CWE-639",
+            "label": "취약한 직접 개체 참조(IDOR)",
+            "hint": "요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85638",
+        "cvssScore": 7.3,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-85702",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "freegpt-webui 대화 API 인증 누락 취약점",
+        "summaryEn": "A security vulnerability has been detected in ramon-victor freegpt-webui up to 098db3dfeb41555c2ca9269df0f13e10ec1c35dc. Affected is the function _conversation of the file server/backend.py of the component Backend Conversation API. Such manipulation of the argument model leads to missing authentication. The attack may be launched remotely. The exploit has been disclosed publicly and may be used. This product operates on a rolling release basis, ensuring continuous delivery. Consequently, there are no version details for either affected or updated releases. This vulnerability only affects products that are no longer supported by the maintainer.",
+        "summaryKo": "ramon-victor freegpt-webui 098db3dfeb41555c2ca9269df0f13e10ec1c35dc 이전 버전의 Backend Conversation API 컴포넌트 내 server/backend.py 파일의 _conversation 함수에서 취약점이 발견되었습니다. model 인자를 조작하여 인증 누락을 유발하며, 원격 공격이 가능합니다.",
+        "interpretation": "로그인이나 권한 확인 없이 중요한 대화 기능에 누구나 접근할 수 있어, 공격자가 시스템을 임의로 악용할 수 있는 보안 문제입니다.",
+        "cause": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "mitigation": "유지보수되지 않는 제품이므로 사용을 중단하거나 최신 지원 버전으로 대체를 권장합니다.",
+        "cwe": [
+          {
+            "id": "CWE-287",
+            "label": "부적절한 인증",
+            "hint": "인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생"
+          },
+          {
+            "id": "CWE-306",
+            "label": "인증 누락",
+            "hint": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85702",
+        "cvssScore": 7.3,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-80113",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "PassMark 제품군 DirectIo64.sys 권한 상승 취약점",
+        "summaryEn": "PassMark PerformanceTest before 11.1 build 1012, BurnInTest before 11.1 build 1000, and OSForensics before 11.1 build 1016 contain a privilege escalation vulnerability in DirectIo64.sys that allows local users to clear arbitrary bits at any physical memory address due to missing validation of the physical address parameter in an exposed IOCTL handler. Attackers can obtain a device handle and supply an arbitrary 64-bit physical address with a bit index to invoke MmMapIoSpace and clear bits in kernel code pages or page table entries, enabling local privilege escalation or system compromise.",
+        "summaryKo": "PassMark PerformanceTest 11.1 빌드 1012 이전 버전, BurnInTest 11.1 빌드 1000 이전 버전 및 OSForensics 11.1 빌드 1016 이전 버전의 DirectIo64.sys에는 노출된 IOCTL 핸들러에서 물리적 주소 매개변수의 유효성을 검증하지 않아 로컬 사용자가 임의의 물리적 메모리 주소에서 임의의 비트를 지울 수 있는 권한 상승 취약점이 존재합니다. 공격자는 장치 핸들을 얻고 비트 인덱스와 함께 임의의 64비트 물리적 주소를 제공하여 MmMapIoSpace를 호출하고 커널 코드 페이지 또는 페이지 테이블 항목의 비트를 지울 수 있으며, 이를 통해 로컬 권한 상승 또는 시스템 손상을 유발할 수 있습니다.",
+        "interpretation": "컴퓨터의 핵심 메모리 보호 장치가 제대로 작동하지 않아, 로컬 사용자 권한을 가진 공격자가 시스템을 완전히 장악할 수 있는 위험한 취약점입니다.",
+        "cause": "일반적으로 쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하여 취약한 버전을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-782",
+            "label": null,
+            "hint": null
+          },
+          {
+            "id": "CWE-787",
+            "label": "버퍼 범위 밖 쓰기",
+            "hint": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80113",
+        "cvssScore": 7.1,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-80117",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "PassMark 제품군 DirectIo64.sys 권한 상승 취약점",
+        "summaryEn": "PassMark PerformanceTest before 11.1 build 1012, BurnInTest before 11.1 build 1000, and OSForensics before 11.1 build 1016 contain a privilege escalation vulnerability in DirectIo64.sys that allows local users to issue arbitrary IN and OUT instructions to any x86 I/O port due to missing allowlist or port validation on exposed IOCTLs. Attackers can obtain a device handle and write to sensitive ports including the PS/2 controller port, CPU reset ports, CMOS configuration ports, and interrupt controller ports to cause an immediate system reset or other hardware-level manipulation from a standard user account.",
+        "summaryKo": "PassMark PerformanceTest 11.1 빌드 1012 이전 버전, BurnInTest 11.1 빌드 1000 이전 버전, OSForensics 11.1 빌드 1016 이전 버전의 DirectIo64.sys에서 권한 상승 취약점이 존재합니다. 노출된 IOCTL에 대한 허용 목록이나 포트 검증이 누락되어 로컬 사용자가 임의의 IN 및 OUT 명령어를 모든 x86 I/O 포트에 실행할 수 있습니다. 공격자는 장치 핸들을 획득하여 PS/2 컨트롤러 포트, CPU 리셋 포트, CMOS 설정 포트, 인터럽트 컨트롤러 포트 등 민감한 포트에 쓰기 작업을 수행함으로써 표준 사용자 계정에서 즉시 시스템 리셋이나 기타 하드웨어 수준의 조작을 유발할 수 있습니다.",
+        "interpretation": "일반 사용자 권한을 가진 공격자가 컴퓨터의 핵심 하드웨어를 직접 제어할 수 있는 포트에 임의의 명령을 내려, 시스템을 강제로 재부팅하거나 오작동하게 만들 수 있는 보안 취약점입니다.",
+        "cause": "입출력 제어(IOCTL) 요청을 처리할 때 허용된 포트 목록이나 유효성 검증이 누락되어 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하여 취약한 버전을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-782",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80117",
+        "cvssScore": 7.1,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "권한 상승"
+      },
+      {
+        "id": "CVE-2026-80118",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "PassMark 제품 드라이버의 물리 메모리 유출 및 커널 충돌 취약점",
+        "summaryEn": "PassMark PerformanceTest before 11.1 build 1012, BurnInTest before 11.1 build 1000, and OSForensics before 11.1 build 1016 contain an unauthenticated physical memory disclosure in DirectIo64.sys, reachable by unprivileged local users through a single IOCTL with no caller-identity check. The handler writes a crash-dump-format (PAGEDU64) image of all physical memory to a caller-supplied file path in the SYSTEM context, allowing a standard user to create files in locations they cannot otherwise write and to recover memory belonging to processes of other users. The image is preceded by a header that exposes the kernel loaded-module list, active-process list and PFN database pointers, defeating KASLR. The same handler also dereferences the return value of an internal kernel-structure locator without a NULL check; that locator returns NULL on three distinct failure paths, and a kernel crash results on builds where any of those paths is taken.",
+        "summaryKo": "11.1 빌드 1012 이전의 PassMark PerformanceTest, 11.1 빌드 1000 이전의 BurnInTest, 11.1 빌드 1016 이전의 OSForensics의 DirectIo64.sys에는 인증되지 않은 물리 메모리 노출 취약점이 포함되어 있으며, 권한이 없는 로컬 사용자가 호출자 신원 확인이 없는 단일 IOCTL을 통해 접근할 수 있습니다. 핸들러는 SYSTEM 컨텍스트에서 호출자가 제공한 파일 경로에 모든 물리 메모리의 크래시 덤프 형식(PAGEDU64) 이미지를 기록하여, 일반 사용자가 그렇지 않으면 쓸 수 없는 위치에 파일을 생성하고 다른 사용자의 프로세스에 속한 메모리를 복구할 수 있게 합니다. 이미지 앞에는 커널 로드된 모듈 목록, 활성 프로세스 목록 및 PFN 데이터베이스 포인터를 노출하는 헤더가 있어 KASLR을 무력화합니다. 또한 동일한 핸들러는 NULL 체크 없이 내부 커널 구조 로케이터의 반환 값을 역참조하며, 해당 로케이터는 세 가지 고유한 실패 경로에서 NULL을 반환하고, 이러한 경로 중 하나가 취해진 빌드에서는 커널 충돌이 발생합니다.",
+        "interpretation": "컴퓨터의 기본 권한을 가진 일반 사용자가 시스템의 핵심 메모리 정보를 훔쳐보거나 파일 시스템을 임의로 조작할 수 있으며, 특정 조건에서는 시스템이 강제로 멈추는 현상이 발생할 수 있습니다.",
+        "cause": "일반적으로 값이 비어 있을 수 있는 상황을 확인하지 않고 그대로 사용해서 발생",
+        "mitigation": "제조사에서 제공하는 최신 보안 패치를 적용하여 취약한 드라이버 버전을 업데이트해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-73",
+            "label": null,
+            "hint": null
+          },
+          {
+            "id": "CWE-476",
+            "label": "NULL 포인터 역참조",
+            "hint": "값이 비어 있을 수 있는 상황을 확인하지 않고 그대로 사용해서 발생"
+          },
+          {
+            "id": "CWE-497",
+            "label": null,
+            "hint": null
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80118",
+        "cvssScore": 7.1,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "정보 노출"
+      },
+      {
+        "id": "CVE-2026-86090",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "ntopng 알림 삭제 기능의 권한 검사 누락 취약점",
+        "summaryEn": "ntopng before 6.7.260717 fails to perform authorization checks in the delete endpoints and recipients REST v2 handlers. Authenticated non-administrator users can issue POST requests to irreversibly delete all configured notification endpoints and recipients, silencing all alerts.",
+        "summaryKo": "6.7.260717 이전 버전의 ntopng는 삭제 엔드포인트 및 수신자 REST v2 핸들러에서 권한 검사를 수행하지 못합니다. 인증된 비관리자 사용자는 POST 요청을 발행하여 구성된 모든 알림 엔드포인트와 수신자를 영구적으로 삭제하고 모든 경고를 차단할 수 있습니다.",
+        "interpretation": "관리자만 할 수 있어야 하는 알림 설정 삭제를 권한이 없는 일반 사용자도 처리할 수 있어서, 중요한 알림 기능이 무력화될 수 있습니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생합니다.",
+        "mitigation": "제조사가 제공하는 최신 보안 패치 버전인 6.7.260717 이후로 업그레이드하거나 보안 설정을 점검하시기 바랍니다.",
+        "cwe": [
+          {
+            "id": "CWE-862",
+            "label": "권한 검사 누락",
+            "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86090",
+        "cvssScore": 7.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:H",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-86091",
+        "date": "2026-09-05",
+        "severity": "HIGH",
+        "title": "ntopng 권한 검사 누락으로 인한 호스트 풀 일괄 삭제 취약점",
+        "summaryEn": "ntopng before 6.7.260717 fails to check user privileges in the pools bulk-delete endpoint, allowing authenticated non-administrators to delete all host pools and member bindings. Attackers can issue POST requests to the delete pools endpoint to irreversibly destroy every host pool, removing traffic policy bindings and visibility restrictions that may bypass security policies.",
+        "summaryKo": "6.7.260717 이전 버전의 ntopng는 풀 일괄 삭제 엔드포인트에서 사용자 권한을 확인하지 못하여, 인증된 일반 사용자가 모든 호스트 풀과 멤버 바인딩을 삭제할 수 있습니다. 공격자는 풀 삭제 엔드포인트에 POST 요청을 전송하여 모든 호스트 풀을 영구적으로 파괴할 수 있으며, 이를 통해 트래픽 정책 바인딩 및 가시성 제한이 제거되어 보안 정책을 우회할 수 있습니다.",
+        "interpretation": "로그인한 일반 사용자가 관리자만 할 수 있는 호스트 풀 삭제 기능을 실행하여 시스템 설정을 임의로 망가뜨릴 수 있는 취약점입니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생합니다.",
+        "mitigation": "ntopng를 버전 6.7.260717 이후로 업데이트하거나 패치를 적용하세요.",
+        "cwe": [
+          {
+            "id": "CWE-862",
+            "label": "권한 검사 누락",
+            "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86091",
+        "cvssScore": 7.1,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:L",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "접근 통제 오류"
+      },
+      {
+        "id": "CVE-2026-5522",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "IBM QRadar 하드코딩된 자격증명 취약점",
+        "summaryEn": "IBM QRadar 7.5.0 through 7.5.0 UP15 Interim Fix 005 contains hard-coded credentials, such as a password or cryptographic key, which it uses for its own inbound authentication, outbound communication to external components, or encryption of internal data.",
+        "summaryKo": "IBM QRadar 7.5.0부터 7.5.0 UP15 Interim Fix 005 버전까지는 자체 인바운드 인증, 외부 구성 요소와의 아웃바운드 통신 또는 내부 데이터 암호화에 사용되는 비밀번호나 암호화 키와 같은 하드코딩된 자격증명을 포함하고 있습니다.",
+        "interpretation": "프로그램 내부에 비밀번호나 보안키가 고정되어 있어, 공격자가 이를 알아내어 시스템에 무단으로 접근하거나 중요한 데이터를 탈취할 수 있습니다.",
+        "cause": "일반적으로 비밀번호·키가 소스코드나 설정 파일에 고정값으로 박혀 있어서 발생합니다.",
+        "mitigation": "제조사에서 제공하는 최신 보안 패치나 업데이트를 적용하여 하드코딩된 자격증명을 수정하거나 제거해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-798",
+            "label": "하드코딩된 자격증명",
+            "hint": "비밀번호·키가 소스코드나 설정 파일에 고정값으로 박혀 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5522",
+        "cvssScore": 6.7,
+        "cvssVector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:H/I:L/A:N",
+        "cvssPlain": "로컬 접근 필요 · 공격 난이도 낮음 · 높은 권한 필요 · 사용자 개입 불필요",
+        "category": "하드코딩된 자격증명"
+      },
+      {
+        "id": "CVE-2026-85618",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "ConvertX xelatex 변환기의 임의 파일 읽기 취약점",
+        "summaryEn": "ConvertX 0.17.0 contains an arbitrary file read vulnerability in the xelatex converter that allows authenticated users to read files by uploading LaTeX files with input directives. Attackers can upload .tex files containing \\\\input{path} or \\\\verbatiminput{path} directives to have the TeX engine read arbitrary files accessible to the server process and include them in downloadable PDF output.",
+        "summaryKo": "ConvertX 0.17.0의 xelatex 변환기에는 인증된 사용자가 input 지시어가 포함된 LaTeX 파일을 업로드하여 임의의 파일을 읽을 수 있는 취약점이 있습니다. 공격자는 \\input{path} 또는 \\verbatiminput{path} 지시어가 포함된 .tex 파일을 업로드하여 TeX 엔진이 서버 프로세스에서 접근할 수 있는 임의의 파일을 읽고 다운로드 가능한 PDF 출력에 포함시키도록 할 수 있습니다.",
+        "interpretation": "인증된 사용자가 악의적인 코드가 담긴 파일을 업로드하여 서버가 원래 접근해서는 안 되는 중요한 파일을 몰래 훔쳐볼 수 있는 보안 문제입니다.",
+        "cause": "일반적으로 파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "mitigation": "제조사가 제공하는 최신 보안 패치를 적용하고, LaTeX 파일 업로드 시 입력값 검증 로직을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-22",
+            "label": "경로 순회",
+            "hint": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85618",
+        "cvssScore": 6.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "위험한 파일 업로드"
+      },
+      {
+        "id": "CVE-2026-85621",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "LobeChat QQ 및 페이슈 어댑터 웹훅 서명 검증 미흡 취약점",
+        "summaryEn": "LobeChat (LobeHub) 2.2.1 does not properly verify inbound chat-platform webhook signatures in the QQ and Feishu adapters. The webhook route (/api/agent/webhooks/:platform) is unauthenticated by design and delegates verification to each adapter; the QQ adapter performs no Ed25519 signature verification on dispatched message events, and the Feishu adapter only performs an optional static-token comparison that is skipped when no token is configured (the default) and is not a body signature. An unauthenticated attacker who knows the public webhook URL can POST forged inbound messages with an attacker-chosen sender identity and arbitrary text, causing the bot owner's agent to process attacker-controlled input and treat the attacker as a trusted platform sender.",
+        "summaryKo": "LobeChat 2.2.1 버전은 QQ 및 페이슈 어댑터에서 인바운드 채팅 플랫폼 웹훅 서명을 올바르게 검증하지 않습니다. 웹훅 경로는 설계상 인증이 필요 없으며 검증을 각 어댑터에 위임하는데, QQ 어댑터는 메시지 이벤트에 대한 Ed25519 서명 검증을 수행하지 않고, 페이슈 어댑터는 토큰이 설정되지 않은 기본 상태에서 건너뛰어지는 선택적 정적 토큰 비교만 수행합니다. 공개된 웹훅 URL을 아는 인증되지 않은 공격자는 공격자가 조작한 발신자 신원과 임의의 텍스트가 포함된 위조된 인바운드 메시지를 전송하여, 봇 소유자의 에이전트가 공격자의 입력을 처리하고 신뢰할 수 있는 플랫폼 발신자로 취급하도록 만들 수 있습니다.",
+        "interpretation": "외부 플랫폼의 메시지가 진짜 안전한 곳에서 온 것인지 확인하지 않아, 공격자가 봇을 속여 가짜 메시지를 보내고 마음대로 조종할 수 있는 위험이 있습니다.",
+        "cause": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생합니다.",
+        "mitigation": "제공사의 최신 보안 패치를 적용하고, 웹훅 요청에 대한 서명 검증 및 인증 설정을 강화해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-345",
+            "label": "데이터 진위 검증 미흡",
+            "hint": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85621",
+        "cvssScore": 6.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 권한 불필요 · 사용자 개입 불필요",
+        "category": "인증 우회"
+      },
+      {
+        "id": "CVE-2026-85669",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "Potpie 대화 동기화 엔드포인트 권한 검사 누락 취약점",
+        "summaryEn": "potpie through 2.0.0 fails to verify user ownership on the POST /conversations/{conversation_id}/code-changes/sync endpoint. Authenticated attackers can write arbitrary file changes into other users' conversations by supplying their conversation IDs, allowing unauthorized modification of pending changes.",
+        "summaryKo": "potpie 2.0.0 버전 이하의 POST /conversations/{conversation_id}/code-changes/sync 엔드포인트는 사용자 소유권을 검증하지 못합니다. 인증된 공격자는 다른 사용자의 대화 ID를 제공하여 임의의 파일 변경 사항을 해당 대화에 기록할 수 있으며, 이를 통해 대기 중인 변경 사항을 무단으로 수정할 수 있습니다.",
+        "interpretation": "다른 사람의 대화에 권한 없이 접근해 임의로 코드를 수정할 수 있는 보안 약점입니다.",
+        "cause": "일반적으로 기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생합니다.",
+        "mitigation": "제공사의 보안 패치를 적용하여 최신 버전으로 업그레이드하고 소유권 검증 로직을 확인해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-862",
+            "label": "권한 검사 누락",
+            "hint": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85669",
+        "cvssScore": 6.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "취약한 직접 개체 참조(IDOR)"
+      },
+      {
+        "id": "CVE-2026-85689",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "llmware 컬렉션 데이터베이스 계층의 SQL 인젝션 취약점",
+        "summaryEn": "llmware 0.4.6 contains an SQL injection vulnerability in the collection-database layer (llmware/resources.py) where filter and lookup values are directly string-interpolated into SQL WHERE clauses without parameterization or escaping, in both the SQLite and PostgreSQL backends. The filter validator only checks keys against an allow-list and never sanitizes values. Attacker-controlled filter values reaching the public API via Library.block_lookup and Query.text_query_with_custom_filter / text_query_by_author_or_speaker can neutralize the intended filter to disclose rows the caller was scoped out of (cross-document/cross-collection disclosure); on PostgreSQL the flaw permits boolean- and UNION-based SQL injection.",
+        "summaryKo": "llmware 버전 0.4.6의 컬렉션 데이터베이스 계층(llmware/resources.py)에는 SQLite 및 PostgreSQL 백엔드 모두에서 필터 및 조회 값이 매개변수화나 이스케이프 처리 없이 SQL WHERE 절에 직접 문자열로 삽입되는 SQL 인젝션 취약점이 존재합니다. 필터 검증기는 키가 허용 목록에 있는지 페이지만 확인하고 값은 절대 살균하지 않습니다. 공개 API를 통해 공격자가 제어하는 필터 값이 전달되면 의도한 필터를 무력화하여 호출자가 접근할 수 없는 행을 유출할 수 있으며(교차 문서/교차 컬렉션 유출), PostgreSQL에서는 불리언 기반 및 UNION 기반 SQL 인젝션이 허용됩니다.",
+        "interpretation": "사용자가 입력한 검색어나 필터 값이 프로그램 내부에서 안전하게 처리되지 않고 데이터베이스 명령어에 그대로 포함되어, 권한이 없는 민감한 정보까지 탈취당할 수 있는 위험이 있습니다.",
+        "cause": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생",
+        "mitigation": "llmware를 최신 버전으로 업데이트하거나, 데이터베이스 쿼리 생성 시 사용자 입력값을 문자열로 직접 삽입하지 않고 매개변수화(Prepared Statement)를 적용해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-89",
+            "label": "SQL 인젝션",
+            "hint": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85689",
+        "cvssScore": 6.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "SQL 인젝션"
+      },
+      {
+        "id": "CVE-2026-85693",
+        "date": "2026-09-05",
+        "severity": "MEDIUM",
+        "title": "Chatbot UI 검색 엔드포인트의 권한 우회로 인한 타인 파일 유출 취약점",
+        "summaryEn": "Chatbot UI contains an authorization bypass vulnerability in the retrieval endpoint that allows authenticated attackers to access private file content belonging to other users by supplying arbitrary file UUIDs. The endpoint uses a service-role Supabase client that bypasses row-level security and fails to validate file ownership, enabling attackers to retrieve indexed content chunks from victim files through crafted POST requests.",
+        "summaryKo": "Chatbot UI의 검색 엔드포인트에 인증 우회 취약점이 존재하여, 인증된 공격자가 임의의 파일 UUID를 입력함으로써 다른 사용자의 비공개 파일 내용에 접근할 수 있습니다. 해당 엔드포인트는 행 수준 보안을 우회하고 파일 소유권을 검증하지 않는 서비스 역할 Supabase 클라이언트를 사용하여, 공격자가 조작된 POST 요청을 통해 피해자 파일에서 인덱싱된 콘텐츠 청크를 가져올 수 있게 합니다.",
+        "interpretation": "공격자가 주소창이나 요청값에 다른 사람의 파일 고유번호를 무작위로 넣으면, 시스템이 내 파일이 맞는지 확인하지 않고 곧바로 그 내용을 보여주는 보안 문제입니다.",
+        "cause": "일반적으로 요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생",
+        "mitigation": "제공사의 최신 보안 패치를 적용하고, 파일 접근 요청 시 사용자의 권한과 소유권을 엄격하게 검증하도록 설정해야 합니다.",
+        "cwe": [
+          {
+            "id": "CWE-639",
+            "label": "취약한 직접 개체 참조(IDOR)",
+            "hint": "요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생"
+          }
+        ],
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85693",
+        "cvssScore": 6.5,
+        "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "cvssPlain": "네트워크에서 접근 가능 · 공격 난이도 낮음 · 낮은 권한 필요 · 사용자 개입 불필요",
+        "category": "취약한 직접 개체 참조(IDOR)"
+      }
+    ],
+    "secondaryHighlights": [],
+    "cweBreakdown": [
+      {
+        "key": "CWE-22",
+        "label": "경로 순회",
+        "count": 9,
+        "desc": "파일 경로에 들어가는 입력값을 검증하지 않아 상위 폴더로 벗어날 수 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85661",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85661"
+          },
+          {
+            "id": "CVE-2026-85606",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85606"
+          },
+          {
+            "id": "CVE-2026-19303",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19303"
+          }
+        ]
+      },
+      {
+        "key": "CWE-918",
+        "label": "SSRF",
+        "count": 8,
+        "desc": "서버가 사용자가 지정한 주소로 요청을 보내면서 목적지를 제한하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85666",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85666"
+          },
+          {
+            "id": "CVE-2026-85686",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85686"
+          },
+          {
+            "id": "CVE-2026-85691",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85691"
+          }
+        ]
+      },
+      {
+        "key": "CWE-306",
+        "label": "인증 누락",
+        "count": 6,
+        "desc": "반드시 인증이 필요한 기능에 인증 절차 자체가 없어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85667",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85667"
+          },
+          {
+            "id": "CVE-2026-85688",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85688"
+          },
+          {
+            "id": "CVE-2026-85695",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85695"
+          }
+        ]
+      },
+      {
+        "key": "CWE-78",
+        "label": "OS 명령 인젝션",
+        "count": 4,
+        "desc": "사용자 입력을 운영체제 명령어에 그대로 넘겨서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85672",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85672"
+          },
+          {
+            "id": "CVE-2026-85696",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85696"
+          },
+          {
+            "id": "CVE-2026-16826",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16826"
+          }
+        ]
+      },
+      {
+        "key": "CWE-94",
+        "label": "코드 인젝션",
+        "count": 4,
+        "desc": "사용자 입력이 실행 가능한 코드로 해석되도록 방치해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85623",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85623"
+          },
+          {
+            "id": "CVE-2026-85674",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85674"
+          },
+          {
+            "id": "CVE-2026-85694",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85694"
+          }
+        ]
+      },
+      {
+        "key": "CWE-862",
+        "label": "권한 검사 누락",
+        "count": 4,
+        "desc": "기능을 실행하기 전에 권한이 있는지 확인하는 절차 자체가 없어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85651",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85651"
+          },
+          {
+            "id": "CVE-2026-86090",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86090"
+          },
+          {
+            "id": "CVE-2026-86091",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86091"
+          }
+        ]
+      },
+      {
+        "key": "CWE-287",
+        "label": "부적절한 인증",
+        "count": 4,
+        "desc": "인증 절차는 있지만 우회하거나 속일 수 있게 허술해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-18221",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18221"
+          },
+          {
+            "id": "CVE-2026-85702",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85702"
+          },
+          {
+            "id": "CVE-2026-85636",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85636"
+          }
+        ]
+      },
+      {
+        "key": "CWE-782",
+        "label": "CWE-782",
+        "count": 4,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-80113",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80113"
+          },
+          {
+            "id": "CVE-2026-80116",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80116"
+          },
+          {
+            "id": "CVE-2026-80117",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80117"
+          }
+        ]
+      },
+      {
+        "key": "CWE-787",
+        "label": "버퍼 범위 밖 쓰기",
+        "count": 4,
+        "desc": "쓰려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-86095",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86095"
+          },
+          {
+            "id": "CVE-2026-86098",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86098"
+          },
+          {
+            "id": "CVE-2026-17255",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17255"
+          }
+        ]
+      },
+      {
+        "key": "CWE-89",
+        "label": "SQL 인젝션",
+        "count": 3,
+        "desc": "사용자 입력을 SQL 문에 그대로 이어붙여서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-18658",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18658"
+          },
+          {
+            "id": "CVE-2026-82538",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82538"
+          },
+          {
+            "id": "CVE-2026-85689",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85689"
+          }
+        ]
+      },
+      {
+        "key": "CWE-863",
+        "label": "부정확한 권한 검사",
+        "count": 3,
+        "desc": "권한 검사는 있지만 조건이 잘못돼 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85620",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85620"
+          },
+          {
+            "id": "CVE-2026-19283",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19283"
+          },
+          {
+            "id": "CVE-2026-16941",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16941"
+          }
+        ]
+      },
+      {
+        "key": "CWE-285",
+        "label": "부적절한 인가",
+        "count": 3,
+        "desc": "사용자가 해당 작업을 수행할 권한이 있는지 제대로 확인하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-18175",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18175"
+          },
+          {
+            "id": "CVE-2026-85638",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85638"
+          },
+          {
+            "id": "CVE-2026-17483",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17483"
+          }
+        ]
+      },
+      {
+        "key": "CWE-532",
+        "label": "CWE-532",
+        "count": 3,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-19649",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19649"
+          },
+          {
+            "id": "CVE-2026-16689",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16689"
+          },
+          {
+            "id": "CVE-2026-17442",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17442"
+          }
+        ]
+      },
+      {
+        "key": "CWE-73",
+        "label": "CWE-73",
+        "count": 2,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-85684",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85684"
+          },
+          {
+            "id": "CVE-2026-80118",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80118"
+          }
+        ]
+      },
+      {
+        "key": "CWE-639",
+        "label": "취약한 직접 개체 참조(IDOR)",
+        "count": 2,
+        "desc": "요청에 들어있는 ID값만으로 접근을 허용하고 소유권을 확인하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85607",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85607"
+          },
+          {
+            "id": "CVE-2026-85693",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85693"
+          }
+        ]
+      },
+      {
+        "key": "CWE-125",
+        "label": "버퍼 범위 밖 읽기",
+        "count": 2,
+        "desc": "읽으려는 위치가 할당된 메모리 범위 안인지 확인하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85698",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85698"
+          },
+          {
+            "id": "CVE-2026-16660",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16660"
+          }
+        ]
+      },
+      {
+        "key": "CWE-400",
+        "label": "자원 소비 과다(DoS)",
+        "count": 2,
+        "desc": "처리량·자원 사용을 제한하지 않아 과도한 요청에 시스템이 마비될 수 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-19645",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19645"
+          },
+          {
+            "id": "CVE-2026-85703",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85703"
+          }
+        ]
+      },
+      {
+        "key": "CWE-476",
+        "label": "NULL 포인터 역참조",
+        "count": 2,
+        "desc": "값이 비어 있을 수 있는 상황을 확인하지 않고 그대로 사용해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-17273",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17273"
+          },
+          {
+            "id": "CVE-2026-86097",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86097"
+          }
+        ]
+      },
+      {
+        "key": "CWE-362",
+        "label": "CWE-362",
+        "count": 2,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-85639",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85639"
+          },
+          {
+            "id": "CVE-2026-85704",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85704"
+          }
+        ]
+      },
+      {
+        "key": "CWE-1321",
+        "label": "CWE-1321",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-85625",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85625"
+          }
+        ]
+      },
+      {
+        "key": "CWE-88",
+        "label": "CWE-88",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-85626",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85626"
+          }
+        ]
+      },
+      {
+        "key": "CWE-770",
+        "label": "자원 할당량 제한 없음",
+        "count": 1,
+        "desc": "메모리·연결·스레드 같은 자원을 요청하는 만큼 제한 없이 내줘서 과도한 요청에 시스템이 마비될 수 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85664",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85664"
+          }
+        ]
+      },
+      {
+        "key": "CWE-200",
+        "label": "민감 정보 노출",
+        "count": 1,
+        "desc": "노출되면 안 되는 정보를 접근 제한 없이 응답에 포함해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-18486",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18486"
+          }
+        ]
+      },
+      {
+        "key": "CWE-732",
+        "label": "잘못된 권한 설정",
+        "count": 1,
+        "desc": "파일·자원의 접근 권한을 필요한 범위보다 넓게 설정해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-80112",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80112"
+          }
+        ]
+      },
+      {
+        "key": "CWE-345",
+        "label": "데이터 진위 검증 미흡",
+        "count": 1,
+        "desc": "데이터가 신뢰할 수 있는 곳에서 왔는지 확인하는 절차가 부족해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85621",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85621"
+          }
+        ]
+      },
+      {
+        "key": "CWE-601",
+        "label": "오픈 리다이렉트",
+        "count": 1,
+        "desc": "이동시킬 주소를 검증하지 않고 사용자가 지정한 값을 그대로 사용해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85676",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85676"
+          }
+        ]
+      },
+      {
+        "key": "CWE-522",
+        "label": "보호되지 않은 자격증명",
+        "count": 1,
+        "desc": "비밀번호 등 인증 정보를 암호화·해시 없이 저장해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-85700",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85700"
+          }
+        ]
+      },
+      {
+        "key": "CWE-79",
+        "label": "크로스사이트 스크립팅(XSS)",
+        "count": 1,
+        "desc": "사용자 입력을 검증·이스케이프 없이 웹페이지에 그대로 출력해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-8447",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8447"
+          }
+        ]
+      },
+      {
+        "key": "CWE-284",
+        "label": "부적절한 접근 통제",
+        "count": 1,
+        "desc": "자원에 누가 접근할 수 있는지 제대로 제한하지 않아서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-9186",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9186"
+          }
+        ]
+      },
+      {
+        "key": "CWE-798",
+        "label": "하드코딩된 자격증명",
+        "count": 1,
+        "desc": "비밀번호·키가 소스코드나 설정 파일에 고정값으로 박혀 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-5522",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5522"
+          }
+        ]
+      },
+      {
+        "key": "CWE-212",
+        "label": "CWE-212",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-78658",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78658"
+          }
+        ]
+      },
+      {
+        "key": "CWE-121",
+        "label": "CWE-121",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-17270",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17270"
+          }
+        ]
+      },
+      {
+        "key": "CWE-330",
+        "label": "예측 가능한 난수 사용",
+        "count": 1,
+        "desc": "보안에 쓰기에 충분히 무작위하지 않은 값을 난수로 사용해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-17274",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17274"
+          }
+        ]
+      },
+      {
+        "key": "CWE-611",
+        "label": "XML 외부 개체 주입(XXE)",
+        "count": 1,
+        "desc": "XML 파서가 외부 개체 참조를 제한 없이 처리해서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-17444",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-17444"
+          }
+        ]
+      },
+      {
+        "key": "CWE-401",
+        "label": "CWE-401",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-18076",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18076"
+          }
+        ]
+      },
+      {
+        "key": "CWE-122",
+        "label": "힙 버퍼 오버플로우",
+        "count": 1,
+        "desc": "힙에 할당된 메모리 범위를 넘어서까지 쓸 수 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-18341",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18341"
+          }
+        ]
+      },
+      {
+        "key": "CWE-74",
+        "label": "인젝션(상위 분류)",
+        "count": 1,
+        "desc": "입력값에 섞인 특수 문자·명령을 제거하지 않고 다음 처리 단계로 그대로 넘겨서 발생 — 하위에 SQL·OS 명령 등 구체적인 인젝션 유형이 있음",
+        "examples": [
+          {
+            "id": "CVE-2026-85643",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85643"
+          }
+        ]
+      },
+      {
+        "key": "CWE-367",
+        "label": "경쟁 조건(TOCTOU)",
+        "count": 1,
+        "desc": "확인한 시점과 실제 사용하는 시점 사이에 상태가 바뀔 수 있어서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-76925",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76925"
+          }
+        ]
+      },
+      {
+        "key": "CWE-416",
+        "label": "메모리 해제 후 사용(UAF)",
+        "count": 1,
+        "desc": "이미 해제한 메모리를 계속 참조할 수 있는 상태로 남겨둬서 발생",
+        "examples": [
+          {
+            "id": "CVE-2026-86096",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86096"
+          }
+        ]
+      },
+      {
+        "key": "CWE-267",
+        "label": "CWE-267",
+        "count": 1,
+        "desc": "",
+        "examples": [
+          {
+            "id": "CVE-2026-18858",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18858"
+          }
+        ]
+      }
+    ],
+    "categorySampleSize": 92,
+    "productBreakdown": [
+      {
+        "key": "ibm",
+        "label": "IBM",
+        "count": 38,
+        "desc": "기업용 서버·소프트웨어·클라우드 솔루션을 만드는 회사예요. 제품군이 넓어 다양한 유형의 취약점이 섞여 있어요.",
+        "examples": [
+          {
+            "id": "CVE-2026-18658",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18658"
+          },
+          {
+            "id": "CVE-2026-19283",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19283"
+          },
+          {
+            "id": "CVE-2026-19298",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19298"
+          }
+        ]
+      },
+      {
+        "key": "microsoft",
+        "label": "Microsoft/Windows",
+        "count": 1,
+        "desc": "Windows 운영체제와 Office 등 마이크로소프트 제품군. 기업·개인 PC에 광범위하게 깔려 있어요.",
+        "examples": [
+          {
+            "id": "CVE-2026-80112",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80112"
+          }
+        ]
+      },
+      {
+        "key": "php",
+        "label": "PHP",
+        "count": 1,
+        "desc": "웹사이트 서버 쪽 로직을 짜는 스크립트 언어예요. 워드프레스 등 수많은 웹사이트의 기반이라 영향 범위가 넓어요.",
+        "examples": [
+          {
+            "id": "CVE-2026-85643",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85643"
+          }
+        ]
+      }
+    ],
+    "briefing": "오늘 신규 등록된 CVE는 총 402건이며, 심각도별로는 심각 8건, 높음 36건, 중간 46건, 낮음 2건, 평가 대기 310건입니다. 가장 많이 나온 취약점 유형은 경로 순회 9건이고, 가장 많이 언급된 제품·벤더는 IBM으로 38건입니다."
   }
 ]
